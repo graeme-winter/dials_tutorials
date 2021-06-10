@@ -163,7 +163,7 @@ how the parameters affect the spot finding algorithm. The final button
 produces peaks at real diffraction spot positions will give the best
 chance of success. 
 
-![Image buttons](./images/viewer-controls.png)
+<img src="./images/viewer-controls.png" width="30%">
 
 The second tool for visualisation of the found spots is the reciprocal
 lattice viewer - which presents a view of the spot positions mapped to
