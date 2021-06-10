@@ -151,6 +151,8 @@ the reflections i.e. the outer extent of the connected regions of the
 signal pixels. The signal pixels are highlighted with green blobs
 giving a sense of what is and is not "strong."
 
+![Image viewer](./images/viewer.png )
+
 The default parameters for spot finding usually do a good job for
 Pilatus images, such as these. However they may not be optimal for data
 from other detector types, such as CCDs or image plates. Issues with
