@@ -189,6 +189,8 @@ dials.reciprocal_lattice_viewer optimised.expt strong.refl
 
 should show straight lines, provided everything has worked correctly. 
 
+Further discussion of the output can be found
+[here](./find_spots_detail.md). 
 
 ## Indexing
 
