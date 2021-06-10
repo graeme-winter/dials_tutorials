@@ -151,7 +151,7 @@ the reflections i.e. the outer extent of the connected regions of the
 signal pixels. The signal pixels are highlighted with green blobs
 giving a sense of what is and is not "strong."
 
-![Image viewer](./images/viewer.png )
+![Image viewer](./images/viewer.png)
 
 The default parameters for spot finding usually do a good job for
 Pilatus images, such as these. However they may not be optimal for data
@@ -162,6 +162,8 @@ how the parameters affect the spot finding algorithm. The final button
 'threshold’ is the one on which spots were found, so ensuring this
 produces peaks at real diffraction spot positions will give the best
 chance of success. 
+
+![Image buttons](./images/viewer-controls.png)
 
 The second tool for visualisation of the found spots is the reciprocal
 lattice viewer - which presents a view of the spot positions mapped to
@@ -176,7 +178,12 @@ to rotate the space to "look down" the lines of reflections. If you
 cannot, or the lines are not straight, it is likely that there are
 some errors in the experiment parameters e.g. detector distance or
 beam centre. If these are not too large they will likely be corrected
-in the subsequent analysis - however you may find it useful to run
+in the subsequent analysis.
+
+![Reciprocal viewer](./images/reciprocal-lattice.png)
+
+If the geometry is not accurately recorded you may find it useful to
+run 
 
 ```
 dials.search_beam_position imported.expt strong.refl
