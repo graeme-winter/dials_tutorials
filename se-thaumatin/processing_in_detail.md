@@ -46,7 +46,9 @@ installing the Linux version in a WSL terminal using e.g. Ubuntu.
 
 The following example uses a selenourea soaked Thaumatin data set
 collected on beamline i04 at Diamond Light Source, which is available
-[from OneDrive](https://dlsltd-my.sharepoint.com/:f:/g/personal/graeme_winter_diamond_ac_uk/EnAVwtJMH1tFpkCVMQCodUQB8rfrfDT8coLdW8noM0rDmg?e=kzujT6)
+[from OneDrive](https://dlsltd-my.sharepoint.com/:f:/g/personal/graeme_winter_diamond_ac_uk/EnAVwtJMH1tFpkCVMQCodUQB8rfrfDT8coLdW8noM0rDmg?e=kzujT6). You
+are probably better off downloading the files one at a time rather
+than as a zip file, as some systems struggle with zip files > 4GB.
 
 ## Files
 
