@@ -408,7 +408,7 @@ reindexed data as these files can be large. In most cases it is
 simpler to re-run `dials.index` setting the chosen space group. 
 
 The reader is reminded here - in most cases it is absolutely fine to
-proceed without worrying about the crystal symmetry at this stage `:-)` 
+proceed without worrying about the crystal symmetry at this stage 🙂
 
 ## Refinement
 
