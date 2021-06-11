@@ -17,6 +17,26 @@ tools, I am not making so much effort to explain the options as simply
 find the settings which work for you. Particularly with looking at
 diffraction images, the "best" settings are very personal. 
 
+## DIALS version
+
+This tutorial assumes you are using (DIALS
+version 3.5)[https://dials.github.io/installation.html] and that you
+have this set up (i.e. you've sourced the setup file).
+
+If you type `dials.version` you should see something like:
+
+```
+DIALS 3.5.0-g82bac9855-release
+Python 3.8.10
+Installed in: /Applications/dials-v3-5-0/modules/dials
+```
+
+If you are running on the APS virtual machines, `module load
+dials-3.5.0` will get you set up and there is no need to download the
+data. If you are running at home on Linux or macOS then you should be
+able to reproduce the results in here. If you are on Windows, try
+installing the Linux version in a WSL terminal using e.g. Ubuntu.
+
 ## Tutorial data
 
 The following example uses a small Thaumatin data set collected on
@@ -29,7 +49,13 @@ DIALS creates two principle file types:
 - experiment files called `something.expt`
 - reflection files called `something.refl`
 
-In most cases the filenames will correspond to the name of the DIALS
+"Experiment" in DIALS has a very specific meaning - the capturing of
+data from one set of detector, beam, goniometer and crystal - so if
+you have two scans from one crystal this is two experiments, if you
+have two lattices on one data set this is two experiments. In most
+cases you can ignore this distinction though.
+
+Usually the output filenames will correspond to the name of the DIALS
 program which created them e.g. `indexed.refl` and `indexed.expt` from
 `dials.index`. The only deviations from this are on import (see below)
 where we are only reading experiment models and spot finding where we
@@ -38,6 +64,8 @@ create no models so (by default) there is no output experiment file.
 
 At any time you can _look_ at these files with `dials.show` which will
 summarise the content of the files to the terminal. 
+
+(If you're impatient...)[./tldr.md)
 
 ## Parameters
 
@@ -175,8 +203,6 @@ how the parameters affect the spot finding algorithm. The final button
 produces peaks at real diffraction spot positions will give the best
 chance of success. 
 
-<img src="./images/viewer-controls.png" width="30%">
-
 The second tool for visualisation of the found spots is the reciprocal
 lattice viewer - which presents a view of the spot positions mapped to
 reciprocal space.
@@ -194,15 +220,20 @@ in the subsequent analysis.
 
 ![Reciprocal viewer](./images/reciprocal-lattice.png)
 
-If the geometry is not accurately recorded you may find it useful to
-run 
+Have a play with the settings - you can change the beam centre in the
+viewer to see how nicely aligned spots move out of alignment. Some of
+the options will only work after you have indexed the data. If the
+geometry is not accurately recorded you may find it useful to run:
 
 ```
 dials.search_beam_position imported.expt strong.refl
 ```
 
-to determine an updated position for the beam centre - running the
-reciprocal lattice viewer with the optimised experiment output:
+to determine an updated position for the beam centre - ideally the
+shift that this calculates should be small if the beamline is well
+calibrated - if it is a couple of mm or more it may be worth
+discussing this with the beamline staff! Running the reciprocal
+lattice viewer with the optimised experiment output:
 
 ```
 dials.reciprocal_lattice_viewer optimised.expt strong.refl
@@ -236,7 +267,31 @@ set are the `space_group` and `unit_cell` if these are known in
 advance. While this does index the data it will also perform some
 refinement with a static crystal model, and indicate in the output the
 fraction of reflections which have been indexed - ideally this should
-be close to 100%. If it is significantly less than 100% it is possible
+be close to 100%:
+
+```
+Refined crystal models:
+model 1 (19471 reflections):
+Crystal:
+    Unit cell: 58.276(3), 58.228(2), 150.669(5), 89.9383(8), 89.9515(12), 90.0746(13)
+    Space group: P 1
+    U matrix:  {{ 0.5142,  0.6367, -0.5747},
+                {-0.3924, -0.4212, -0.8177},
+                {-0.7626,  0.6460,  0.0332}}
+    B matrix:  {{ 0.0172,  0.0000,  0.0000},
+                { 0.0000,  0.0172,  0.0000},
+                {-0.0000, -0.0000,  0.0066}}
+    A = UB:    {{ 0.0088,  0.0109, -0.0038},
+                {-0.0067, -0.0072, -0.0054},
+                {-0.0131,  0.0111,  0.0002}}
++------------+-------------+---------------+-------------+
+|   Imageset |   # indexed |   # unindexed | % indexed   |
+|------------+-------------+---------------+-------------|
+|          0 |       19471 |          3604 | 84.4%       |
++------------+-------------+---------------+-------------+
+```
+
+If it is significantly less than 100% it is possible
 you have a second lattice - adding `max_lattices=2` (say) to the
 command-line will indicate to the program that you would like to
 consider attempting to separately index the unindexed reflections
@@ -245,7 +300,8 @@ after the first lattice has been identified.
 By default the triclinic lattice i.e. with `P1` no additional symmetry
 is assumed - for the majority of data there are no differences in the
 quality of the results from assigning the Bravais lattice at this
-stage. 
+stage, even if as here it is perfectly obvious what the correct answer
+is. 
 
 If successful, `dials.index` writes the experiments and indexed
 reflections to two new files `indexed.expt` and `indexed.refl` - if
@@ -321,6 +377,30 @@ you will see a table of possible unit cell / Bravais lattice /
 R.M.S. deviations printed in the output - in the case of this tutorial
 data they will all match, as the true symmetry is tetragonal.
 
+```
+Chiral space groups corresponding to each Bravais lattice:
+aP: P1
+mP: P2 P21
+mC: C2
+oP: P222 P2221 P21212 P212121
+oC: C2221 C222
+tP: P4 P41 P42 P43 P422 P4212 P4122 P41212 P4222 P42212 P4322 P43212
++------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------+
+|   Solution |   Metric fit |   rmsd | min/max cc   |   #spots | lattice   | unit_cell                                |   volume | cb_op      |
+|------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------|
+|   *      9 |       0.0969 |  0.057 | 0.753/0.914  |     5000 | tP        | 58.08  58.08 150.34  90.00  90.00  90.00 |   507151 | a,b,c      |
+|   *      8 |       0.091  |  0.049 | 0.753/0.811  |     5000 | oC        | 82.24  82.41 150.56  90.00  90.00  90.00 |  1020311 | a+b,-a+b,c |
+|   *      7 |       0.0969 |  0.053 | 0.753/0.933  |     5000 | oP        | 57.98  58.06 150.24  90.00  90.00  90.00 |   505766 | a,b,c      |
+|   *      6 |       0.091  |  0.045 | 0.811/0.811  |     5000 | mC        | 82.31  82.20 150.43  90.00  90.08  90.00 |  1017816 | a-b,a+b,c  |
+|   *      5 |       0.0891 |  0.034 | 0.933/0.933  |     5000 | mP        | 58.14  58.18 150.49  90.00  89.91  90.00 |   509099 | -b,-a,-c   |
+|   *      4 |       0.0969 |  0.048 | 0.795/0.795  |     5000 | mP        | 58.12  58.13 150.51  90.00  89.90  90.00 |   508490 | a,b,c      |
+|   *      3 |       0.0785 |  0.05  | 0.753/0.753  |     5000 | mP        | 58.19 150.48  58.15  90.00  90.11  90.00 |   509165 | b,c,a      |
+|   *      2 |       0.0478 |  0.032 | 0.809/0.809  |     5000 | mC        | 82.27  82.38 150.61  90.00  89.93  90.00 |  1020753 | a+b,-a+b,c |
+|   *      1 |       0      |  0.031 | -/-          |     5000 | aP        | 58.28  58.23 150.67  89.94  89.95  90.08 |   511263 | a,b,c      |
++------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------+
+* = recommended solution
+```
+
 If you wish to use one of the output experiments from this process
 e.g. `bravais_setting_9.expt` you will need to reindex the reflection
 data from indexing to match this - we do not output every option of
@@ -350,7 +430,31 @@ dials.refine indexed.expt indexed.refl
 
 without any options and the program will do something sensible - if
 you compare the R.M.S. deviations from the end of indexing with the
-end of refinement you should see a small improvement. If you look at
+end of refinement you should see a small improvement e.g.
+
+```
+RMSDs by experiment:
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |   5000 |  0.27013 |  0.31145 |    0.25904 |
++-------+--------+----------+----------+------------+
+```
+
+to:
+
+```
+RMSDs by experiment:
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |  14423 |  0.24008 |  0.27144 |    0.20241 |
++-------+--------+----------+----------+------------+
+```
+
+If you look at
 the output of `dials.report` at this stage you should see small
 variations in the unit cell and sample orientation as the crystal is
 rotated - if these do not appear small then it is likely that
