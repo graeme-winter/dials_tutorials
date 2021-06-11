@@ -65,7 +65,7 @@ create no models so (by default) there is no output experiment file.
 At any time you can _look_ at these files with `dials.show` which will
 summarise the content of the files to the terminal. 
 
-(If you're impatient...)[./tldr.md)
+[If you're impatient...](./tldr.md)
 
 ## Parameters
 
