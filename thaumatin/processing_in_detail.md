@@ -1,4 +1,4 @@
-# Processing in Detail (Thaumatin / Eiger Edition)
+# Processing in Detail (APS / CCP4 2021)
 
 ## Introduction
 
@@ -6,7 +6,16 @@ DIALS processing may be performed by either running the individual
 tools (spot finding, indexing, refinement, integration, symmetry,
 scaling, exporting to MTZ) or you can run `xia2`, which makes
 informed choices for you at each stage. In this tutorial we will run
-through each of the steps in turn, checking the output as we go. We will also enforce the correct lattice symmetry.
+through each of the steps in turn, taking a look at the output as we
+go. We will also look at enforcing the correct lattice symmetry.
+
+The aim of this tutorial is to introduce you to the tools, not teach
+about data processing - it is assumed you have some idea of the
+overall process from e.g. associated lectures. With the graphical
+tools, I am not making so much effort to explain the options as simply
+"playing" will give you a chance to learn your way around and also
+find the settings which work for you. Particularly with looking at
+diffraction images, the "best" settings are very personal. 
 
 ## Tutorial data
 
@@ -119,6 +128,9 @@ the controls at the bottom of the "Settings" window allow you to step
 through these and can be very useful for getting a "computer's eye
 view" of how the data look (particularly for establishing where the
 diffraction is visible to.)
+
+[Here](./import_detail.md) is a short discussion on some more details
+of importing data. 
 
 ## Find Spots
 
