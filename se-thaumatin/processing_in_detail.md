@@ -476,7 +476,7 @@ damage:
 Once you have refined the model the next step is to integrate the
 data - in effect this is using the refined model to calculate the
 positions where all of the reflections in the data set will be found
-and measure the background substracted intensities:
+and measure the background subtracted intensities:
 
 ```
 dials.integrate refined.expt refined.refl

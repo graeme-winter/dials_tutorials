@@ -12,6 +12,8 @@ dials.refine indexed.expt indexed.refl
 dials.integrate refined.expt refined.refl
 dials.symmetry integrated.expt integrated.refl
 dials.scale symmetrized.expt symmetrized.refl
+dials.export scaled.expt scaled.refl
+dials.merge scaled.expt scaled.refl
 ```
 
 If you run this _before_ working through the tutorial you can spend the time looking at the log files (e.g. `cat dials.find_spots.log`) rather than waiting for the individual tasks to complete.
