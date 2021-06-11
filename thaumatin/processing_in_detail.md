@@ -408,7 +408,7 @@ reindexed data as these files can be large. In most cases it is
 simpler to re-run `dials.index` setting the chosen space group. 
 
 The reader is reminded here - in most cases it is absolutely fine to
-proceed without worrying about the crystal symmetry at this stage 🙂
+proceed without worrying about the crystal symmetry at this stage 🙂.
 
 ## Refinement
 
@@ -459,8 +459,9 @@ the output of `dials.report` at this stage you should see small
 variations in the unit cell and sample orientation as the crystal is
 rotated - if these do not appear small then it is likely that
 something has happened during data collection e.g. severe radiation
-damage. 
-   
+damage:
+
+![Refinement graphs](./images/refine-report-sv.png)
 
 ## Integration
 
