@@ -19,8 +19,8 @@ diffraction images, the "best" settings are very personal.
 
 ## DIALS version
 
-This tutorial assumes you are using (DIALS
-version 3.5)[https://dials.github.io/installation.html] and that you
+This tutorial assumes you are using [DIALS
+version 3.5](https://dials.github.io/installation.html) and that you
 have this set up (i.e. you've sourced the setup file).
 
 If you type `dials.version` you should see something like:
