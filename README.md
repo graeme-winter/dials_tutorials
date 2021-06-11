@@ -7,3 +7,5 @@ but hopefully contaim some valuable signal.
 
 [2021 APS CCP4 workshop: thaumatin](./thaumatin/processing_in_detail.md)
 
+[2021 APS CCP4 workshop: selenourea thaumatin](./se-thaumatin/processing_in_detail.md)
+
