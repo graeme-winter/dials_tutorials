@@ -197,9 +197,9 @@ dials.image_viewer imported.expt strong.refl
 ```
 
 to get a sense of what spots were found. You will see that the spots
-are surrounded by little blue boxes - these are the _bounding boxes_ of
-the reflections i.e. the outer extent of the connected regions of the
-signal pixels. The signal pixels are highlighted with green blobs
+are surrounded by little boxes - these are the _bounding boxes_ of
+the reflections i.e. the outer extent of the pixels that belong to
+that spot. The "signal" pixels are highlighted with green blobs
 giving a sense of what is and is not "strong."
 
 ![Image viewer](./images/image-view-spots.png)
