@@ -51,7 +51,7 @@ input {
 
 --------------------------------------------------------------------------------
   format: <class 'dxtbx.format.FormatNexusEigerDLS16M.FormatNexusEigerDLS16M'>
-  num images: 500
+  num images: 1800
   sequences:
     still:    0
     sweep:    1
@@ -60,7 +60,7 @@ input {
 Writing experiments to imported.expt
 ```
 
-If you expected 500 images as a single sweep, from an Eiger detector, then this looks right. More complex cases e.g. with 4 sweeps of data from a single sample could look like:
+If you expected 1800 images as a single sweep, from an Eiger detector, then this looks right. More complex cases e.g. with 4 sweeps of data from a single sample could look like:
 
 ```
 --------------------------------------------------------------------------------
@@ -75,3 +75,8 @@ Writing experiments to imported.expt
 ```
 
 In this tutorial we will only be considering single-sweep data. 
+
+The `format` here is more than the file format - it is the specialised
+reader code that was found to be appropriate for this data, which
+allows certain local customisations. In the case of data from Diamond,
+this includes the shadow model for the goniometer.
