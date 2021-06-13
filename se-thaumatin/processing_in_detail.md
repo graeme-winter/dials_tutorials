@@ -653,7 +653,47 @@ experiments. `dials.scale` generates a HTML report `dials.scale.html`
 which includes a lot of information about how the models look, as well
 as regions of the data which agree well and poorly - from a practical
 perspective this is the point where you really _know_ about the final
-quality of the data.
+quality of the data. The overall summary data are printed to the console and
+the log file e.g.:
+
+```
+            -------------Summary of merging statistics--------------           
+
+                                            Suggested   Low    High  Overall
+High resolution limit                           1.18    3.20    1.18    1.08
+Low resolution limit                          150.04  151.27    1.20  150.04
+Completeness                                   93.3   100.0    59.9    79.6
+Multiplicity                                   12.1    12.2     6.2    11.3
+I/sigma                                        14.0    79.8     0.3    12.7
+Rmerge(I)                                     0.086   0.031   1.904   0.088
+Rmerge(I+/-)                                  0.082   0.028   1.731   0.083
+Rmeas(I)                                      0.090   0.032   2.076   0.092
+Rmeas(I+/-)                                   0.089   0.031   2.005   0.090
+Rpim(I)                                       0.025   0.009   0.798   0.026
+Rpim(I+/-)                                    0.034   0.012   0.996   0.035
+CC half                                       0.999   1.000   0.316   0.999
+Anomalous completeness                         92.9   100.0    57.8    77.5
+Anomalous multiplicity                          6.4     7.1     3.2     6.0
+Anomalous correlation                         0.192   0.300  -0.018   0.206
+Anomalous slope                               0.519                        
+dF/F                                          0.067                        
+dI/s(dI)                                      0.565                        
+Total observations                           957119   56962   15339  988441
+Total unique                                  79095    4663    2492   87260
+```
+
+as well as a better estimate for the resolution, if this is lower than the full extent of the data. Further up you will also see an analysis of the error model:
+
+```
+Error model details:
+  Type: basic
+  Parameters: a = 0.98564, b = 0.02339
+  Error model formula: σ'² = a²(σ² + (bI)²)
+  estimated I/sigma asymptotic limit: 43.369
+```
+
+which is very useful for basic diagnostics. This is immediately comparable with
+the ISa statistic from XDS. 
 
 ## Merging or Exporting
 
