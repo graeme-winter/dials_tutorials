@@ -671,5 +671,5 @@ to simply export the scaled reflections in MTZ format or
 dials.merge scaled.expt scaled.refl
 ```
 
-which will output a scaled and merged MTZ file. 
-
+which will output a scaled and merged MTZ file. What you can go do
+with this is [explored](./next.md) but out of context for this tutorial.
