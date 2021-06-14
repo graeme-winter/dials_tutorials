@@ -11,7 +11,7 @@ dials.index imported.expt strong.refl
 dials.refine indexed.expt indexed.refl
 dials.integrate refined.expt refined.refl
 dials.symmetry integrated.expt integrated.refl
-dials.scale symmetrized.expt symmetrized.refl
+dials.scale symmetrized.expt symmetrized.refl anomalous=true absorption_level=medium
 dials.export scaled.expt scaled.refl
 dials.merge scaled.expt scaled.refl
 ```
