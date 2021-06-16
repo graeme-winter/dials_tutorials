@@ -52,7 +52,7 @@ than as a zip file, as some systems struggle with zip files > 4GB.
 
 ## Files
 
-DIALS creates two principle file types:
+DIALS creates two principal file types:
 
 - experiment files called `something.expt`
 - reflection files called `something.refl`
