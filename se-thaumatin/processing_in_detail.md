@@ -617,7 +617,7 @@ Space group with equivalent score (enantiomorphic pair): P 43 21 2
 During the experiment there are effects which alter the measured
 intensity of the reflections, not least radiation damage, changes to
 beam intensity or illuminated volume or absorption within the
-sample. The purpose of `dials.scale` like all scaling programs is to
+sample. The purpose of `dials.scale`, like all scaling programs, is to
 attempt to correct for these effects by using the fact that symmetry
 related reflections should share a common intensity. By default no
 attempt is made to merge the reflections - this may be done
