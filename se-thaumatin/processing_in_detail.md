@@ -186,7 +186,7 @@ dials.find_spots imported.expt
 ```
 
 This is one of the two steps where every image in the data set is read
-and processed and hence can be moderately time consuming. This
+and processed and hence can be moderately time-consuming. This
 contains a reflection file `strong.refl` which contains both the
 positions of the strong spots and also "images" of the spot pixels
 which we will use later. You can view these spots on top of the images
