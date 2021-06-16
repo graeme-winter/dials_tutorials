@@ -64,7 +64,7 @@ have two lattices on one data set this is two experiments. In most
 cases you can ignore this distinction though.
 
 Usually the output filenames will correspond to the name of the DIALS
-program which created them e.g. `indexed.refl` and `indexed.expt` from
+program that created them e.g. `indexed.refl` and `indexed.expt` from
 `dials.index`. The only deviations from this are on import (see below)
 where we are only reading experiment models and spot finding where we
 find _strong_ reflections so write these to `strong.refl` - and we
