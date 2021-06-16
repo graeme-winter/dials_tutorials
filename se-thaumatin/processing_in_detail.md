@@ -364,7 +364,7 @@ should not be a cause for concern.
 Once you have indexed the data you may optionally attempt to infer the
 correct Bravais lattice and assign this to constrain the unit cell in
 subsequent processing. If, for example, the unit cell from indexing
-has all three angles close to 90 degrees and two unit cell lengths
+has all three angles close to 90° and two unit cell lengths
 with very similar values you could guess that the unit cell is
 tetragonal. In `dials.refine_bravais_settings` we take away the
 guesswork by transforming the unit cell to all possible Bravais
@@ -498,7 +498,7 @@ than e.g. a laptop.
 
 If you know in advance that the data do not diffract to anything close
 to the edges of the detector you can assign a resolution limit at this
-stage by adding `prediction.d_min=1.8` (say) to define a 1.8A
+stage by adding `prediction.d_min=1.8` (say) to define a 1.8 Å
 resolution limit - this should in general not be necessary. At the end
 of integration two new files are created - `integrated.refl` and
 `integrated.expt` - looking at these in the image viewer e.g.
