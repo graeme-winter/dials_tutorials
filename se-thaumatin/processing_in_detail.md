@@ -241,8 +241,8 @@ dials.search_beam_position imported.expt strong.refl
 ```
 
 to determine an updated position for the beam centre - ideally the
-shift that this calculates should be small if the beamline is well
-calibrated - if it is a couple of mm or more it may be worth
+shift that this calculates should be small if the beamline is well-calibrated
+- if it is a couple of mm or more it may be worth
 discussing this with the beamline staff! Running the reciprocal
 lattice viewer with the optimised experiment output:
 
