@@ -258,7 +258,7 @@ Further discussion of the output can be found
 ## Indexing
 
 The next step will be indexing of the found spots with `dials.index` -
-by default this uses a 3D FFT algorithm to identify periodicy in the
+by default this uses a 3D FFT algorithm to identify periodicity in the
 reciprocal space mapped spot positions, though there are other
 algorithms available which can be better suited to e.g. narrow data
 sets.
