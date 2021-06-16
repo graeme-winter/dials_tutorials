@@ -506,3 +506,73 @@ If all the dots are widely distributed around the circles then there is no evide
 The crystallographic unit cell can be used to give some hints of isomorphism before intensity data are compared. If you have two distinct crystal forms they will be visible in these histograms:
 
 ![Unit cell comparisons](./images/cells.png)
+
+In this case we have a reasonable spread of unit cells with two
+apparent outliers - with these data they are most likely to be better
+identified by intensity comparisons, but in some cases the unit cell
+information could provide more useful insight.
+
+### Delta CC-half
+
+This is possibly more useful - showing the data which add or detract
+from the data set as a whole - this was already touched apon in the
+discussion above. The data may be excluded by taking the data from the
+scaled full cluster and passing this _in_ to `dials.scale` with the
+`exclude_datasets=` option.
+
+![Delta CC half](./images/delta-cchalf.png)
+
+### Intensity Clustering
+
+Here we are assessing the correlation between pairs of data sets - if
+these are relatively complete this can very rapidly give you an idea
+of which data should be merged. Here we see the so-called "cos angle"
+clustering which is an assessment of the similarity independent of the
+strength of the individual data sets, and there are (depending on your
+criteria) maybe three or four distinct clusters. It is these clusters
+which are then considered in the next section.
+
+![Data set comparisons](./images/cos-cluster.png)
+
+### Cluster Comparisons
+
+This is where we really get down to brass tacks: the possible clusters
+that have been identified by `multiplex` with completeness >= 90% can
+be compared by their overall and per-resolution-shell merging
+statistics:
+
+![Merging statistic graphs](./images/clusters.png)
+
+These allow you to select the best cluster according to your own
+criteria before proceeding.
+
+For each cluster you will find a subdirectory inside the folder you
+ran `multiplex`: this contains all of the analysis output and most
+usefully the final scaled data for that cluster, scaled independently
+of the other clusters. For example:
+
+```
+Grey-Area mplex :) $ cd cluster_20
+Grey-Area cluster_20 :) $ ls
+27_dials.two_theta_refine.cif		dials.estimate_resolution.log
+27_dials.two_theta_refine.json		dials.scale.log
+27_dials.two_theta_refine.log		dials.two_theta_refine.log
+27_dials.two_theta_refine.mmcif		models.expt
+27_dials.two_theta_refine.p4p		multiplicities_h_0.json
+27_dials.two_theta_refine_2theta.png	multiplicities_h_0.png
+27_refined_cell.expt			multiplicities_k_0.json
+28_dials.scale.log			multiplicities_k_0.png
+28_scaled.expt				multiplicities_l_0.json
+28_scaled.mtz				multiplicities_l_0.png
+28_scaled.refl				observations.refl
+28_scaled_unmerged.mtz			scaled.expt
+28_scaling.html				scaled.mtz
+29_dials.estimate_resolution.html	scaled.refl
+29_dials.estimate_resolution.json	scaled_unmerged.mtz
+29_dials.estimate_resolution.log
+```
+
+contains everything you would need to take forward for that cluster,
+allowing you to evaluate the success of processing for each downstream
+step. The merging statistics for every cluster are also highlighted in
+the tabs of the output in `xia2.multiplex.html`.
