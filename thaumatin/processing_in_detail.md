@@ -44,7 +44,7 @@ beamline i03 at Diamond Light Source, which is available [from Zenodo](https://d
 
 ## Files
 
-DIALS creates two principle file types:
+DIALS creates two principal file types:
 
 - experiment files called `something.expt`
 - reflection files called `something.refl`
@@ -56,7 +56,7 @@ have two lattices on one data set this is two experiments. In most
 cases you can ignore this distinction though.
 
 Usually the output filenames will correspond to the name of the DIALS
-program which created them e.g. `indexed.refl` and `indexed.expt` from
+program that created them e.g. `indexed.refl` and `indexed.expt` from
 `dials.index`. The only deviations from this are on import (see below)
 where we are only reading experiment models and spot finding where we
 find _strong_ reflections so write these to `strong.refl` - and we
@@ -131,8 +131,8 @@ the NeXus formatted file (which is functionally equivalent) with
 dials.import xtal_1_5.nxs
 ```
 
-It is important to note that for well behaved data (i.e. anything
-which is well collected from a well behaved sample) the commands below
+It is important to note that for well-behaved data (i.e. anything
+which is well-collected from a well-behaved sample) the commands below
 will often be identical after importing.
 
 At this point you can actually look at the images with the
@@ -175,7 +175,7 @@ dials.find_spots imported.expt
 ```
 
 This is one of the two steps where every image in the data set is read
-and processed and hence can be moderately time consuming. This
+and processed and hence can be moderately time-consuming. This
 contains a reflection file `strong.refl` which contains both the
 positions of the strong spots and also "images" of the spot pixels
 which we will use later. You can view these spots on top of the images
@@ -230,8 +230,8 @@ dials.search_beam_position imported.expt strong.refl
 ```
 
 to determine an updated position for the beam centre - ideally the
-shift that this calculates should be small if the beamline is well
-calibrated - if it is a couple of mm or more it may be worth
+shift that this calculates should be small if the beamline is well-calibrated
+ - if it is a couple of mm or more it may be worth
 discussing this with the beamline staff! Running the reciprocal
 lattice viewer with the optimised experiment output:
 
@@ -247,7 +247,7 @@ Further discussion of the output can be found
 ## Indexing
 
 The next step will be indexing of the found spots with `dials.index` -
-by default this uses a 3D FFT algorithm to identify periodicy in the
+by default this uses a 3D FFT algorithm to identify periodicity in the
 reciprocal space mapped spot positions, though there are other
 algorithms available which can be better suited to e.g. narrow data
 sets.
@@ -353,7 +353,7 @@ should not be a cause for concern.
 Once you have indexed the data you may optionally attempt to infer the
 correct Bravais lattice and assign this to constrain the unit cell in
 subsequent processing. If, for example, the unit cell from indexing
-has all three angles close to 90 degrees and two unit cell lengths
+has all three angles close to 90° and two unit cell lengths
 with very similar values you could guess that the unit cell is
 tetragonal. In `dials.refine_bravais_settings` we take away the
 guesswork by transforming the unit cell to all possible Bravais
@@ -468,7 +468,7 @@ damage:
 Once you have refined the model the next step is to integrate the
 data - in effect this is using the refined model to calculate the
 positions where all of the reflections in the data set will be found
-and measure the background substracted intensities:
+and measure the background-subtracted intensities:
 
 ```
 dials.integrate refined.expt refined.refl
@@ -488,7 +488,7 @@ than e.g. a laptop.
 
 If you know in advance that the data do not diffract to anything close
 to the edges of the detector you can assign a resolution limit at this
-stage by adding `prediction.d_min=1.8` (say) to define a 1.8A
+stage by adding `prediction.d_min=1.8` (say) to define a 1.8 Å
 resolution limit - this should in general not be necessary. At the end
 of integration two new files are created - `integrated.refl` and
 `integrated.expt` - looking at these in the image viewer e.g.
@@ -541,7 +541,7 @@ P2?2?2? in standard MX
 During the experiment there are effects which alter the measured
 intensity of the reflections, not least radiation damage, changes to
 beam intensity or illuminated volume or absorption within the
-sample. The purpose of `dials.scale` like all scaling programs is to
+sample. The purpose of `dials.scale`, like all scaling programs, is to
 attempt to correct for these effects by using the fact that symmetry
 related reflections should share a common intensity. By default no
 attempt is made to merge the reflections - this may be done
@@ -568,7 +568,7 @@ correction is constrained with
 absorption_level=(low|medium|high)
 ```
 
-setting low, the default, corresponds to ~ 1% absorption, medium to ~
+where setting low, the default, corresponds to ~ 1% absorption, medium to ~
 5% and high to ~ 25% - these are not absolute, more a sense of what
 you may expect. Testing has indicated that setting it too high is
 unlikely to do any harm, but setting it too low can have a measurable
