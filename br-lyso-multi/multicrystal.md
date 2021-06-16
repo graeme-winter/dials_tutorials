@@ -13,7 +13,9 @@ The aim of the tutorial is to introduce you to tools for symmetry determination,
 
 For this tutorial the data kindly provided from a [CCP4 School at SPring 8](https://zenodo.org/record/1442922) will be used - in particular the 31 data sets included in `bl32xu_group2_data.tar.xz`. These are recorded using the `zoo` system with an Eiger 9M detector, and appear in the data _files_ as 3,100 images which we have to interpret as 31 x 100 image @ 0.1° / frame data sets. The data are from small samples of tetragonal lysozyme (unit cell ~ 78, 78, 38, 90, 90, 90, space group P43212), though we won't use that information from the outset.
 
-The mode of data collection makes these data a little "special" so when importing care must be taken to treat the 31 x 100 image data sets as different data sets - in `dials.import` using `image_range=1,100` etc. is necessary.
+The mode of data collection makes these data a little "special" so when importing care must be taken to treat the 31 x 100 image data sets as different data sets - in `dials.import` using `image_range=1,100` etc. is necessary. The data were taken from a single loop, which was raster scanned to identify the sample positions then collected using the ZOO system:
+
+![Loop image](./images/loop.png)
 
 ## Book Keeping
 
