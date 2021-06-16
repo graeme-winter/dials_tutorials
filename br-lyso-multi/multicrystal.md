@@ -15,7 +15,7 @@ For this tutorial the data kindly provided from a [CCP4 School at SPring 8](http
 
 The mode of data collection makes these data a little "special" so when importing care must be taken to treat the 31 x 100 image data sets as different data sets - in `dials.import` using `image_range=1,100` etc. is necessary. The data were taken from a single loop, which was raster scanned to identify the sample positions then collected using the ZOO system:
 
-![Loop image](./images/loop.png)
+![Loop image](./images/loop.jpg)
 
 ## Book Keeping
 
