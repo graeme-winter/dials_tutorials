@@ -139,8 +139,8 @@ the NeXus formatted file (which is functionally equivalent) with
 dials.import SeThau_1_1.nxs
 ```
 
-It is important to note that for well behaved data (i.e. anything
-which is well collected from a well behaved sample) the commands below
+It is important to note that for well-behaved data (i.e. anything
+which is well-collected from a well-behaved sample) the commands below
 will often be identical after importing.
 
 At this point you can actually look at the images with the
