@@ -644,7 +644,7 @@ correction is constrained with
 absorption_level=(low|medium|high)
 ```
 
-setting low, the default, corresponds to ~ 1% absorption, medium to ~
+where setting low, the default, corresponds to ~ 1% absorption, medium to ~
 5% and high to ~ 25% - these are not absolute, more a sense of what
 you may expect. Testing has indicated that setting it too high is
 unlikely to do any harm, but setting it too low can have a measurable
