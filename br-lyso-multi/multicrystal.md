@@ -1,4 +1,4 @@
-# Multicrystal with xia2 / multiplex
+90# Multicrystal with xia2 / multiplex
 
 ## Introduction
 
@@ -493,7 +493,9 @@ Once all the data are processed you can use a tool from `xia2` called `multiplex
 xia2.multiplex ../sweep-*/integrated.* min_completeness=0.9 
 ```
 
-Now we can start asking some tricky questions about the _best_ subsets of data to use for the next steps in your data analysis. This command will filter out all the clusters which are >= 90% complete, then scale and merge the data for each of those clusters to allow direct comparison - here inspection of `xia2.multiplex.html` is critical. There is a _lot_ of information in there so worth paying attention to.
+Now we can start asking some tricky questions about the _best_ subsets
+of data to use for the next steps in your data analysis. This command
+will keep all the clusters which are >= 90% complete, then scale and merge the data for each of those clusters to allow direct comparison - here inspection of `xia2.multiplex.html` is critical. There is a _lot_ of information in there so worth paying attention to.
 
 ### Preferential Orientation
 
