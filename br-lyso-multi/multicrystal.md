@@ -2,10 +2,10 @@
 
 ## Introduction
 
-The actual _processing_ of multi-crystal data is essentially no different to processing regular rotation data in the first instance - though there are some potential differences in how you handle the data by and large the process for an individual sweep is straightforward. The work comes in identifying which subsets of data (e.g. which crystals, or subsets of data from crystals) to merge into the final data set. This tutorial covers the basics of how to use
+The actual _processing_ of multi-crystal data is essentially no different to processing regular rotation data in the first instance - though there are some potential differences in how you handle the data, by and large the process for an individual sweep is straightforward. The work comes in identifying which subsets of data (e.g. which crystals, or subsets of data from crystals) to merge into the final data set. This tutorial covers the basics of how to use
 DIALS tools to make these choices. 
 
-One particular issue with multi-crystal data processing is the "book keeping" i.e. keeping track of individual data sets, which can become cumbersome when the numbers are large. This tutorial is aimed at helping you to use the tools at your disposal to process such data with the minimum of 🤯.
+One particular issue with multi-crystal data processing is the "bookkeeping" i.e. keeping track of individual data sets, which can become cumbersome when the numbers are large. This tutorial is aimed at helping you to use the tools at your disposal to process such data with the minimum of 🤯.
 
 The aim of the tutorial is to introduce you to tools for symmetry determination, incremental scaling and data elimination such that you could use them during experimental beam time. 
 
@@ -13,15 +13,15 @@ The aim of the tutorial is to introduce you to tools for symmetry determination,
 
 For this tutorial the data kindly provided from a [CCP4 School at SPring 8](https://zenodo.org/record/1442922) will be used - in particular the 31 data sets included in `bl32xu_group2_data.tar.xz`. These are recorded using the `zoo` system with an Eiger 9M detector, and appear in the data _files_ as 3,100 images which we have to interpret as 31 x 100 image @ 0.1° / frame data sets. The data are from small samples of tetragonal lysozyme (unit cell ~ 78, 78, 38, 90, 90, 90, space group P43212), though we won't use that information from the outset.
 
-The mode of data collection makes these data a little "special" so when importing care must be taken to treat the 31 x 100 image data sets as different data sets - in `dials.import` using `image_range=1,100` etc. is necessary. The data were taken from a single loop, which was raster scanned to identify the sample positions then collected using the ZOO system:
+The mode of data collection makes these data a little "special" so when importing care must be taken to treat the 31 x 100 image data sets as different data sets: in `dials.import` using `image_range=1,100` etc. is necessary. The data were taken from a single loop, which was raster scanned to identify the sample positions then collected using the ZOO system:
 
 ![Loop image](./images/loop.jpg)
 
-## Book Keeping
+## Bookkeeping
 
 This process will involve processing dozens of data sets, will create hundreds of files and will involve running similar looking scaling tasks on several occasions so care will need to be taken on how you organise yourself.
 
-I've chosen to present the processing as directories `sweep00` to `sweep30` (i.e. 31 directories, using computer counting) and then `combine0-9` for combining first 10, `combine0-19` for first 20 etc. - any other organisation will do, but these need to be consistent.
+I've chosen to present the processing as directories `sweep00` to `sweep30` (i.e. 31 directories, using computer counting) and then `combine0-9` for combining first 10, `combine0-19` for first 20 etc. Any other organisation will do, but these need to be consistent.
 
 
 ## Process
@@ -44,7 +44,7 @@ done
 
 This will import and process each 100 image block and really demonstrates how shell scripting can be powerful. In "real" data collection each data set would probably have a different filename, so the only change would be altering the `dials.import` command.
 
-This will generate 31 x `{integrated.refl,integrated.expt}` pairs that are the real input to this process. For this tutorial we will work on the first 10, then _add_ the next ten etc. demonstrating the incremental approach to combining the data.
+This will generate 31 × `{integrated.refl,integrated.expt}` pairs that are the real input to this process. For this tutorial we will work on the first 10, then _add_ the next ten etc. demonstrating the incremental approach to combining the data.
 
 ## Sets 0-9
 
@@ -240,7 +240,7 @@ Reindexing operators:
 x,y,z: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 ```
 
-Running through scaling as before, setting a 1.45A resolution limit, we see:
+Running through scaling as before, setting a 1.45 Å resolution limit, we see:
 
 ```
 Resolution limit suggested from CC½ fit (limit CC½=0.3): 1.48
@@ -465,7 +465,7 @@ Total observations                           400223   22084   20368
 Total unique                                  21639    1221    1063
 ```
 
-By this point there is a good chance you are becoming "snow blind" from all the numbers in the output and they cease to have meaning - and you could be right to do so. Once you have complete data which appears to be internally isomorphous actually attempting structure solution on the processed data will be key, e.g. trying to find the heavy atom substructure or similar, as a more robust measure.
+By this point there is a good chance you are becoming "snow blind" from all the numbers in the output and they cease to have meaning - and you could not be blamed for this. Once you have complete data which appears to be internally isomorphous, actually attempting structure solution on the processed data will be key, e.g. trying to find the heavy atom substructure or similar, as a more robust measure.
 
 ## Explorations of Reciprocal Space
 
