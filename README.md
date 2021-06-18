@@ -11,3 +11,4 @@ but hopefully contaim some valuable signal.
 
 [2021 APS CCP4 workshop: multi-crystal](./br-lyso-multi/multicrystal.md)
 
+[Basic scripting](./scripting/basic_scripting.md)
