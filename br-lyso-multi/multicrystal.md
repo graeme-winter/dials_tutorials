@@ -46,6 +46,8 @@ This will import and process each 100 image block and really demonstrates how sh
 
 This will generate 31 x `{integrated.refl,integrated.expt}` pairs that are the real input to this process. For this tutorial we will work on the first 10, then _add_ the next ten etc. demonstrating the incremental approach to combining the data.
 
+[If this is all Greek to you then this tutorial is here to help!](../scripting/basic_scripting.md)
+
 ## Sets 0-9
 
 First,
