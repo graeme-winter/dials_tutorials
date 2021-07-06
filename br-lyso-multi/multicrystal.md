@@ -1,4 +1,4 @@
-90# Multicrystal with xia2 / multiplex
+# Multicrystal with xia2 / multiplex
 
 ## Introduction
 
