@@ -49,7 +49,7 @@ cherry
 On our systems we can get a real person name using a command called `getent` (which you will never need again, so don't bother to remember this):
 
 ```
-getent password ${name}
+getent passwd ${name}
 ```
 
 Will print what we know about the person with that username, separated by colons. To get what we want we can use another program `cut` which splits up lines, for named delimiters e.g. 
