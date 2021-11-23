@@ -2,6 +2,8 @@
 
 This is a non-trivial worked example to answer a real question: which of the very many data sets I measured on November 18th gave me the highest resolution `xia2-dials` run. One could answer this with some careful book-keeping and a tedious trawl through SynchWeb, but that is not my style. 
 
+Note - these get a little _long_ so we will use line continuation markers by ending lines with `\`...
+
 Start off in the right place:
 
 ```
@@ -36,25 +38,38 @@ Completeness                                   99.0   100.0    86.6
 So:
 
 ```
-grep "High resolution limit" $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi); do echo ${file} $(grep Assuming $file | cut -d : -f 2);  done | grep 'I 2 3' | awk '{print $1}')
+grep "High resolution limit" \
+  $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi); do \
+    echo ${file} $(grep Assuming $file | cut -d : -f 2);  done | \
+    grep 'I 2 3' | awk '{print $1}')
 ```
 
 will get the resolution line - we want to know the highest shell limit (last number) and the data set this came from (first two tokens separated by `/`) so let's replace `/` with spaces then figure out which tokens we actually _want_ - 
 
 ```
-grep "High resolution limit" $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi) ; do echo ${file} $(grep Assuming $file | cut -d : -f 2); done | grep 'I 2 3' | awk '{print $1}') | sed 's$/$ $g'
+grep "High resolution limit" \
+  $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi) ; do \
+    echo ${file} $(grep Assuming $file | cut -d : -f 2); done | \
+    grep 'I 2 3' | awk '{print $1}') | sed 's$/$ $g'
 ```
 
 (leaning quite heavily on `sed` now, but you can google how to use that) - next we need to re-arrange to have the resolution _first_ so we can sort on it (`sort -rn` gives a reverse numerical sort)
 
 ```
-grep "High resolution limit" $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi) ; do echo ${file} $(grep Assuming $file | cut -d : -f 2); done | grep 'I 2 3' | awk '{print $1}') | sed 's$/$ $g' | awk '{print $NF, $2, $3}'
+grep "High resolution limit" \
+  $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi) ; do \
+    echo ${file} $(grep Assuming $file | cut -d : -f 2); done | \
+    grep 'I 2 3' | awk '{print $1}') | sed 's$/$ $g' | awk '{print $NF, $2, $3}'
 ```
 
 So then we sort it, then shuffle the tokens back into the order we want for viewing - and learn which was the highest 
 
 ```
-grep "High resolution limit" $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi) ; do echo ${file} $(grep Assuming $file | cut -d : -f 2); done | grep 'I 2 3' | awk '{print $1}') | sed 's$/$ $g' | awk '{print $NF, $2, $3}' | sort -rn | awk '{print $2"/"$3, $1}'
+grep "High resolution limit" \
+  $(for file in $(find . -name 'xia2.txt' | grep xia2-dials | grep -v multi) ; do \
+    echo ${file} $(grep Assuming $file | cut -d : -f 2); done | \
+    grep 'I 2 3' | awk '{print $1}') | sed 's$/$ $g' | awk '{print $NF, $2, $3}' \
+    sort -rn | awk '{print $2"/"$3, $1}'
 ```
 
 From which we know which is the highest resolution one: this may not be the _best_ data set but however you slice the problem, you can use these tools to get the job done. 
