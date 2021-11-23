@@ -71,3 +71,5 @@ will extract the names we want. Finally, we can save these names with:
 ```
 
 which will write the output not to the screen but to a file which should be called "_your_ username".names. Getting the job done will involve connecting some of the commands above, using pipes, then using the `for` loop and sub shell `$(command | other)` stuff in the right way. 
+
+Finished? Bored? Try [this](./shell_scripting_extra_credit.md)
