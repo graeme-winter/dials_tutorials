@@ -42,7 +42,7 @@ DIALS can support much more complex experimental geometries as well as supportin
 
 ```
 DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
-DIALS 3.5.0-g82bac9855-release
+DIALS 3.dev.611-g1596bb41a
 The following parameters have been modified:
 
 input {
@@ -51,7 +51,7 @@ input {
 
 --------------------------------------------------------------------------------
   format: <class 'dxtbx.format.FormatNexusEigerDLS16M.FormatNexusEigerDLS16M'>
-  num images: 500
+  num images: 720
   sequences:
     still:    0
     sweep:    1
@@ -60,7 +60,7 @@ input {
 Writing experiments to imported.expt
 ```
 
-If you expected 500 images as a single sweep, from an Eiger detector, then this looks right. More complex cases e.g. with 4 sweeps of data from a single sample could look like:
+If you expected 720 images as a single sweep, from an Eiger detector, then this looks right. More complex cases e.g. with 4 sweeps of data from a single sample could look like:
 
 ```
 --------------------------------------------------------------------------------
