@@ -521,7 +521,7 @@ predicted in any program so typically excluded from processing.
 
 Before the data may be scaled it is necessary that the crystal
 symmetry is known - if this was assigned correctly at indexing
-e.g. `space_group=P41212` then you can proceed directly to scaling. In
+e.g. `space_group=I213` then you can proceed directly to scaling. In
 the majority of cases however it will be unknown or not set at this
 point, so needs to be assigned between integration and scaling. Even
 if the Bravais lattice was assigned earlier, the correct symmetry
@@ -547,7 +547,39 @@ is how this step is run. At this point it is important to note that
 the program is trying to identify all symmetry elements, and does not
 know that e.g. inversion centres are not possible - so for an oP
 lattice it will be testing for P/mmm symmetry which corresponds to
-P2?2?2? in standard MX
+P2?2?2? in standard MX.
+
+The data in this tutorial give interesting output for this:
+
+```
++--------------+--------+------+--------+-----+---------------+
+|   likelihood |   Z-CC |   CC |      N |     | Operator      |
+|--------------+--------+------+--------+-----+---------------|
+|        0.942 |   9.95 | 0.99 | 153330 | *** | 1 |(0, 0, 0)  |
+|        0.16  |   4.48 | 0.45 | 292020 |     | 4 |(1, 1, 0)  |
+|        0.16  |   4.47 | 0.45 | 292632 |     | 4 |(1, 0, 1)  |
+|        0.161 |   4.49 | 0.45 | 292380 |     | 4 |(0, 1, 1)  |
+|        0.94  |   9.87 | 0.99 | 293032 | *** | 3 |(1, 0, 0)  |
+|        0.939 |   9.85 | 0.99 | 293108 | *** | 3 |(0, 1, 0)  |
+|        0.94  |   9.86 | 0.99 | 293028 | *** | 3 |(0, 0, 1)  |
+|        0.94  |   9.88 | 0.99 | 293030 | *** | 3 |(1, 1, 1)  |
+|        0.941 |   9.91 | 0.99 | 146456 | *** | 2 |(1, 1, 0)  |
+|        0.161 |   4.49 | 0.45 | 146404 |     | 2 |(-1, 1, 0) |
+|        0.941 |   9.89 | 0.99 | 148810 | *** | 2 |(1, 0, 1)  |
+|        0.161 |   4.49 | 0.45 | 148232 |     | 2 |(-1, 0, 1) |
+|        0.94  |   9.88 | 0.99 | 146406 | *** | 2 |(0, 1, 1)  |
+|        0.16  |   4.49 | 0.45 | 146196 |     | 2 |(0, -1, 1) |
+|        0.162 |   4.52 | 0.45 | 146224 |     | 2 |(1, 1, 2)  |
+|        0.16  |   4.49 | 0.45 | 147204 |     | 2 |(1, 2, 1)  |
+|        0.161 |   4.5  | 0.45 | 146470 |     | 2 |(2, 1, 1)  |
++--------------+--------+------+--------+-----+---------------+
+```
+
+Here it is clear that there are some operations that have close to
+100% CC, others that are much lower - in particular the 4-fold
+rotations in the middle of the faces are not present which means the
+crystal has a _polar_ space group so care needs to be taken when
+combining data from multiple samples. 
 
 
 ## Scaling and Merging
