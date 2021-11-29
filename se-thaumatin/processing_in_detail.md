@@ -25,20 +25,19 @@ diffraction images, the "best" settings are very personal.
 ## DIALS version
 
 This tutorial assumes you are using [DIALS
-version 3.5](https://dials.github.io/installation.html) and that you
-have this set up (i.e. you've sourced the setup file).
+version 3.7](https://dials.github.io/installation.html) and that you
+have this set up (i.e. you've sourced the setup file, or module loaded
+`ccp4-workshop`).
 
 If you type `dials.version` you should see something like:
 
 ```
-DIALS 3.5.0-g82bac9855-release
-Python 3.8.10
-Installed in: /Applications/dials-v3-5-0/modules/dials
+DIALS 3.7.1-gfb34cbf01-release
+Python 3.9.7
+Installed in: /dls_sw/apps/dials/dials-v3-7-1/modules/dials
 ```
 
-If you are running on the APS virtual machines, `module load
-dials-3.5.0` will get you set up and there is no need to download the
-data. If you are running at home on Linux or macOS then you should be
+If you are running at home on Linux or macOS then you should be
 able to reproduce the results in here. If you are on Windows, try
 installing the Linux version in a WSL terminal using e.g. Ubuntu.
 
@@ -48,7 +47,9 @@ The following example uses a selenourea soaked Thaumatin data set
 collected on beamline i04 at Diamond Light Source, which is available
 [from OneDrive](https://dlsltd-my.sharepoint.com/:f:/g/personal/graeme_winter_diamond_ac_uk/EnAVwtJMH1tFpkCVMQCodUQB8rfrfDT8coLdW8noM0rDmg?e=kzujT6). You
 are probably better off downloading the files one at a time rather
-than as a zip file, as some systems struggle with zip files > 4GB.
+than as a zip file, as some systems struggle with zip files > 4GB. For
+the workshop at Diamond, the data are at
+`/dls/i03/data/2021/mx30951-8/tutorial_data/dials`.
 
 ## Files
 
