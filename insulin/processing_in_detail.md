@@ -1,4 +1,4 @@
-# Processing in Detail: selenourea soaked thaumatin (APS / CCP4 2021) 
+# Processing in Detail (Diamond / CCP4 2021)
 
 ## Introduction
 
@@ -8,11 +8,6 @@ scaling, exporting to MTZ) or you can run `xia2`, which makes
 informed choices for you at each stage. In this tutorial we will run
 through each of the steps in turn, taking a look at the output as we
 go. We will also look at enforcing the correct lattice symmetry.
-
-This data set is slightly more substantial than the small 50° set used
-for the other thaumatin tutorial, but more "realistic" in processing
-time and allows phasing from the data that are processed if you are so
-inclined. 
 
 The aim of this tutorial is to introduce you to the tools, not teach
 about data processing - it is assumed you have some idea of the
@@ -26,8 +21,7 @@ diffraction images, the "best" settings are very personal.
 
 This tutorial assumes you are using [DIALS
 version 3.7](https://dials.github.io/installation.html) and that you
-have this set up (i.e. you've sourced the setup file, or module loaded
-`ccp4-workshop`).
+have this set up (i.e. you've run `module load ccp4-workshop`).
 
 If you type `dials.version` you should see something like:
 
@@ -37,19 +31,22 @@ Python 3.9.7
 Installed in: /dls_sw/apps/dials/dials-v3-7-1/modules/dials
 ```
 
-If you are running at home on Linux or macOS then you should be
-able to reproduce the results in here. If you are on Windows, try
-installing the Linux version in a WSL terminal using e.g. Ubuntu.
+If you are running this at home with a different version of DIALS,
+details may change but the general flow should be the same. 
 
 ## Tutorial data
 
-The following example uses a selenourea soaked Thaumatin data set
-collected on beamline i04 at Diamond Light Source, which is available
-[from OneDrive](https://dlsltd-my.sharepoint.com/:f:/g/personal/graeme_winter_diamond_ac_uk/EnAVwtJMH1tFpkCVMQCodUQB8rfrfDT8coLdW8noM0rDmg?e=kzujT6). You
-are probably better off downloading the files one at a time rather
-than as a zip file, as some systems struggle with zip files > 4GB. For
-the workshop at Diamond, the data are at
-`/dls/i03/data/2021/mx30951-8/tutorial_data/dials`.
+The data for this tutorial were collected with a deliberately wide
+rotation angle (i.e. going against my advice in the lecture on Monday)
+to allow quick processing... they are in
+
+```
+/dls/i03/data/2021/mx30951-8/gw/20211118/TestInsulin/ins_1
+```
+
+and we will look at `ins_1_2.nxs` - there are other data sets in
+surrounding areas which are more carefully measured. I'll upload the
+data to Zenodo to allow follow-at-home... 
 
 ## Files
 
@@ -129,16 +126,12 @@ brackets around to structure for computers). While you can edit this
 file if you know what you are doing, usually this is not necessary. 
 
 ```
-dials.import SeThau_1_1_master.h5
+dials.import /dls/i03/data/2021/mx30951-8/gw/20211118/TestInsulin/ins_1/ins_1_2.nxs
 ```
 
-will read the metadata from this `master` file and write
-`imported.expt` from this - equally in this case you could import from
-the NeXus formatted file (which is functionally equivalent) with
-
-```
-dials.import SeThau_1_1.nxs
-```
+will read the metadata from this `nexus` file and write
+`imported.expt` from this: this is the same as "master" files
+elsewhere (and indeed we write master files too.)
 
 It is important to note that for well-behaved data (i.e. anything
 which is well-collected from a well-behaved sample) the commands below
@@ -155,13 +148,10 @@ in this tool there are many settings you can adjust, which could
 depend on the source of the data and - most importantly - your
 preferences. Personally the author finds for basic inspection of the
 images the brightness is a bit high for pixel array data, and a value
-of 5 / 10 may be better for viewing the diffraction pattern as a
-whole. 
-
-![Image viewer](./images/image-view.png)
+of 10 may be better for viewing the diffraction pattern as a whole.
 
 To get a sense of how the diffraction spots are spread, stacking
-images can help - for example in this case setting the stack to 10
+images can help - for example in this case setting the stack to 2
 gives a good idea of the real separation between reflections. If the
 data are not stacked the spot finding process can also be explored -
 the controls at the bottom of the "Settings" window allow you to step
@@ -198,22 +188,22 @@ dials.image_viewer imported.expt strong.refl
 ```
 
 to get a sense of what spots were found. You will see that the spots
-are surrounded by little boxes - these are the _bounding boxes_ of
-the reflections i.e. the outer extent of the pixels that belong to
-that spot. The "signal" pixels are highlighted with green blobs
+are surrounded by little blue boxes - these are the _bounding boxes_ of
+the reflections i.e. the outer extent of the connected regions of the
+signal pixels. The signal pixels are highlighted with green blobs
 giving a sense of what is and is not "strong."
 
-![Image viewer](./images/image-view-spots.png)
+![Image viewer](./images/viewer.png)
 
 The default parameters for spot finding usually do a good job for
-Pilatus or Eiger images, such as these. However they may not be
-optimal for data from other detector types, such as CCDs or image
-plates. Issues with  incorrectly set gain might, for example, lead to
-background noise being extracted as spots. You can use the image mode
-buttons to preview how the parameters affect the spot finding
-algorithm. The final button 'threshold’ is the one on which spots were
-found, so ensuring this produces peaks at real diffraction spot
-positions will give the best chance of success. 
+Pilatus images, such as these. However they may not be optimal for data
+from other detector types, such as CCDs or image plates. Issues with
+incorrectly set gain might, for example, lead to background noise being
+extracted as spots. You can use the image mode buttons to preview
+how the parameters affect the spot finding algorithm. The final button
+'threshold’ is the one on which spots were found, so ensuring this
+produces peaks at real diffraction spot positions will give the best
+chance of success. 
 
 The second tool for visualisation of the found spots is the reciprocal
 lattice viewer - which presents a view of the spot positions mapped to
@@ -243,7 +233,7 @@ dials.search_beam_position imported.expt strong.refl
 
 to determine an updated position for the beam centre - ideally the
 shift that this calculates should be small if the beamline is well-calibrated
-- if it is a couple of mm or more it may be worth
+ - if it is a couple of mm or more it may be worth
 discussing this with the beamline staff! Running the reciprocal
 lattice viewer with the optimised experiment output:
 
@@ -283,23 +273,23 @@ be close to 100%:
 
 ```
 Refined crystal models:
-model 1 (178887 reflections):
+model 1 (74549 reflections):
 Crystal:
-    Unit cell: 57.8418(17), 57.9446(18), 150.015(4), 89.9877(8), 90.0371(8), 90.0379(8)
+    Unit cell: 67.094(3), 67.207(3), 67.188(3), 109.4587(5), 109.4455(5), 109.4563(5)
     Space group: P 1
-    U matrix:  {{ 0.2124, -0.0181, -0.9770},
-                {-0.8378,  0.5112, -0.1916},
-                { 0.5029,  0.8593,  0.0934}}
-    B matrix:  {{ 0.0173,  0.0000,  0.0000},
-                { 0.0000,  0.0173,  0.0000},
-                { 0.0000, -0.0000,  0.0067}}
-    A = UB:    {{ 0.0037, -0.0003, -0.0065},
-                {-0.0145,  0.0088, -0.0013},
-                { 0.0087,  0.0148,  0.0006}}
+    U matrix:  {{-0.2300, -0.0313,  0.9727},
+                {-0.1224,  0.9925,  0.0030},
+                {-0.9655, -0.1183, -0.2321}}
+    B matrix:  {{ 0.0149,  0.0000,  0.0000},
+                { 0.0053,  0.0158,  0.0000},
+                { 0.0091,  0.0091,  0.0182}}
+    A = UB:    {{ 0.0053,  0.0084,  0.0177},
+                { 0.0034,  0.0157,  0.0001},
+                {-0.0171, -0.0040, -0.0042}}
 +------------+-------------+---------------+-------------+
 |   Imageset |   # indexed |   # unindexed | % indexed   |
 |------------+-------------+---------------+-------------|
-|          0 |      178887 |         55243 | 76.4%       |
+|          0 |       74549 |          6615 | 91.8%       |
 +------------+-------------+---------------+-------------+
 ```
 
@@ -392,28 +382,43 @@ data they will all match, as the true symmetry is tetragonal.
 ```
 Chiral space groups corresponding to each Bravais lattice:
 aP: P1
-mP: P2 P21
-mC: C2
-oP: P222 P2221 P21212 P212121
-oC: C2221 C222
-tP: P4 P41 P42 P43 P422 P4212 P4122 P41212 P4222 P42212 P4322 P43212
-+------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------+
-|   Solution |   Metric fit |   rmsd | min/max cc   |   #spots | lattice   | unit_cell                                |   volume | cb_op      |
-|------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------|
-|   *      9 |       0.1075 |  0.083 | 0.941/0.944  |    18000 | tP        | 57.86  57.86 149.97  90.00  90.00  90.00 |   502104 | a,b,c      |
-|   *      8 |       0.1075 |  0.085 | 0.935/0.941  |    18000 | oC        | 81.81  81.87 149.99  90.00  90.00  90.00 |  1004617 | a+b,-a+b,c |
-|   *      7 |       0.1032 |  0.084 | 0.941/0.941  |    18000 | mC        | 81.87  81.82 149.99  90.00  90.04  90.00 |  1004685 | a-b,a+b,c  |
-|   *      6 |       0.1075 |  0.084 | 0.935/0.935  |    18000 | mC        | 81.80  81.85 149.97  90.00  90.02  90.00 |  1004200 | a+b,-a+b,c |
-|   *      5 |       0.0531 |  0.064 | 0.940/0.957  |    18000 | oP        | 57.85  57.95 150.03  90.00  90.00  90.00 |   502974 | a,b,c      |
-|   *      4 |       0.0531 |  0.064 | 0.940/0.940  |    18000 | mP        | 57.95  57.84 150.02  90.00  89.99  90.00 |   502845 | -b,-a,-c   |
-|   *      3 |       0.0399 |  0.062 | 0.957/0.957  |    18000 | mP        | 57.84  57.95 150.01  90.00  90.04  90.00 |   502805 | a,b,c      |
-|   *      2 |       0.0391 |  0.067 | 0.941/0.941  |    18000 | mP        | 57.85 150.03  57.95  90.00  90.04  90.00 |   502958 | -a,-c,-b   |
-|   *      1 |       0      |  0.065 | -/-          |    18000 | aP        | 57.84  57.95 150.02  89.99  90.04  90.04 |   502865 | a,b,c      |
-+------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------+
+oF: F222
+oI: I222 I212121
+tI: I4 I41 I422 I4122
+hR: R3:H R32:H
+cI: I23 I213 I432 I4132
+mI: I2
++------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
+|   Solution |   Metric fit |   rmsd | min/max cc   |   #spots | lattice   | unit_cell                                 |   volume | cb_op             |
+|------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------|
+|   *     22 |       0.1169 |  0.07  | 0.830/0.917  |    36000 | cI        | 77.65  77.65  77.65  90.00  90.00  90.00  |   468176 | b+c,a+c,a+b       |
+|   *     21 |       0.1156 |  0.069 | 0.853/0.854  |    36000 | hR        | 109.86 109.86  67.31  90.00  90.00 120.00 |   703563 | a+b+2*c,a-c,b     |
+|   *     20 |       0.1156 |  0.07  | 0.859/0.863  |    36000 | hR        | 109.82 109.82  67.25  90.00  90.00 120.00 |   702496 | 2*a+b+c,-a+b,c    |
+|   *     19 |       0.1096 |  0.064 | 0.834/0.835  |    36000 | hR        | 109.74 109.74  67.30  90.00  90.00 120.00 |   701941 | b-c,-a+c,a+b+c    |
+|   *     18 |       0.1169 |  0.069 | 0.474/0.917  |    36000 | tI        | 77.66  77.66  77.63  90.00  90.00  90.00  |   468233 | b+c,a+c,a+b       |
+|   *     17 |       0.1169 |  0.07  | 0.474/0.851  |    36000 | tI        | 77.66  77.66  77.67  90.00  90.00  90.00  |   468401 | a+b,b+c,a+c       |
+|   *     16 |       0.1169 |  0.069 | 0.495/0.841  |    36000 | tI        | 77.62  77.62  77.65  90.00  90.00  90.00  |   467902 | a+c,a+b,b+c       |
+|   *     15 |       0.1169 |  0.069 | 0.841/0.917  |    36000 | oI        | 77.65  77.62  77.66  90.00  90.00  90.00  |   468092 | a+c,a+b,b+c       |
+|   *     14 |       0.1096 |  0.065 | 0.526/0.917  |    36000 | oF        | 77.52 109.61 109.75  90.00  90.00  90.00  |   932573 | a+b,-a+b,a+b+2*c  |
+|   *     13 |       0.1169 |  0.067 | 0.480/0.841  |    36000 | oF        | 77.62 109.68 109.77  90.00  90.00  90.00  |   934550 | -b-c,2*a+b+c,-b+c |
+|   *     12 |       0.1169 |  0.067 | 0.841/0.841  |    36000 | mI        | 77.61  77.62  77.58  90.00  90.05  90.00  |   467346 | a+c,-b-c,a+b      |
+|   *     11 |       0.1069 |  0.064 | 0.917/0.917  |    36000 | mI        | 77.53  77.51  77.55  90.00  90.07  90.00  |   465977 | -a-c,-a-b,b+c     |
+|   *     10 |       0.1096 |  0.062 | 0.534/0.534  |    36000 | mI        | 67.19 109.65  67.25  90.00 109.53  90.00  |   466938 | c,-a+b,-a-b-c     |
+|   *      9 |       0.1156 |  0.067 | 0.525/0.525  |    36000 | mI        | 67.25 109.74  67.28  90.00 109.47  90.00  |   468132 | -c,2*a+b+c,-b     |
+|   *      8 |       0.0933 |  0.063 | 0.481/0.851  |    36000 | oF        | 77.72 109.84 110.01  90.00  90.00  90.00  |   939018 | -a-c,-a+c,a+2*b+c |
+|   *      7 |       0.086  |  0.061 | 0.851/0.851  |    36000 | mI        | 77.68  77.69  77.73  90.00  90.09  90.00  |   469100 | a+b,a+c,-b-c      |
+|   *      6 |       0.0933 |  0.062 | 0.481/0.481  |    36000 | mI        | 67.29 109.79  67.33  90.00 109.52  90.00  |   468862 | b,a-c,-a-b-c      |
+|   *      5 |       0.0495 |  0.057 | 0.830/0.833  |    36000 | hR        | 109.76 109.76  67.09  90.00  90.00 120.00 |   700006 | a+2*b+c,-b+c,a    |
+|   *      4 |       0.0495 |  0.055 | 0.526/0.526  |    36000 | mI        | 67.10 109.79  67.22  90.00 109.46  90.00  |   466927 | -a,-a-b-2*c,-b    |
+|   *      3 |       0.0405 |  0.057 | 0.485/0.485  |    36000 | mI        | 67.12 109.83  67.21  90.00 109.44  90.00  |   467157 | -a,a+2*b+c,-c     |
+|   *      2 |       0.0174 |  0.054 | 0.480/0.480  |    36000 | mI        | 67.07 109.69  67.20  90.00 109.41  90.00  |   466300 | a,-b+c,-a-b-c     |
+|   *      1 |       0      |  0.053 | -/-          |    36000 | aP        | 67.10  67.21  67.19 109.46 109.45 109.46  |   233392 | a,b,c             |
++------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
+* = recommended solution
 ```
 
 If you wish to use one of the output experiments from this process
-e.g. `bravais_setting_9.expt` you will need to reindex the reflection
+e.g. `bravais_setting_22.expt` you will need to reindex the reflection
 data from indexing to match this - we do not output every option of
 reindexed data as these files can be large. In most cases it is
 simpler to re-run `dials.index` setting the chosen space group. 
@@ -449,7 +454,7 @@ RMSDs by experiment:
 |   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
 |    id |        |     (px) |     (px) |   (images) |
 |-------+--------+----------+----------+------------|
-|     0 |  18000 |  0.50174 |  0.69553 |    0.76912 |
+|     0 |  36000 |  0.56919 |  0.43822 |    0.23862 |
 +-------+--------+----------+----------+------------+
 ```
 
@@ -461,7 +466,7 @@ RMSDs by experiment:
 |   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
 |    id |        |     (px) |     (px) |   (images) |
 |-------+--------+----------+----------+------------|
-|     0 | 114818 |  0.31991 |  0.50414 |    0.45294 |
+|     0 |  52654 |  0.28189 |  0.25471 |    0.11902 |
 +-------+--------+----------+----------+------------+
 ```
 
@@ -470,9 +475,7 @@ the output of `dials.report` at this stage you should see small
 variations in the unit cell and sample orientation as the crystal is
 rotated - if these do not appear small then it is likely that
 something has happened during data collection e.g. severe radiation
-damage:
-
-![Refinement graphs](./images/refine-report-sv.png)
+damage.
 
 ## Integration
 
@@ -518,7 +521,7 @@ predicted in any program so typically excluded from processing.
 
 Before the data may be scaled it is necessary that the crystal
 symmetry is known - if this was assigned correctly at indexing
-e.g. `space_group=P41212` then you can proceed directly to scaling. In
+e.g. `space_group=I213` then you can proceed directly to scaling. In
 the majority of cases however it will be unknown or not set at this
 point, so needs to be assigned between integration and scaling. Even
 if the Bravais lattice was assigned earlier, the correct symmetry
@@ -546,71 +549,37 @@ know that e.g. inversion centres are not possible - so for an oP
 lattice it will be testing for P/mmm symmetry which corresponds to
 P2?2?2? in standard MX.
 
-In the output you'll see first the individual symmetry operation:
+The data in this tutorial give interesting output for this:
 
 ```
-Scoring individual symmetry elements
-
 +--------------+--------+------+--------+-----+---------------+
 |   likelihood |   Z-CC |   CC |      N |     | Operator      |
 |--------------+--------+------+--------+-----+---------------|
-|        0.94  |   9.9  | 0.99 | 362986 | *** | 1 |(0, 0, 0)  |
-|        0.94  |   9.92 | 0.99 | 751640 | *** | 4 |(0, 0, 1)  |
-|        0.941 |   9.92 | 0.99 | 373768 | *** | 2 |(1, 0, 0)  |
-|        0.941 |   9.93 | 0.99 | 393952 | *** | 2 |(0, 1, 0)  |
-|        0.94  |   9.91 | 0.99 | 364832 | *** | 2 |(0, 0, 1)  |
-|        0.94  |   9.9  | 0.99 | 389620 | *** | 2 |(1, 1, 0)  |
-|        0.94  |   9.91 | 0.99 | 367896 | *** | 2 |(-1, 1, 0) |
+|        0.942 |   9.95 | 0.99 | 153330 | *** | 1 |(0, 0, 0)  |
+|        0.16  |   4.48 | 0.45 | 292020 |     | 4 |(1, 1, 0)  |
+|        0.16  |   4.47 | 0.45 | 292632 |     | 4 |(1, 0, 1)  |
+|        0.161 |   4.49 | 0.45 | 292380 |     | 4 |(0, 1, 1)  |
+|        0.94  |   9.87 | 0.99 | 293032 | *** | 3 |(1, 0, 0)  |
+|        0.939 |   9.85 | 0.99 | 293108 | *** | 3 |(0, 1, 0)  |
+|        0.94  |   9.86 | 0.99 | 293028 | *** | 3 |(0, 0, 1)  |
+|        0.94  |   9.88 | 0.99 | 293030 | *** | 3 |(1, 1, 1)  |
+|        0.941 |   9.91 | 0.99 | 146456 | *** | 2 |(1, 1, 0)  |
+|        0.161 |   4.49 | 0.45 | 146404 |     | 2 |(-1, 1, 0) |
+|        0.941 |   9.89 | 0.99 | 148810 | *** | 2 |(1, 0, 1)  |
+|        0.161 |   4.49 | 0.45 | 148232 |     | 2 |(-1, 0, 1) |
+|        0.94  |   9.88 | 0.99 | 146406 | *** | 2 |(0, 1, 1)  |
+|        0.16  |   4.49 | 0.45 | 146196 |     | 2 |(0, -1, 1) |
+|        0.162 |   4.52 | 0.45 | 146224 |     | 2 |(1, 1, 2)  |
+|        0.16  |   4.49 | 0.45 | 147204 |     | 2 |(1, 2, 1)  |
+|        0.161 |   4.5  | 0.45 | 146470 |     | 2 |(2, 1, 1)  |
 +--------------+--------+------+--------+-----+---------------+
 ```
 
-followed by the results of composing these into the possible space
-groups and the likelihood assessment of these - which takes into
-consideration the elements present in the space group and also those
-not present:
-
-```
-Scoring all possible sub-groups
-
-+-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------+
-| Patterson group   |     |   Likelihood |   NetZcc |   Zcc+ |   Zcc- |   CC |   CC- |   delta | Reindex operator   |
-|-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------|
-| P 4/m m m         | *** |        0.999 |     9.91 |   9.91 |   0    | 0.99 |  0    |     0.1 | a,b,c              |
-| P m m m           |     |        0     |     0.01 |   9.92 |   9.91 | 0.99 |  0.99 |     0.1 | a,b,c              |
-| C m m m           |     |        0     |    -0.02 |   9.91 |   9.92 | 0.99 |  0.99 |     0.1 | a+b,a-b,-c         |
-| P 4/m             |     |        0     |    -0.01 |   9.91 |   9.92 | 0.99 |  0.99 |     0.1 | a,b,c              |
-| P 1 2/m 1         |     |        0     |     0    |   9.91 |   9.91 | 0.99 |  0.99 |     0   | a,b,c              |
-| P 1 2/m 1         |     |        0     |     0    |   9.91 |   9.91 | 0.99 |  0.99 |     0.1 | b,-a,c             |
-| C 1 2/m 1         |     |        0     |    -0.01 |   9.91 |   9.92 | 0.99 |  0.99 |     0.1 | a-b,-a-b,-c        |
-| P 1 2/m 1         |     |        0     |    -0.01 |   9.91 |   9.92 | 0.99 |  0.99 |     0   | -a,c,b             |
-| C 1 2/m 1         |     |        0     |    -0.01 |   9.9  |   9.92 | 0.99 |  0.99 |     0.1 | a+b,a-b,-c         |
-| P -1              |     |        0     |    -0.01 |   9.9  |   9.91 | 0.99 |  0.99 |     0   | a,b,c              |
-+-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------+
-
-Best solution: P 4/m m m
-```
-
-Here the symmetry appears to be `P4/mmm` i.e. 4-fold rotation and
-three 2-fold mirror axes - and corresponds to some variation of
-`P4?2?2` - this information is sufficient for scaling though for
-structure solution identification of the correct space group is
-necessary - `dials.symmetry` will also attempt to guess this as:
-
-```
-+---------------+---------+
-| Space group   |   score |
-|---------------+---------|
-| P 4 2 2       |       0 |
-| P 4 21 2      |       0 |
-| P 41 2 2      |       0 |
-| P 42 2 2      |       0 |
-| P 41 21 2     |       1 |
-| P 42 21 2     |       0 |
-+---------------+---------+
-Recommended space group: P 41 21 2
-Space group with equivalent score (enantiomorphic pair): P 43 21 2
-```
-
+Here it is clear that there are some operations that have close to
+100% CC, others that are much lower - in particular the 4-fold
+rotations in the middle of the faces are not present which means the
+crystal has a _polar_ space group so care needs to be taken when
+combining data from multiple samples. 
 
 
 ## Scaling and Merging
@@ -654,47 +623,7 @@ experiments. `dials.scale` generates a HTML report `dials.scale.html`
 which includes a lot of information about how the models look, as well
 as regions of the data which agree well and poorly - from a practical
 perspective this is the point where you really _know_ about the final
-quality of the data. The overall summary data are printed to the console and
-the log file e.g.:
-
-```
-            -------------Summary of merging statistics--------------           
-
-                                            Suggested   Low    High  Overall
-High resolution limit                           1.18    3.20    1.18    1.08
-Low resolution limit                          150.04  151.27    1.20  150.04
-Completeness                                   93.3   100.0    59.9    79.6
-Multiplicity                                   12.1    12.2     6.2    11.3
-I/sigma                                        14.0    79.8     0.3    12.7
-Rmerge(I)                                     0.086   0.031   1.904   0.088
-Rmerge(I+/-)                                  0.082   0.028   1.731   0.083
-Rmeas(I)                                      0.090   0.032   2.076   0.092
-Rmeas(I+/-)                                   0.089   0.031   2.005   0.090
-Rpim(I)                                       0.025   0.009   0.798   0.026
-Rpim(I+/-)                                    0.034   0.012   0.996   0.035
-CC half                                       0.999   1.000   0.316   0.999
-Anomalous completeness                         92.9   100.0    57.8    77.5
-Anomalous multiplicity                          6.4     7.1     3.2     6.0
-Anomalous correlation                         0.192   0.300  -0.018   0.206
-Anomalous slope                               0.519                        
-dF/F                                          0.067                        
-dI/s(dI)                                      0.565                        
-Total observations                           957119   56962   15339  988441
-Total unique                                  79095    4663    2492   87260
-```
-
-as well as a better estimate for the resolution, if this is lower than the full extent of the data. Further up you will also see an analysis of the error model:
-
-```
-Error model details:
-  Type: basic
-  Parameters: a = 0.98564, b = 0.02339
-  Error model formula: σ'² = a²(σ² + (bI)²)
-  estimated I/sigma asymptotic limit: 43.369
-```
-
-which is very useful for basic diagnostics. This is immediately comparable with
-the ISa statistic from XDS. 
+quality of the data.
 
 ## Merging or Exporting
 
@@ -712,5 +641,5 @@ to simply export the scaled reflections in MTZ format or
 dials.merge scaled.expt scaled.refl
 ```
 
-which will output a scaled and merged MTZ file. What you can go do
-with this is [explored](./next.md) but out of context for this tutorial.
+which will output a scaled and merged MTZ file. 
+
