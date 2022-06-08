@@ -12,7 +12,7 @@ go. We will also look at enforcing the correct lattice symmetry.
 This data set is slightly more substantial than the small 50° set used
 for the other thaumatin tutorial, but more "realistic" in processing
 time and allows phasing from the data that are processed if you are so
-inclined. 
+inclined.
 
 The aim of this tutorial is to introduce you to the tools, not teach
 about data processing - it is assumed you have some idea of the
@@ -25,16 +25,16 @@ diffraction images, the "best" settings are very personal.
 ## DIALS version
 
 This tutorial assumes you are using [DIALS
-version 3.7](https://dials.github.io/installation.html) and that you
+version 3.8 or later](https://dials.github.io/installation.html) and that you
 have this set up (i.e. you've sourced the setup file, or module loaded
 `ccp4-workshop`).
 
 If you type `dials.version` you should see something like:
 
 ```
-DIALS 3.7.1-gfb34cbf01-release
-Python 3.9.7
-Installed in: /dls_sw/apps/dials/dials-v3-7-1/modules/dials
+DIALS 3.8.0-gdc8ae18-release
+Python 3.7.12
+Installed in: /dls_sw/apps/ccp4/8.0.001/ccp4-8.0/lib/python3.7/site-packages/dials
 ```
 
 If you are running at home on Linux or macOS then you should be
@@ -117,7 +117,7 @@ dials.report step.expt step.refl
 ```
 
 which will generate a detailed report as HTML describing the current
-state of the processing. 
+state of the processing.
    
 ## Import
 
@@ -126,7 +126,7 @@ data - here the metadata are read and a description of the data to be
 processed saved to a file named `imported.expt`. This is "human
 readable" in that the file is JSON format (roughly readable text with
 brackets around to structure for computers). While you can edit this
-file if you know what you are doing, usually this is not necessary. 
+file if you know what you are doing, usually this is not necessary.
 
 ```
 dials.import SeThau_1_1_master.h5
@@ -142,10 +142,83 @@ dials.import SeThau_1_1.nxs
 
 It is important to note that for well-behaved data (i.e. anything
 which is well-collected from a well-behaved sample) the commands below
-will often be identical after importing.
+will often be identical after importing. Once you have `imported.expt` you can look at the content with `dials.show` as:
 
-At this point you can actually look at the images with the
-`dials.image_viewer` tool - 
+```
+dials.show imported.expt
+```
+
+which produces a _relatively_ human readable description:
+
+```
+DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
+The following parameters have been modified:
+
+input {
+  experiments = imported.expt
+}
+
+Experiment 0:
+Experiment identifier: 3b8a9d5c-3336-11e2-6e32-ef4652120616
+Image template: /Volumes/Noir/Data/i04-sethau/SeThau_1_1.nxs
+Detector:
+Panel:
+  name: /entry/instrument/detector
+  type: SENSOR_PAD
+  identifier: 
+  pixel_size:{0.075,0.075}
+  image_size: {4148,4362}
+  trusted_range: {-1,9202}
+  thickness: 0.45
+  material: Si
+  mu: 3.96038
+  gain: 1
+  pedestal: 0
+  fast_axis: {1,0,0}
+  slow_axis: {0,-1,0}
+  origin: {-158.369,166.26,-170}
+  distance: 170
+  pixel to millimeter strategy: ParallaxCorrectedPxMmStrategy
+    mu: 3.96038
+    t0: 0.45
+
+
+Max resolution (at corners): 1.088745
+Max resolution (inscribed):  1.369247
+
+Beam:
+    wavelength: 0.979499
+    sample to source direction : {0,0,1}
+    divergence: 0
+    sigma divergence: 0
+    polarization normal: {0,1,0}
+    polarization fraction: 0.999
+    flux: 0
+    transmission: 1
+
+Beam centre: 
+    mm: (158.37,166.26)
+    px: (2111.59,2216.80)
+
+Scan:
+    number of images:   1800
+    image range:   {1,1800}
+    oscillation:   {0,0.1}
+    exposure time: 0
+
+Goniometer:
+    Rotation axis:   {1,0,0}
+    Fixed rotation:  {1,0,0,0,1,0,0,0,1}
+    Setting rotation:{1,0,0,0,1,0,0,0,1}
+    Axis #0 (phi):  {1,-0.0037,0.002}
+    Axis #1 (chi):  {-0.0046,0.0372,-0.9993}
+    Axis #2 (omega):  {1,0,0}
+    Angles: 0,0,0
+    scan axis: #2 (omega)
+```
+
+At this point you can also look at the images with the
+`dials.image_viewer` tool -
 
 ```
 dials.image_viewer imported.expt
@@ -319,7 +392,7 @@ If successful, `dials.index` writes the experiments and indexed
 reflections to two new files `indexed.expt` and `indexed.refl` - if
 these are loaded in the reciprocal lattice viewer you can see which
 spots have been indexed and if you have multiple lattices switch them
-"on and off" for comparison. 
+"on and off" for comparison.
 
 The process that the indexing performs is quite complex -
 
@@ -357,8 +430,7 @@ reflections - these are reflections which do not strictly belong to
 the crystal lattice but are accidentally close to a reciprocal space
 position and hence can be indexed. Most often this is an issue with
 small satellite lattices or ice / powder on the sample. Usually this
-should not be a cause for concern. 
-
+should not be a cause for concern.
 
 ## Bravais Lattice Determination (optional!)
 
@@ -610,8 +682,6 @@ necessary - `dials.symmetry` will also attempt to guess this as:
 Recommended space group: P 41 21 2
 Space group with equivalent score (enantiomorphic pair): P 43 21 2
 ```
-
-
 
 ## Scaling and Merging
 
