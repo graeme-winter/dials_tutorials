@@ -1,4 +1,4 @@
-# Processing in Detail: selenourea soaked thaumatin (APS / CCP4 2021) 
+# Processing in Detail: selenourea soaked thaumatin (APS / CCP4 2021)
 
 ## Introduction
 
@@ -20,7 +20,7 @@ overall process from e.g. associated lectures. With the graphical
 tools, I am not making so much effort to explain the options as simply
 "playing" will give you a chance to learn your way around and also
 find the settings which work for you. Particularly with looking at
-diffraction images, the "best" settings are very personal. 
+diffraction images, the "best" settings are very personal.
 
 ## DIALS version
 
@@ -69,10 +69,10 @@ program that created them e.g. `indexed.refl` and `indexed.expt` from
 `dials.index`. The only deviations from this are on import (see below)
 where we are only reading experiment models and spot finding where we
 find _strong_ reflections so write these to `strong.refl` - and we
-create no models so (by default) there is no output experiment file. 
+create no models so (by default) there is no output experiment file.
 
 At any time you can _look_ at these files with `dials.show` which will
-summarise the content of the files to the terminal. 
+summarise the content of the files to the terminal. You can also `dials.show` reflection files which gives a tabular symmary of the content but this can be rather slow, as the data are much more substantial.
 
 [If you're impatient...](./tldr.md)
 
@@ -98,7 +98,7 @@ dials.index -c -e2 | less
 will allow you to scroll through the extensive list of options you can
 adjust. In most cases the defaults are relatively sensible for
 synchrotron data from a pixel array detector, as we are using in this
-tutorial. 
+tutorial.
 
 ## Output
 
@@ -229,7 +229,7 @@ depend on the source of the data and - most importantly - your
 preferences. Personally the author finds for basic inspection of the
 images the brightness is a bit high for pixel array data, and a value
 of 5 / 10 may be better for viewing the diffraction pattern as a
-whole. 
+whole.
 
 ![Image viewer](./images/image-view.png)
 
@@ -243,7 +243,7 @@ view" of how the data look (particularly for establishing where the
 diffraction is visible to.)
 
 [Here](./import_detail.md) is a short discussion on some more details
-of importing data. 
+of importing data.
 
 ## Find Spots
 
@@ -327,7 +327,7 @@ dials.reciprocal_lattice_viewer optimised.expt strong.refl
 should show straight lines, provided everything has worked correctly. 
 
 Further discussion of the output can be found
-[here](./find_spots_detail.md). 
+[here](./find_spots_detail.md).
 
 ## Indexing
 
