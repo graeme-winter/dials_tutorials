@@ -696,10 +696,16 @@ independently in `dials.merge` - but a table of merging statistics is
 printed at the end along with resolution recommendations.
 
 ```
-dials.scale symmetrized.expt symmetrized.refl [anomalous=True]
+dials.scale symmetrized.expt symmetrized.refl anomalous=True
 ```
 
-runs everything with the defaults which allows for:
+for anomalous data or
+
+```
+dials.scale symmetrized.expt symmetrized.refl
+```
+
+for native - this will run everything with the defaults which allows for:
 
 - modest radiation damage
 - changes in overall intensity
@@ -712,7 +718,19 @@ it may be necessary to adjust the extent to which the absorption
 correction is constrained with
 
 ```
-absorption_level=(low|medium|high)
+absorption_level=low
+```
+
+_or_
+
+```
+absorption_level=medium
+```
+
+_or_
+
+```
+absorption_level=high
 ```
 
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~
