@@ -225,36 +225,19 @@ mI: I2
 * = recommended solution
 ```
 
-If you wish to use one of the output experiments from this process
-e.g. `bravais_setting_22.expt` you will need to reindex the reflection
-data from indexing to match this - we do not output every option of
-reindexed data as these files can be large. In most cases it is
-simpler to re-run `dials.index` setting the chosen space group. 
+If you wish to use one of the output experiments from this process e.g. `bravais_setting_22.expt` you will need to reindex the reflection data from indexing to match this - we do not output every option of reindexed data as these files can be large. In most cases it is simpler to re-run `dials.index` setting the chosen space group.
 
-The reader is reminded here - in most cases it is absolutely fine to
-proceed without worrying about the crystal symmetry at this stage 🙂.
+The reader is reminded here - in most cases it is absolutely fine to proceed without worrying about the crystal symmetry at this stage 🙂.
 
 ## Refinement
 
-The model is already refined during indexing, but this is assuming
-that a single crystal model is appropriate for every image in the data
-set - in reality there are usually small changes in the unit cell and
-crystal orientation throughout the experiment as the sample is
-rotated. `dials.refine` will first re-run refinement with a fixed unit
-cell and then perform scan-varying refinement. If you have indexed
-multiple sweeps earlier in processing (not covered in this tutorial)
-then the crystal models will be copied and split at this stage to
-allow per-crystal-per-scan models to be refined. 
+The model is already refined during indexing, but this is assuming that a single crystal model is appropriate for every image in the data set - in reality there are usually small changes in the unit cell and crystal orientation throughout the experiment as the sample is rotated. `dials.refine` will first re-run refinement with a fixed unit cell and then perform scan-varying refinement. If you have indexed multiple sweeps earlier in processing (not covered in this tutorial) then the crystal models will be copied and split at this stage to allow per-crystal-per-scan models to be refined.
 
 By and large one may run:
 
-```
-dials.refine indexed.expt indexed.refl
-```
+        dials.refine indexed.expt indexed.refl
 
-without any options and the program will do something sensible - if
-you compare the R.M.S. deviations from the end of indexing with the
-end of refinement you should see a small improvement e.g.
+without any options and the program will do something sensible - if you compare the R.M.S. deviations from the end of indexing with the end of refinement you should see a small improvement e.g.
 
 ```
 RMSDs by experiment:
@@ -278,78 +261,31 @@ RMSDs by experiment:
 +-------+--------+----------+----------+------------+
 ```
 
-If you look at
-the output of `dials.report` at this stage you should see small
-variations in the unit cell and sample orientation as the crystal is
-rotated - if these do not appear small then it is likely that
-something has happened during data collection e.g. severe radiation
-damage.
+If you look at the output of `dials.report` at this stage you should see small variations in the unit cell and sample orientation as the crystal is rotated - if these do not appear small then it is likely that something has happened during data collection e.g. severe radiation damage.
 
 ## Integration
 
-Once you have refined the model the next step is to integrate the
-data - in effect this is using the refined model to calculate the
-positions where all of the reflections in the data set will be found
-and measure the background-subtracted intensities:
+Once you have refined the model the next step is to integrate the data - in effect this is using the refined model to calculate the positions where all of the reflections in the data set will be found and measure the background-subtracted intensities:
 
-```
-dials.integrate refined.expt refined.refl
-```
+        dials.integrate refined.expt refined.refl
 
-By default this will pass through the data twice, first looking at the
-shapes of the predicted spots to form a reference profile model then
-passing through a second time to use this profile model to integrate
-the data, by being fit to the transformed pixel values. This is by far
-the most computationally expensive step in the processing of the data!
+By default this will pass through the data twice, first looking at the shapes of the predicted spots to form a reference profile model then passing through a second time to use this profile model to integrate the data, by being fit to the transformed pixel values. This is by far the most computationally expensive step in the processing of the data!
 
-by default all the processors in your computer are used, unless we
-think this will exceed the memory available in the machine. At times,
-however, if you have a large unit cell and / or a large data set you
-may find that processing on a desktop workstation is more appropriate
-than e.g. a laptop.
+by default all the processors in your computer are used, unless we think this will exceed the memory available in the machine. At times, however, if you have a large unit cell and / or a large data set you may find that processing on a desktop workstation is more appropriate than e.g. a laptop.
 
-If you know in advance that the data do not diffract to anything close
-to the edges of the detector you can assign a resolution limit at this
-stage by adding `prediction.d_min=1.8` (say) to define a 1.8 Å
-resolution limit - this should in general not be necessary. At the end
-of integration two new files are created - `integrated.refl` and
-`integrated.expt` - looking at these in the image viewer e.g.
+If you know in advance that the data do not diffract to anything close to the edges of the detector you can assign a resolution limit at this stage by adding `prediction.d_min=1.8` (say) to define a 1.8 Å resolution limit - this should in general not be necessary. At the end of integration two new files are created - `integrated.refl` and `integrated.expt` - looking at these in the image viewer e.g.
 
-```
-dials.image_viewer integrated.expt integrated.refl
-```
+        dials.image_viewer integrated.expt integrated.refl
 
-can be very enlightening as you should see little red boxes around
-every reflection - if you select "integrated only" you can see what
-was and was not integrated. You may see a selection of reflections
-close to the rotation axis are missed - these are not well modelled or
-predicted in any program so typically excluded from processing. 
+can be very enlightening as you should see little red boxes around every reflection - if you select "integrated only" you can see what was and was not integrated. You may see a selection of reflections close to the rotation axis are missed - these are not well modelled or predicted in any program so typically excluded from processing.
 
 ## Symmetry analysis
 
-Before the data may be scaled it is necessary that the crystal
-symmetry is known - if this was assigned correctly at indexing
-e.g. `space_group=I213` then you can proceed directly to scaling. In
-the majority of cases however it will be unknown or not set at this
-point, so needs to be assigned between integration and scaling. Even
-if the Bravais lattice was assigned earlier, the correct symmetry
-_within_ that lattice is needed.
+Before the data may be scaled it is necessary that the crystal symmetry is known - if this was assigned correctly at indexing e.g. `space_group=I213` then you can proceed directly to scaling. In the majority of cases however it will be unknown or not set at this point, so needs to be assigned between integration and scaling. Even if the Bravais lattice was assigned earlier, the correct symmetry _within_ that lattice is needed.
 
-The symmetry analysis in DIALS takes the information from the spot
-positions and also the spot intensities. The former are used to
-effectively re-run `dials.refine_bravais_settings` to identify
-possible lattices and hence candidate symmetry operations, and the
-latter are used to assess the presence or absence of these symmetry
-operations. Once the operations are found, the crystal rotational
-symmetry is assigned by composing these operations into a putative
-space group. In addition, systematically absent reflections are also
-assessed to assign a best guess to translational elements of the
-symmetry - though these are not needed for scaling, they may help with
-downstream analysis rather than you having to manually identify them.
+The symmetry analysis in DIALS takes the information from the spot positions and also the spot intensities. The former are used to effectively re-run `dials.refine_bravais_settings` to identify possible lattices and hence candidate symmetry operations, and the latter are used to assess the presence or absence of these symmetry operations. Once the operations are found, the crystal rotational symmetry is assigned by composing these operations into a putative space group. In addition, systematically absent reflections are also assessed to assign a best guess to translational elements of the symmetry - though these are not needed for scaling, they may help with downstream analysis rather than you having to manually identify them.
 
-```
-dials.symmetry integrated.expt integrated.refl
-```
+        dials.symmetry integrated.expt integrated.refl
 
 is how this step is run. At this point it is important to note that
 the program is trying to identify all symmetry elements, and does not
