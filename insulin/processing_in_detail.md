@@ -1,52 +1,30 @@
-# Processing in Detail (Diamond / CCP4 2021)
+# Processing in Detail (Diamond / CCP4 2022)
 
 ## Introduction
 
-DIALS processing may be performed by either running the individual
-tools (spot finding, indexing, refinement, integration, symmetry,
-scaling, exporting to MTZ) or you can run `xia2`, which makes
-informed choices for you at each stage. In this tutorial we will run
-through each of the steps in turn, taking a look at the output as we
-go. We will also look at enforcing the correct lattice symmetry.
+DIALS processing may be performed by either running the individual tools (spot finding, indexing, refinement, integration, symmetry, scaling, exporting to MTZ) or you can run `xia2`, which makes informed choices for you at each stage. In this tutorial we will run through each of the steps in turn, taking a look at the output as we go. We will also look at enforcing the correct lattice symmetry.
 
-The aim of this tutorial is to introduce you to the tools, not teach
-about data processing - it is assumed you have some idea of the
-overall process from e.g. associated lectures. With the graphical
-tools, I am not making so much effort to explain the options as simply
-"playing" will give you a chance to learn your way around and also
-find the settings which work for you. Particularly with looking at
-diffraction images, the "best" settings are very personal. 
+The aim of this tutorial is to introduce you to the tools, not teach about data processing - it is assumed you have some idea of the overall process from e.g. associated lectures. With the graphical tools, I am not making so much effort to explain the options as simply "playing" will give you a chance to learn your way around and also find the settings which work for you. Particularly with looking at diffraction images, the "best" settings are very personal.
 
 ## DIALS version
 
-This tutorial assumes you are using [DIALS
-version 3.7](https://dials.github.io/installation.html) and that you
-have this set up (i.e. you've run `module load ccp4-workshop`).
+This tutorial assumes you are using [DIALS version 3.12](https://dials.github.io/installation.html) and that you have this set up (i.e. you've run `module load ccp4-workshop`).
 
 If you type `dials.version` you should see something like:
 
-```
-DIALS 3.7.1-gfb34cbf01-release
-Python 3.9.7
-Installed in: /dls_sw/apps/dials/dials-v3-7-1/modules/dials
-```
+        DIALS 3.12.0-g13ced8fbc-release
+        Python 3.9.13
+        Installed in: /dls_sw/apps/dials/dials-v3-12-0/modules/dials/src/dials
 
-If you are running this at home with a different version of DIALS,
-details may change but the general flow should be the same. 
+If you are running this at home with a different version of DIALS, details may change but the general flow should be the same.
 
 ## Tutorial data
 
-The data for this tutorial were collected with a deliberately wide
-rotation angle (i.e. going against my advice in the lecture on Monday)
-to allow quick processing... they are in
+The data for this tutorial were collected with a deliberately wide rotation angle (i.e. going against my advice in the lectures) to allow quick processing... they are in
 
-```
-/dls/i03/data/2021/mx30951-8/gw/20211118/TestInsulin/ins_1
-```
+        /dls/i03/data/2022/mx33300-1/TestInsulin/ins_11/
 
-and we will look at `ins_1_2.nxs` - there are other data sets in
-surrounding areas which are more carefully measured. I'll upload the
-data to Zenodo to allow follow-at-home... 
+and we will look at `ins_11_1.nxs` - there are other data sets in surrounding areas which are more carefully measured. The same data are available [here](https://zenodo.org/record/7277713) to allow following through the tutorials remotely.
 
 ## Files
 
@@ -55,94 +33,50 @@ DIALS creates two principal file types:
 - experiment files called `something.expt`
 - reflection files called `something.refl`
 
-"Experiment" in DIALS has a very specific meaning - the capturing of
-data from one set of detector, beam, goniometer and crystal - so if
-you have two scans from one crystal this is two experiments, if you
-have two lattices on one data set this is two experiments. In most
-cases you can ignore this distinction though.
+"Experiment" in DIALS has a very specific meaning - the capturing of data from one set of detector, beam, goniometer and crystal - so if you have two scans from one crystal this is two experiments, if you have two lattices on one data set this is two experiments. In most cases you can ignore this distinction though.
 
-Usually the output filenames will correspond to the name of the DIALS
-program that created them e.g. `indexed.refl` and `indexed.expt` from
-`dials.index`. The only deviations from this are on import (see below)
-where we are only reading experiment models and spot finding where we
-find _strong_ reflections so write these to `strong.refl` - and we
-create no models so (by default) there is no output experiment file. 
+Usually the output filenames will correspond to the name of the DIALS program that created them e.g. `indexed.refl` and `indexed.expt` from `dials.index`. The only deviations from this are on import (see below) where we are only reading experiment models and spot finding where we find _strong_ reflections so write these to `strong.refl` - and we create no models so (by default) there is no output experiment file.
 
-At any time you can _look_ at these files with `dials.show` which will
-summarise the content of the files to the terminal. 
+At any time you can _look_ at these files with `dials.show` which will summarise the content of the files to the terminal.
 
-[If you're impatient...](./tldr.md)
+[If you're impatient...](./tldr.md) - the truth is this is pretty much how I start processing any data set these days.
 
 ## Parameters
 
-All DIALS programs accept parameters in the form of
-`parameter=value` - in most cases this will be sufficient though some
-less frequently used options may require "name space" clarification
-e.g. `index_assignment.method=local`. All of the DIALS programs
-support the option
+All DIALS programs accept parameters in the form of `parameter=value` - in most cases this will be sufficient though some less frequently used options may require "name space" clarification e.g. `index_assignment.method=local`. All of the DIALS programs support the option
 
-```
-dials.program -c -e2
-```
+        dials.program -c -e2
 
-which will show you all possible configuration options - if you are
-looking for an option this is the simplest way to search so e.g.
+which will show you all possible configuration options - if you are looking for an option this is the simplest way to search so e.g.
 
-```
-dials.index -c -e2 | less
-```
+        dials.index -c -e2 | less
 
-will allow you to scroll through the extensive list of options you can
-adjust. In most cases the defaults are relatively sensible for
-synchrotron data from a pixel array detector, as we are using in this
-tutorial. 
+will allow you to scroll through the extensive list of options you can adjust. In most cases the defaults are relatively sensible for synchrotron data from a pixel array detector, as we are using in this tutorial.
 
 ## Output
 
-In the majority of cases the `dials` programs write their output to
-`dials.program.log` e.g. `dials.find_spots.log` etc. - everything
-which is printed to the terminal is also saved in this file, so you
-can review the processing later. In the case where you are reporting
-an issue to the developers including these log files in the error
-report (particularly for the step which failed) is very helpful. 
+In the majority of cases the `dials` programs write their output to `dials.program.log` e.g. `dials.find_spots.log` etc. - everything which is printed to the terminal is also saved in this file, so you can review the processing later. In the case where you are reporting an issue to the developers including these log files in the error report (particularly for the step which failed) is very helpful.
 
-From most stages you can generate a more verbose _report_ of the
-current state of processing with:
+From most stages you can generate a more verbose _report_ of the current state of processing with:
 
-```
-dials.report step.expt step.refl
-```
+        dials.report step.expt step.refl
 
 which will generate a detailed report as HTML describing the current
-state of the processing. 
-   
+state of the processing.
+
 ## Import
 
-The starting point for any processing with DIALS is to _import_ the
-data - here the metadata are read and a description of the data to be
-processed saved to a file named `imported.expt`. This is "human
-readable" in that the file is JSON format (roughly readable text with
-brackets around to structure for computers). While you can edit this
-file if you know what you are doing, usually this is not necessary. 
+The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
 
-```
-dials.import /dls/i03/data/2021/mx30951-8/gw/20211118/TestInsulin/ins_1/ins_1_2.nxs
-```
+        dials.import /dls/i03/data/2022/mx33300-1/TestInsulin/ins_11/ins_11_1_master.h5
 
-will read the metadata from this `nexus` file and write
-`imported.expt` from this: this is the same as "master" files
-elsewhere (and indeed we write master files too.)
+will read the metadata from this `nexus` file and write `imported.expt` from this: this is the same as "master" files elsewhere (and indeed we write master files too; they are not included in the Zenodo upload.)
 
-It is important to note that for well-behaved data (i.e. anything
-which is well-collected from a well-behaved sample) the commands below
-will often be identical after importing.
+It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing.
 
-At this point you can actually look at the images with the
-`dials.image_viewer` tool - 
+At this point you can actually look at the images with the `dials.image_viewer` tool -
 
-```
-dials.image_viewer imported.expt
-```
+        dials.image_viewer imported.expt
 
 in this tool there are many settings you can adjust, which could
 depend on the source of the data and - most importantly - your
