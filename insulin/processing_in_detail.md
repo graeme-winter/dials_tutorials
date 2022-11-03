@@ -78,107 +78,51 @@ At this point you can actually look at the images with the `dials.image_viewer` 
 
         dials.image_viewer imported.expt
 
-in this tool there are many settings you can adjust, which could
-depend on the source of the data and - most importantly - your
-preferences. Personally the author finds for basic inspection of the
-images the brightness is a bit high for pixel array data, and a value
-of 10 may be better for viewing the diffraction pattern as a whole.
+in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences. Personally the author finds for basic inspection of the images the brightness is a bit high for pixel array data, and a value of 10 may be better for viewing the diffraction pattern as a whole.
 
-To get a sense of how the diffraction spots are spread, stacking
-images can help - for example in this case setting the stack to 2
-gives a good idea of the real separation between reflections. If the
-data are not stacked the spot finding process can also be explored -
-the controls at the bottom of the "Settings" window allow you to step
-through these and can be very useful for getting a "computer's eye
-view" of how the data look (particularly for establishing where the
-diffraction is visible to.)
+To get a sense of how the diffraction spots are spread, stacking images can help - for example in this case setting the stack to 5 gives a good idea of the real separation between reflections. If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
 
-[Here](./import_detail.md) is a short discussion on some more details
-of importing data. 
+[Here](./import_detail.md) is a short discussion on some more details of importing data.
 
 ## Find Spots
 
-The first "real" task in any processing using DIALS is the spot
-finding. Since this is looking for spots on every image in the
-dataset, this process can take some time so by default will use all of
-the processors available in your machine - if you would like to
-control this adjust with e.g. `nproc=4` - however the default is
-usually sensible unless you are sharing the computer with many
-others.
+The first "real" task in any processing using DIALS is the spot finding. Since this is looking for spots on every image in the dataset, this process can take some time so by default will use all of the processors available in your machine - if you would like to control this adjust with e.g. `nproc=4` - however the default is usually sensible unless you are sharing the computer with many others.
 
-```
-dials.find_spots imported.expt
-```
+        dials.find_spots imported.expt
 
-This is one of the two steps where every image in the data set is read
-and processed and hence can be moderately time-consuming. This
-contains a reflection file `strong.refl` which contains both the
-positions of the strong spots and also "images" of the spot pixels
-which we will use later. You can view these spots on top of the images
-with
+This is one of the two steps where every image in the data set is read and processed and hence can be moderately time-consuming. This contains a reflection file `strong.refl` which contains both the positions of the strong spots and also "images" of the spot pixels which we will use later. You can view these spots on top of the images with
 
-```
-dials.image_viewer imported.expt strong.refl
-```
+        dials.image_viewer imported.expt strong.refl
 
-to get a sense of what spots were found. You will see that the spots
-are surrounded by little blue boxes - these are the _bounding boxes_ of
-the reflections i.e. the outer extent of the connected regions of the
-signal pixels. The signal pixels are highlighted with green blobs
-giving a sense of what is and is not "strong."
+to get a sense of what spots were found. You will see that the spots are surrounded by little blue boxes - these are the _bounding boxes_ of the reflections i.e. the outer extent of the connected regions of the signal pixels. The signal pixels are highlighted with green blobs giving a sense of what is and is not "strong."
+
+*FIXME UPDATE THIS IMAGE*
 
 ![Image viewer](./images/viewer.png)
 
-The default parameters for spot finding usually do a good job for
-Pilatus images, such as these. However they may not be optimal for data
-from other detector types, such as CCDs or image plates. Issues with
-incorrectly set gain might, for example, lead to background noise being
-extracted as spots. You can use the image mode buttons to preview
-how the parameters affect the spot finding algorithm. The final button
-'threshold’ is the one on which spots were found, so ensuring this
-produces peaks at real diffraction spot positions will give the best
-chance of success. 
+The default parameters for spot finding usually do a good job for Pilatus images, such as these. However they may not be optimal for data from other detector types, such as CCDs or image plates. Issues with incorrectly set gain might, for example, lead to background noise being extracted as spots. You can use the image mode buttons to preview how the parameters affect the spot finding algorithm. The final button 'threshold’ is the one on which spots were found, so ensuring this produces peaks at real diffraction spot positions will give the best chance of success.
 
-The second tool for visualisation of the found spots is the reciprocal
-lattice viewer - which presents a view of the spot positions mapped to
-reciprocal space.
+The second tool for visualisation of the found spots is the reciprocal lattice viewer - which presents a view of the spot positions mapped to reciprocal space.
 
-```
-dials.reciprocal_lattice_viewer imported.expt strong.refl
-```
+        dials.reciprocal_lattice_viewer imported.expt strong.refl
 
-No matter the sample orientation you should be able
-to rotate the space to "look down" the lines of reflections. If you
-cannot, or the lines are not straight, it is likely that there are
-some errors in the experiment parameters e.g. detector distance or
-beam centre. If these are not too large they will likely be corrected
-in the subsequent analysis.
+No matter the sample orientation you should be able to rotate the space to "look down" the lines of reflections. If you cannot, or the lines are not straight, it is likely that there are some errors in the experiment parameters e.g. detector distance or beam centre. If these are not too large they will likely be corrected in the subsequent analysis.
+
+*FIXME UPDATE THIS IMAGE*
 
 ![Reciprocal viewer](./images/reciprocal-lattice.png)
 
-Have a play with the settings - you can change the beam centre in the
-viewer to see how nicely aligned spots move out of alignment. Some of
-the options will only work after you have indexed the data. If the
-geometry is not accurately recorded you may find it useful to run:
+Have a play with the settings - you can change the beam centre in the viewer to see how nicely aligned spots move out of alignment. Some of the options will only work after you have indexed the data. If the geometry is not accurately recorded you may find it useful to run:
 
-```
-dials.search_beam_position imported.expt strong.refl
-```
+        dials.search_beam_position imported.expt strong.refl
 
-to determine an updated position for the beam centre - ideally the
-shift that this calculates should be small if the beamline is well-calibrated
- - if it is a couple of mm or more it may be worth
-discussing this with the beamline staff! Running the reciprocal
-lattice viewer with the optimised experiment output:
+to determine an updated position for the beam centre - ideally the shift that this calculates should be small if the beamline is well-calibrated - if it is a couple of mm or more it may be worth discussing this with the beamline staff! Running the reciprocal lattice viewer with the optimised experiment output:
 
-```
-dials.reciprocal_lattice_viewer optimised.expt strong.refl
-```
+        dials.reciprocal_lattice_viewer optimised.expt strong.refl
 
-should show straight lines, provided everything has worked correctly. 
+should show straight lines, provided everything has worked correctly.
 
-Further discussion of the output can be found
-[here](./find_spots_detail.md). 
+Further discussion of the output can be found [here](./find_spots_detail.md).
 
 ## Indexing
 
