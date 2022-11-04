@@ -199,28 +199,28 @@ mI: I2
 +------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
 |   Solution |   Metric fit |   rmsd | min/max cc   |   #spots | lattice   | unit_cell                                 |   volume | cb_op             |
 |------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------|
-|   *     22 |       0.1169 |  0.07  | 0.830/0.917  |    36000 | cI        | 77.65  77.65  77.65  90.00  90.00  90.00  |   468176 | b+c,a+c,a+b       |
-|   *     21 |       0.1156 |  0.069 | 0.853/0.854  |    36000 | hR        | 109.86 109.86  67.31  90.00  90.00 120.00 |   703563 | a+b+2*c,a-c,b     |
-|   *     20 |       0.1156 |  0.07  | 0.859/0.863  |    36000 | hR        | 109.82 109.82  67.25  90.00  90.00 120.00 |   702496 | 2*a+b+c,-a+b,c    |
-|   *     19 |       0.1096 |  0.064 | 0.834/0.835  |    36000 | hR        | 109.74 109.74  67.30  90.00  90.00 120.00 |   701941 | b-c,-a+c,a+b+c    |
-|   *     18 |       0.1169 |  0.069 | 0.474/0.917  |    36000 | tI        | 77.66  77.66  77.63  90.00  90.00  90.00  |   468233 | b+c,a+c,a+b       |
-|   *     17 |       0.1169 |  0.07  | 0.474/0.851  |    36000 | tI        | 77.66  77.66  77.67  90.00  90.00  90.00  |   468401 | a+b,b+c,a+c       |
-|   *     16 |       0.1169 |  0.069 | 0.495/0.841  |    36000 | tI        | 77.62  77.62  77.65  90.00  90.00  90.00  |   467902 | a+c,a+b,b+c       |
-|   *     15 |       0.1169 |  0.069 | 0.841/0.917  |    36000 | oI        | 77.65  77.62  77.66  90.00  90.00  90.00  |   468092 | a+c,a+b,b+c       |
-|   *     14 |       0.1096 |  0.065 | 0.526/0.917  |    36000 | oF        | 77.52 109.61 109.75  90.00  90.00  90.00  |   932573 | a+b,-a+b,a+b+2*c  |
-|   *     13 |       0.1169 |  0.067 | 0.480/0.841  |    36000 | oF        | 77.62 109.68 109.77  90.00  90.00  90.00  |   934550 | -b-c,2*a+b+c,-b+c |
-|   *     12 |       0.1169 |  0.067 | 0.841/0.841  |    36000 | mI        | 77.61  77.62  77.58  90.00  90.05  90.00  |   467346 | a+c,-b-c,a+b      |
-|   *     11 |       0.1069 |  0.064 | 0.917/0.917  |    36000 | mI        | 77.53  77.51  77.55  90.00  90.07  90.00  |   465977 | -a-c,-a-b,b+c     |
-|   *     10 |       0.1096 |  0.062 | 0.534/0.534  |    36000 | mI        | 67.19 109.65  67.25  90.00 109.53  90.00  |   466938 | c,-a+b,-a-b-c     |
-|   *      9 |       0.1156 |  0.067 | 0.525/0.525  |    36000 | mI        | 67.25 109.74  67.28  90.00 109.47  90.00  |   468132 | -c,2*a+b+c,-b     |
-|   *      8 |       0.0933 |  0.063 | 0.481/0.851  |    36000 | oF        | 77.72 109.84 110.01  90.00  90.00  90.00  |   939018 | -a-c,-a+c,a+2*b+c |
-|   *      7 |       0.086  |  0.061 | 0.851/0.851  |    36000 | mI        | 77.68  77.69  77.73  90.00  90.09  90.00  |   469100 | a+b,a+c,-b-c      |
-|   *      6 |       0.0933 |  0.062 | 0.481/0.481  |    36000 | mI        | 67.29 109.79  67.33  90.00 109.52  90.00  |   468862 | b,a-c,-a-b-c      |
-|   *      5 |       0.0495 |  0.057 | 0.830/0.833  |    36000 | hR        | 109.76 109.76  67.09  90.00  90.00 120.00 |   700006 | a+2*b+c,-b+c,a    |
-|   *      4 |       0.0495 |  0.055 | 0.526/0.526  |    36000 | mI        | 67.10 109.79  67.22  90.00 109.46  90.00  |   466927 | -a,-a-b-2*c,-b    |
-|   *      3 |       0.0405 |  0.057 | 0.485/0.485  |    36000 | mI        | 67.12 109.83  67.21  90.00 109.44  90.00  |   467157 | -a,a+2*b+c,-c     |
-|   *      2 |       0.0174 |  0.054 | 0.480/0.480  |    36000 | mI        | 67.07 109.69  67.20  90.00 109.41  90.00  |   466300 | a,-b+c,-a-b-c     |
-|   *      1 |       0      |  0.053 | -/-          |    36000 | aP        | 67.10  67.21  67.19 109.46 109.45 109.46  |   233392 | a,b,c             |
+|   *     22 |       0.1746 |  0.076 | 0.765/0.846  |     9000 | cI        | 77.88  77.88  77.88  90.00  90.00  90.00  |   472354 | b+c,a+c,a+b       |
+|   *     21 |       0.1746 |  0.076 | 0.592/0.814  |     9000 | tI        | 77.88  77.88  77.84  90.00  90.00  90.00  |   472111 | b+c,a+c,a+b       |
+|   *     20 |       0.1746 |  0.076 | 0.583/0.841  |     9000 | tI        | 77.87  77.87  77.91  90.00  90.00  90.00  |   472390 | a+b,b+c,a+c       |
+|   *     19 |       0.1746 |  0.076 | 0.603/0.807  |     9000 | tI        | 77.89  77.89  77.89  90.00  90.00  90.00  |   472487 | a+c,a+b,b+c       |
+|   *     18 |       0.1746 |  0.076 | 0.807/0.841  |     9000 | oI        | 77.84  77.91  77.87  90.00  90.00  90.00  |   472201 | a+b,a+c,-b-c      |
+|   *     17 |       0.1697 |  0.053 | 0.616/0.841  |     9000 | oF        | 77.72 109.79 110.10  90.00  90.00  90.00  |   939381 | -a-c,-a+c,a+2*b+c |
+|   *     16 |       0.1576 |  0.049 | 0.843/0.846  |     9000 | hR        | 110.06 110.06  67.23  90.00  90.00 120.00 |   705259 | a+2*b+c,-b+c,a    |
+|   *     15 |       0.1655 |  0.073 | 0.772/0.789  |     9000 | hR        | 110.09 110.09  67.32  90.00  90.00 120.00 |   706590 | a+b+2*c,a-c,b     |
+|   *     14 |       0.1655 |  0.076 | 0.765/0.843  |     9000 | hR        | 110.15 110.15  67.44  90.00  90.00 120.00 |   708624 | 2*a+b+c,-a+b,c    |
+|   *     13 |       0.1746 |  0.073 | 0.598/0.807  |     9000 | oF        | 77.80 109.87 110.04  90.00  90.00  90.00  |   940646 | b+c,-b+c,2*a+b+c  |
+|   *     12 |       0.1697 |  0.052 | 0.841/0.841  |     9000 | mI        | 77.73  77.72  77.74  90.00  90.16  90.00  |   469672 | a+b,a+c,-b-c      |
+|   *     11 |       0.1746 |  0.073 | 0.807/0.807  |     9000 | mI        | 77.72  77.78  77.77  90.00  90.08  90.00  |   470151 | -a-b,-b-c,a+c     |
+|   *     10 |       0.1576 |  0.042 | 0.638/0.638  |     9000 | mI        | 67.21 110.06  67.31  90.00 109.39  90.00  |   469695 | -a,a+2*b+c,-c     |
+|   *      9 |       0.1655 |  0.071 | 0.598/0.598  |     9000 | mI        | 67.25 110.01  67.31  90.00 109.39  90.00  |   469732 | -b,-2*a-b-c,-c    |
+|   *      8 |       0.1018 |  0.042 | 0.602/0.814  |     9000 | oF        | 77.60 109.58 109.95  90.00  90.00  90.00  |   934984 | a+b,-a+b,a+b+2*c  |
+|   *      7 |       0.1016 |  0.039 | 0.814/0.814  |     9000 | mI        | 77.66  77.60  77.60  90.00  90.19  90.00  |   467582 | -a-c,-a-b,b+c     |
+|   *      6 |       0.1018 |  0.041 | 0.602/0.602  |     9000 | mI        | 67.14 109.96  67.17  90.00 109.39  90.00  |   467769 | -a,-a-b-2*c,-b    |
+|   *      5 |       0.0658 |  0.033 | 0.806/0.815  |     9000 | hR        | 109.60 109.60  67.29  90.00  90.00 120.00 |   699973 | b-c,-a+c,a+b+c    |
+|   *      4 |       0.0658 |  0.032 | 0.616/0.616  |     9000 | mI        | 67.10 109.58  67.28  90.00 109.54  90.00  |   466187 | b,a-c,-a-b-c      |
+|   *      3 |       0.0559 |  0.026 | 0.656/0.656  |     9000 | mI        | 67.11 109.64  67.29  90.00 109.48  90.00  |   466761 | a,-b+c,-a-b-c     |
+|   *      2 |       0.0135 |  0.023 | 0.615/0.615  |     9000 | mI        | 67.16 109.51  67.26  90.00 109.56  90.00  |   466089 | c,-a+b,-a-b-c     |
+|   *      1 |       0      |  0.023 | -/-          |     9000 | aP        | 67.08  67.09  67.15 109.43 109.44 109.41  |   233036 | a,b,c             |
 +------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
 * = recommended solution
 ```
@@ -245,7 +245,7 @@ RMSDs by experiment:
 |   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
 |    id |        |     (px) |     (px) |   (images) |
 |-------+--------+----------+----------+------------|
-|     0 |  36000 |  0.56919 |  0.43822 |    0.23862 |
+|     0 |   9000 |  0.22756 |  0.20807 |     0.1411 |
 +-------+--------+----------+----------+------------+
 ```
 
@@ -257,7 +257,7 @@ RMSDs by experiment:
 |   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
 |    id |        |     (px) |     (px) |   (images) |
 |-------+--------+----------+----------+------------|
-|     0 |  52654 |  0.28189 |  0.25471 |    0.11902 |
+|     0 |  17478 |  0.19828 |   0.1788 |    0.11457 |
 +-------+--------+----------+----------+------------+
 ```
 
@@ -296,51 +296,36 @@ P2?2?2? in standard MX.
 The data in this tutorial give interesting output for this:
 
 ```
-+--------------+--------+------+--------+-----+---------------+
-|   likelihood |   Z-CC |   CC |      N |     | Operator      |
-|--------------+--------+------+--------+-----+---------------|
-|        0.942 |   9.95 | 0.99 | 153330 | *** | 1 |(0, 0, 0)  |
-|        0.16  |   4.48 | 0.45 | 292020 |     | 4 |(1, 1, 0)  |
-|        0.16  |   4.47 | 0.45 | 292632 |     | 4 |(1, 0, 1)  |
-|        0.161 |   4.49 | 0.45 | 292380 |     | 4 |(0, 1, 1)  |
-|        0.94  |   9.87 | 0.99 | 293032 | *** | 3 |(1, 0, 0)  |
-|        0.939 |   9.85 | 0.99 | 293108 | *** | 3 |(0, 1, 0)  |
-|        0.94  |   9.86 | 0.99 | 293028 | *** | 3 |(0, 0, 1)  |
-|        0.94  |   9.88 | 0.99 | 293030 | *** | 3 |(1, 1, 1)  |
-|        0.941 |   9.91 | 0.99 | 146456 | *** | 2 |(1, 1, 0)  |
-|        0.161 |   4.49 | 0.45 | 146404 |     | 2 |(-1, 1, 0) |
-|        0.941 |   9.89 | 0.99 | 148810 | *** | 2 |(1, 0, 1)  |
-|        0.161 |   4.49 | 0.45 | 148232 |     | 2 |(-1, 0, 1) |
-|        0.94  |   9.88 | 0.99 | 146406 | *** | 2 |(0, 1, 1)  |
-|        0.16  |   4.49 | 0.45 | 146196 |     | 2 |(0, -1, 1) |
-|        0.162 |   4.52 | 0.45 | 146224 |     | 2 |(1, 1, 2)  |
-|        0.16  |   4.49 | 0.45 | 147204 |     | 2 |(1, 2, 1)  |
-|        0.161 |   4.5  | 0.45 | 146470 |     | 2 |(2, 1, 1)  |
-+--------------+--------+------+--------+-----+---------------+
++--------------+--------+------+-------+-----+---------------+
+|   likelihood |   Z-CC |   CC |     N |     | Operator      |
+|--------------+--------+------+-------+-----+---------------|
+|        0.943 |   9.92 | 0.99 | 24130 | *** | 1 |(0, 0, 0)  |
+|        0.177 |   4.75 | 0.48 | 34990 |     | 4 |(1, 1, 0)  |
+|        0.161 |   4.47 | 0.45 | 34730 |     | 4 |(1, 0, 1)  |
+|        0.16  |   4.45 | 0.44 | 34902 |     | 4 |(0, 1, 1)  |
+|        0.939 |   9.81 | 0.98 | 50328 | *** | 3 |(1, 0, 0)  |
+|        0.936 |   9.75 | 0.97 | 43702 | *** | 3 |(0, 1, 0)  |
+|        0.937 |   9.77 | 0.98 | 30082 | *** | 3 |(0, 0, 1)  |
+|        0.936 |   9.75 | 0.98 | 28854 | *** | 3 |(1, 1, 1)  |
+|        0.942 |   9.87 | 0.99 | 15282 | *** | 2 |(1, 1, 0)  |
+|        0.182 |   4.83 | 0.48 | 11226 |     | 2 |(-1, 1, 0) |
+|        0.942 |   9.87 | 0.99 | 19976 | *** | 2 |(1, 0, 1)  |
+|        0.15  |   4.25 | 0.43 | 19170 |     | 2 |(-1, 0, 1) |
+|        0.943 |   9.9  | 0.99 | 19334 | *** | 2 |(0, 1, 1)  |
+|        0.161 |   4.46 | 0.45 | 32878 |     | 2 |(0, -1, 1) |
+|        0.163 |   4.49 | 0.45 | 24440 |     | 2 |(1, 1, 2)  |
+|        0.164 |   4.52 | 0.45 | 26138 |     | 2 |(1, 2, 1)  |
+|        0.136 |   3.93 | 0.39 | 20246 |     | 2 |(2, 1, 1)  |
++--------------+--------+------+-------+-----+---------------+
 ```
 
-Here it is clear that there are some operations that have close to
-100% CC, others that are much lower - in particular the 4-fold
-rotations in the middle of the faces are not present which means the
-crystal has a _polar_ space group so care needs to be taken when
-combining data from multiple samples. 
-
+Here it is clear that there are some operations that have close to 100% CC, others that are much lower - in particular the 4-fold rotations in the middle of the faces are not present which means the crystal has a _polar_ space group so care needs to be taken when combining data from multiple samples.
 
 ## Scaling and Merging
 
-During the experiment there are effects which alter the measured
-intensity of the reflections, not least radiation damage, changes to
-beam intensity or illuminated volume or absorption within the
-sample. The purpose of `dials.scale`, like all scaling programs, is to
-attempt to correct for these effects by using the fact that symmetry
-related reflections should share a common intensity. By default no
-attempt is made to merge the reflections - this may be done
-independently in `dials.merge` - but a table of merging statistics is
-printed at the end along with resolution recommendations.
+During the experiment there are effects which alter the measured intensity of the reflections, not least radiation damage, changes to beam intensity or illuminated volume or absorption within the sample. The purpose of `dials.scale`, like all scaling programs, is to attempt to correct for these effects by using the fact that symmetry related reflections should share a common intensity. By default no attempt is made to merge the reflections - this may be done independently in `dials.merge` - but a table of merging statistics is printed at the end along with resolution recommendations.
 
-```
-dials.scale symmetrized.expt symmetrized.refl [anomalous=True]
-```
+        dials.scale symmetrized.expt symmetrized.refl [anomalous=True]
 
 runs everything with the defaults which allows for:
 
@@ -348,42 +333,20 @@ runs everything with the defaults which allows for:
 - changes in overall intensity
 - modest sample absorption
 
-with the latter being the parameter most likely changed. If you have a
-data set recorded from a sample containing a large amount of metal
-(not common in MX) or recorded at long wavelength e.g, for sulphur SAD
-it may be necessary to adjust the extent to which the absorption
-correction is constrained with
+with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with
 
-```
-absorption_level=(low|medium|high)
-```
+        absorption_level=(low|medium|high)
 
-where setting low, the default, corresponds to ~ 1% absorption, medium to ~
-5% and high to ~ 25% - these are not absolute, more a sense of what
-you may expect. Testing has indicated that setting it too high is
-unlikely to do any harm, but setting it too low can have a measurable
-impact on the quality of the data for phasing
-experiments. `dials.scale` generates a HTML report `dials.scale.html`
-which includes a lot of information about how the models look, as well
-as regions of the data which agree well and poorly - from a practical
-perspective this is the point where you really _know_ about the final
-quality of the data.
+where setting low, the default, corresponds to ~ 1% absorption, medium to ~5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data.
 
 ## Merging or Exporting
 
-Most downstream software depends on a scaled _and merged_ data set
-e.g. for molecular replacement, so at the end of processing you can
-run
+Most downstream software depends on a scaled _and merged_ data set e.g. for molecular replacement, so at the end of processing you can run
 
-```
-dials.export scaled.expt scaled.refl
-```
+        dials.export scaled.expt scaled.refl
 
 to simply export the scaled reflections in MTZ format or
 
-```
-dials.merge scaled.expt scaled.refl
-```
+        dials.merge scaled.expt scaled.refl
 
-which will output a scaled and merged MTZ file. 
-
+which will output a scaled and merged MTZ file.
