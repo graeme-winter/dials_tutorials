@@ -132,29 +132,70 @@ are the ways to trigger the program, and the most common parameters to set are t
 
 ```
 Refined crystal models:
-model 1 (74549 reflections):
+model 1 (22031 reflections):
 Crystal:
-    Unit cell: 67.094(3), 67.207(3), 67.188(3), 109.4587(5), 109.4455(5), 109.4563(5)
+    Unit cell: 67.0787(15), 67.0881(18), 67.1497(16), 109.4286(6), 109.4379(5), 109.4057(5)
     Space group: P 1
-    U matrix:  {{-0.2300, -0.0313,  0.9727},
-                {-0.1224,  0.9925,  0.0030},
-                {-0.9655, -0.1183, -0.2321}}
+    U matrix:  {{ 0.1983,  0.4141,  0.8883},
+                {-0.5954, -0.6690,  0.4448},
+                { 0.7785, -0.6172,  0.1139}}
     B matrix:  {{ 0.0149,  0.0000,  0.0000},
                 { 0.0053,  0.0158,  0.0000},
                 { 0.0091,  0.0091,  0.0182}}
-    A = UB:    {{ 0.0053,  0.0084,  0.0177},
-                { 0.0034,  0.0157,  0.0001},
-                {-0.0171, -0.0040, -0.0042}}
+    A = UB:    {{ 0.0132,  0.0146,  0.0162},
+                {-0.0083, -0.0065,  0.0081},
+                { 0.0094, -0.0087,  0.0021}}
 +------------+-------------+---------------+-------------+
 |   Imageset |   # indexed |   # unindexed | % indexed   |
 |------------+-------------+---------------+-------------|
-|          0 |       74549 |          6615 | 91.8%       |
+|          0 |       22031 |         14143 | 60.9%       |
 +------------+-------------+---------------+-------------+
 ```
 
-If it is significantly less than 100% it is possible you have a second lattice - adding `max_lattices=2` (say) to the command-line will indicate to the program that you would like to consider attempting to separately index the unindexed reflections after the first lattice has been identified.
+If it is significantly less than 100% it is possible you have a second lattice - adding `max_lattices=2` (say) to the command-line will indicate to the program that you would like to consider attempting to separately index the unindexed reflections after the first lattice has been identified. In this case there was a clear second lattice which can be indexed well:
 
-By default the triclinic lattice i.e. with `P1` no additional symmetry is assumed - for the majority of data there are no differences in the quality of the results from assigning the Bravais lattice at this stage, even if as here it is perfectly obvious what the correct answer is.
+```
+Refined crystal models:
+model 1 (21933 reflections):
+Crystal:
+    Unit cell: 67.1002(11), 67.1161(14), 67.1713(12), 109.4317(6), 109.4414(5), 109.4017(5)
+    Space group: P 1
+    U matrix:  {{ 0.1982,  0.4141,  0.8884},
+                {-0.5955, -0.6690,  0.4448},
+                { 0.7785, -0.6172,  0.1140}}
+    B matrix:  {{ 0.0149,  0.0000,  0.0000},
+                { 0.0052,  0.0158,  0.0000},
+                { 0.0091,  0.0091,  0.0182}}
+    A = UB:    {{ 0.0132,  0.0146,  0.0162},
+                {-0.0083, -0.0065,  0.0081},
+                { 0.0094, -0.0087,  0.0021}}
+model 2 (11577 reflections):
+Crystal:
+    Unit cell: 67.0129(15), 67.0339(12), 67.1879(13), 109.4653(6), 109.4389(7), 109.3508(6)
+    Space group: P 1
+    U matrix:  {{-0.3130, -0.3469, -0.8841},
+                { 0.3928,  0.8003, -0.4531},
+                { 0.8647, -0.4891, -0.1142}}
+    B matrix:  {{ 0.0149,  0.0000,  0.0000},
+                { 0.0052,  0.0158,  0.0000},
+                { 0.0091,  0.0091,  0.0182}}
+    A = UB:    {{-0.0145, -0.0135, -0.0161},
+                { 0.0059,  0.0085, -0.0082},
+                { 0.0093, -0.0088, -0.0021}}
++------------+-------------+---------------+-------------+
+|   Imageset |   # indexed |   # unindexed | % indexed   |
+|------------+-------------+---------------+-------------|
+|          0 |       33510 |          2661 | 92.6%       |
++------------+-------------+---------------+-------------+
+Change of basis op: a,b,c
+Rotation matrix to transform crystal 1 to crystal 2:
+{{-0.991, 0.025, -0.130},
+ {0.007, -0.971, -0.240},
+ {-0.133, -0.239, 0.962}}
+Rotation of -179.465 degrees about axis (-0.066, -0.121, 0.990)
+```
+
+Here we see that there is a second lattice which is almost 180° separated: this is a very common outcome, resulting from the crystal splitting when cooled. In this case a reasonable data set can be obtained ignoring the second lattice, so we can just go ahead with the single lattice results. By default the triclinic lattice i.e. with `P1` no additional symmetry is assumed - for the majority of data there are no differences in the quality of the results from assigning the Bravais lattice at this stage, even if as here it is perfectly obvious what the correct answer is.
 
 If successful, `dials.index` writes the experiments and indexed reflections to two new files `indexed.expt` and `indexed.refl` - if these are loaded in the reciprocal lattice viewer you can see which spots have been indexed and if you have multiple lattices switch them "on and off" for comparison.
 
