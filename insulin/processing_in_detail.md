@@ -96,8 +96,6 @@ This is one of the two steps where every image in the data set is read and proce
 
 to get a sense of what spots were found. You will see that the spots are surrounded by little blue boxes - these are the _bounding boxes_ of the reflections i.e. the outer extent of the connected regions of the signal pixels. The signal pixels are highlighted with green blobs giving a sense of what is and is not "strong."
 
-*FIXME UPDATE THIS IMAGE*
-
 ![Image viewer](./images/viewer.png)
 
 The default parameters for spot finding usually do a good job for Pilatus images, such as these. However they may not be optimal for data from other detector types, such as CCDs or image plates. Issues with incorrectly set gain might, for example, lead to background noise being extracted as spots. You can use the image mode buttons to preview how the parameters affect the spot finding algorithm. The final button 'threshold’ is the one on which spots were found, so ensuring this produces peaks at real diffraction spot positions will give the best chance of success.
@@ -107,8 +105,6 @@ The second tool for visualisation of the found spots is the reciprocal lattice v
         dials.reciprocal_lattice_viewer imported.expt strong.refl
 
 No matter the sample orientation you should be able to rotate the space to "look down" the lines of reflections. If you cannot, or the lines are not straight, it is likely that there are some errors in the experiment parameters e.g. detector distance or beam centre. If these are not too large they will likely be corrected in the subsequent analysis.
-
-*FIXME UPDATE THIS IMAGE*
 
 ![Reciprocal viewer](./images/reciprocal-lattice.png)
 
