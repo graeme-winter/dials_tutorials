@@ -70,7 +70,7 @@ The starting point for any processing with DIALS is to _import_ the data - here 
 
         dials.import /dls/i03/data/2022/mx33300-1/TestInsulin/ins_11/ins_11_1_master.h5
 
-will read the metadata from this `nexus` file and write `imported.expt` from this: this is the same as "master" files elsewhere (and indeed we write master files too; they are not included in the Zenodo upload.)
+will read the metadata from this `nexus` file and write `imported.expt` from this.
 
 It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing.
 
@@ -78,7 +78,7 @@ At this point you can actually look at the images with the `dials.image_viewer` 
 
         dials.image_viewer imported.expt
 
-in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences. Personally the author finds for basic inspection of the images the brightness is a bit high for pixel array data, and a value of 10 may be better for viewing the diffraction pattern as a whole.
+in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences.
 
 To get a sense of how the diffraction spots are spread, stacking images can help - for example in this case setting the stack to 5 gives a good idea of the real separation between reflections. If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
 
@@ -362,7 +362,11 @@ Here it is clear that there are some operations that have close to 100% CC, othe
 
 During the experiment there are effects which alter the measured intensity of the reflections, not least radiation damage, changes to beam intensity or illuminated volume or absorption within the sample. The purpose of `dials.scale`, like all scaling programs, is to attempt to correct for these effects by using the fact that symmetry related reflections should share a common intensity. By default no attempt is made to merge the reflections - this may be done independently in `dials.merge` - but a table of merging statistics is printed at the end along with resolution recommendations.
 
-        dials.scale symmetrized.expt symmetrized.refl [anomalous=True]
+        dials.scale symmetrized.expt symmetrized.refl
+
+or 
+
+        dials.scale symmetrized.expt symmetrized.refl anomalous=True
 
 runs everything with the defaults which allows for:
 
@@ -370,10 +374,12 @@ runs everything with the defaults which allows for:
 - changes in overall intensity
 - modest sample absorption
 
-with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with
+with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with one of these options:
 
-        absorption_level=(low|medium|high)
-
+- `absorption_level=low`
+- `absorption_level=medium`
+- `absorption_level=high`
+        
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data.
 
 ## Estimating resolution
