@@ -78,7 +78,7 @@ At this point you can actually look at the images with the `dials.image_viewer` 
 
         dials.image_viewer imported.expt
 
-in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences. Personally the author finds for basic inspection of the images the brightness is a bit high for pixel array data, and a value of 10 may be better for viewing the diffraction pattern as a whole.
+in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences.
 
 To get a sense of how the diffraction spots are spread, stacking images can help - for example in this case setting the stack to 5 gives a good idea of the real separation between reflections. If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
 
