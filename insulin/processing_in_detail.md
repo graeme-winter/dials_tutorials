@@ -70,7 +70,7 @@ The starting point for any processing with DIALS is to _import_ the data - here 
 
         dials.import /dls/i03/data/2022/mx33300-1/TestInsulin/ins_11/ins_11_1_master.h5
 
-will read the metadata from this `nexus` file and write `imported.expt` from this: this is the same as "master" files elsewhere (and indeed we write master files too; they are not included in the Zenodo upload.)
+will read the metadata from this `nexus` file and write `imported.expt` from this.
 
 It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing.
 
