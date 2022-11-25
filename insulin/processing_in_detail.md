@@ -376,6 +376,14 @@ with the latter being the parameter most likely changed. If you have a data set 
 
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data.
 
+## Estimating resolution
+
+After scaling you can estimate the resolution limit of the scaled data with `dials.estimate_resolution` - this performs a fit and reads off where CC-half is 0.3 by default
+
+        dials.estimate_resolution scaled.*
+
+This will also write out a HTML file with a graph to inspect. You can take the output of this and re-scale the data to this limit with `d_min=1.71` (in this case.)
+
 ## Merging or Exporting
 
 Most downstream software depends on a scaled _and merged_ data set e.g. for molecular replacement, so at the end of processing you can run
