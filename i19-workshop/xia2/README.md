@@ -221,6 +221,10 @@ It is important to note here that the space group assignment is based on the sys
 
 The details of how this works can be followed through by going through the [_much more interesting_ `dials` tutorial](../dials/README.md).
 
+## Result Files
+
+All the data files you need are left in the `DataFiles` directory. In here are files prepared for input to `shelxt` as `shelxt.ins` and `.hkl` - these however do not have the atom definitions. If you want to look at intermediate steps, e.g. from indexing, you can look in (usually) `./DEFAULT/NATIVE/SWEEP1/index/` e.g. `dials.reciprocal_lattice_viewer 17_indexed.expt 17_indexed.refl` in this case.
+
 ## Controlling xia2
 
 The intention of `xia2` is that the defaults "just work" but sometimes you will know better and wish to enforce your will over the computer. This is very straightforward e.g. assigning the known unit cell, space group and resolution limit (which are the key choices) as:
