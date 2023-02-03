@@ -1,6 +1,6 @@
 # xia2
 
-`xia2` as a command line tool is there to process your data when you gave other things to do: it will in general make sensible decisions for you but it _won't_ tell you how your data are interesting, nor give you any real insight into what is going on. If your data are OK, it can be very effective in getting you from the diffraction images to `hkl` files in a compact period of time.
+`xia2` as a command line tool is there to process your data when you have other things to do: it will in general make sensible decisions for you but it _won't_ tell you how your data are interesting, nor give you any real insight into what is going on. If your data are OK, it can be very effective in getting you from the diffraction images to `hkl` files in a compact period of time.
 
 ## Basic xia2 usage
 
