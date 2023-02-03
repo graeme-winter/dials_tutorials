@@ -305,7 +305,7 @@ This is the first real point where we have a good idea of what the data quality 
 dials.scale symmetrized.expt symmetrized.refl
 ```
 
-This will give a summary at the end which includes an estimate of the resolution limit and some overall scaling statistics:
+If you have a lot of heavy atoms, or a large crystal, it could be beneficial to relax the constraints on the absorption correction with `absorption_level=medium` or `high`. This will give a summary at the end which includes an estimate of the resolution limit and some overall scaling statistics:
 
 ```
 Resolution limit suggested from CC½ fit (limit CC½=0.3): 0.61
