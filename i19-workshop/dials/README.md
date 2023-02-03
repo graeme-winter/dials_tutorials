@@ -8,11 +8,39 @@ In the general sense this is exactly the same "workflow" as with `xia2` but this
 
 As before, the data are imported, spots found, indexing and integration performed and the data scaled, so you should end up with pretty much the same answer as `xia2` gets 🙂 but you will learn a little more and it will probably take a little longer.
 
-FIXME in here a few words on what the files are, and how you generally run `dials` programs. Also the log files, and that the image viewer etc. can be run at any stage.
+### DIALS Commands
+Below you will use several DIALS commands: accessing the commands is done through a terminal. DIALS is already installed on Diamond linux workstations, but you need to instruct linux that you want to use it by typing `module load dials` into the terminal.
+
+This will give you access to the dials commands, which are all of the format `dials.the_thing_you_want_to_do`. Obviously we don't want the first step to be memorizing every single command (there will _not_ be a test at the end) - so just remember that the \<tab\> key is your friend. Typing some of the command and double tapping \<tab\> will autocomplete as far as it can and show you all the matching options. Try it yourself by typing `dials.` and double-tapping \<tab\>. 
+
+You also don't want to have to remember the arguments you need to type into any given command. If you just type one of the commands and hit \<enter\> then it will tell you some of the potential arguments / options it's expecting.  
+
+There are a couple of _really_ useful DIALS commands which you can basically use whenever you like as you progress through the chain of commands to inspect your data. 
+
+`dials.image_viewer` can be used to... _view your images_
+
+`dials.show` will show you a synopsis of the information contained in a DIALS file (see below)
+
+`dials.reciprocal_lattice_viewer` launches a graphical application to view your reflection data in reciprocal space
+
+### DIALS Files
+There are two main types of file which DIALS uses. They are not ascii files so they're not that easy to look at with a text editor - use `dials.show` instead!  
+
+Files with the extension `expt` are _experiment_ files which contain informaion describing the experiment: things like the detector type and geometry, incident beam definition, goniometer, UB matrix, etc. 
+
+Files with the extension `refl` are _reflection_ files, which contain information describing the reflections: their positions in real space, intensities, etc. 
+
+Many of the DIALS commands will finish with a line telling you it has created or edited some more files: 
+
+```bash
+...
+Writing experiments to imported.expt
+```
+They will be automatically named to reflect the DIALS command which created them - perhaps you can guess the name of the command that creates this file?! Whenever a command makes a file like this, feel free to explore them using the helpful commands above. 
 
 ## Importing
 
-In all honesty importing the data is usually the most troublesome point in any practical tutorial, as you have to correctly type the location of teh data to import the right frames. For our example the data are in FIXME add this, so we want to import _all_ the data with:
+In all honesty importing the data is usually the most troublesome point in any practical tutorial, as you have to correctly type the location of the data to import the right frames. For our example the data are in FIXME add this, so we want to import _all_ the data with:
 
 ```bash
 dials.import xia2 image=/dls/i19-2/data/2023/cy12345-6/foo/foo_*.cbf
@@ -277,7 +305,7 @@ This is the first real point where we have a good idea of what the data quality 
 dials.scale symmetrized.expt symmetrized.refl
 ```
 
-This will give a summary at the end which includes an estimate of teh resolution limit and some overall scaling statistics:
+This will give a summary at the end which includes an estimate of the resolution limit and some overall scaling statistics:
 
 ```
 Resolution limit suggested from CC½ fit (limit CC½=0.3): 0.61
