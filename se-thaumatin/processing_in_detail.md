@@ -180,66 +180,35 @@ The first "real" task in any processing using DIALS is the spot finding. Since t
 dials.find_spots imported.expt
 ```
 
-This is one of the two steps where every image in the data set is read
-and processed and hence can be moderately time-consuming. This
-contains a reflection file `strong.refl` which contains both the
-positions of the strong spots and also "images" of the spot pixels
-which we will use later. You can view these spots on top of the images
-with
+This is one of the two steps where every image in the data set is read and processed and hence can be moderately time-consuming. This contains a reflection file `strong.refl` which contains both the positions of the strong spots and also "images" of the spot pixels which we will use later. You can view these spots on top of the images with
 
 ```
 dials.image_viewer imported.expt strong.refl
 ```
 
-to get a sense of what spots were found. You will see that the spots
-are surrounded by little boxes - these are the _bounding boxes_ of
-the reflections i.e. the outer extent of the pixels that belong to
-that spot. The "signal" pixels are highlighted with green blobs
-giving a sense of what is and is not "strong."
+to get a sense of what spots were found. You will see that the spots are surrounded by little boxes - these are the _bounding boxes_ of the reflections i.e. the outer extent of the pixels that belong to that spot. The "signal" pixels are highlighted with green blobs giving a sense of what is and is not "strong."
 
 ![Image viewer](./images/image-view-spots.png)
 
-The default parameters for spot finding usually do a good job for
-Pilatus or Eiger images, such as these. However they may not be
-optimal for data from other detector types, such as CCDs or image
-plates. Issues with  incorrectly set gain might, for example, lead to
-background noise being extracted as spots. You can use the image mode
-buttons to preview how the parameters affect the spot finding
-algorithm. The final button 'threshold’ is the one on which spots were
-found, so ensuring this produces peaks at real diffraction spot
-positions will give the best chance of success. 
+The default parameters for spot finding usually do a good job for Pilatus or Eiger images, such as these. However they may not be optimal for data from other detector types, such as CCDs or image plates. Issues with  incorrectly set gain might, for example, lead to background noise being extracted as spots. You can use the image mode buttons to preview how the parameters affect the spot finding algorithm. The final button 'threshold’ is the one on which spots were found, so ensuring this produces peaks at real diffraction spot positions will give the best chance of success. 
 
-The second tool for visualisation of the found spots is the reciprocal
-lattice viewer - which presents a view of the spot positions mapped to
-reciprocal space.
+The second tool for visualisation of the found spots is the reciprocal lattice viewer - which presents a view of the spot positions mapped to reciprocal space.
 
 ```
 dials.reciprocal_lattice_viewer imported.expt strong.refl
 ```
 
-No matter the sample orientation you should be able
-to rotate the space to "look down" the lines of reflections. If you
-cannot, or the lines are not straight, it is likely that there are
-some errors in the experiment parameters e.g. detector distance or
-beam centre. If these are not too large they will likely be corrected
-in the subsequent analysis.
+No matter the sample orientation you should be able to rotate the space to "look down" the lines of reflections. If you cannot, or the lines are not straight, it is likely that there are some errors in the experiment parameters e.g. detector distance or beam centre. If these are not too large they will likely be corrected in the subsequent analysis.
 
 ![Reciprocal viewer](./images/reciprocal-lattice.png)
 
-Have a play with the settings - you can change the beam centre in the
-viewer to see how nicely aligned spots move out of alignment. Some of
-the options will only work after you have indexed the data. If the
-geometry is not accurately recorded you may find it useful to run:
+Have a play with the settings - you can change the beam centre in the viewer to see how nicely aligned spots move out of alignment. Some of the options will only work after you have indexed the data. If the geometry is not accurately recorded you may find it useful to run:
 
 ```
 dials.search_beam_position imported.expt strong.refl
 ```
 
-to determine an updated position for the beam centre - ideally the
-shift that this calculates should be small if the beamline is well-calibrated
-- if it is a couple of mm or more it may be worth
-discussing this with the beamline staff! Running the reciprocal
-lattice viewer with the optimised experiment output:
+to determine an updated position for the beam centre - ideally the shift that this calculates should be small if the beamline is well-calibrated - if it is a couple of mm or more it may be worth discussing this with the beamline staff! Running the reciprocal lattice viewer with the optimised experiment output:
 
 ```
 dials.reciprocal_lattice_viewer optimised.expt strong.refl
@@ -247,16 +216,11 @@ dials.reciprocal_lattice_viewer optimised.expt strong.refl
 
 should show straight lines, provided everything has worked correctly. 
 
-Further discussion of the output can be found
-[here](./find_spots_detail.md).
+Further discussion of the output can be found [here](./find_spots_detail.md).
 
 ## Indexing
 
-The next step will be indexing of the found spots with `dials.index` -
-by default this uses a 3D FFT algorithm to identify periodicity in the
-reciprocal space mapped spot positions, though there are other
-algorithms available which can be better suited to e.g. narrow data
-sets.
+The next step will be indexing of the found spots with `dials.index` - by default this uses a 3D FFT algorithm to identify periodicity in the reciprocal space mapped spot positions, though there are other algorithms available which can be better suited to e.g. narrow data sets.
 
 ```
 dials.index imported.expt strong.refl
@@ -268,12 +232,7 @@ or
 dials.index optimised.expt strong.refl
 ```
    
-are the ways to trigger the program, and the most common parameters to
-set are the `space_group` and `unit_cell` if these are known in
-advance. While this does index the data it will also perform some
-refinement with a static crystal model, and indicate in the output the
-fraction of reflections which have been indexed - ideally this should
-be close to 100%:
+are the ways to trigger the program, and the most common parameters to set are the `space_group` and `unit_cell` if these are known in advance. While this does index the data it will also perform some refinement with a static crystal model, and indicate in the output the fraction of reflections which have been indexed - ideally this should be close to 100%:
 
 ```
 Refined crystal models:
@@ -297,90 +256,38 @@ Crystal:
 +------------+-------------+---------------+-------------+
 ```
 
-If it is significantly less than 100% it is possible
-you have a second lattice - adding `max_lattices=2` (say) to the
-command-line will indicate to the program that you would like to
-consider attempting to separately index the unindexed reflections
-after the first lattice has been identified. 
+If it is significantly less than 100% it is possible you have a second lattice - adding `max_lattices=2` (say) to the command-line will indicate to the program that you would like to consider attempting to separately index the unindexed reflections after the first lattice has been identified.
 
-By default the triclinic lattice i.e. with `P1` no additional symmetry
-is assumed - for the majority of data there are no differences in the
-quality of the results from assigning the Bravais lattice at this
-stage, even if as here it is perfectly obvious what the correct answer
-is. 
+By default the triclinic lattice i.e. with `P1` no additional symmetry is assumed - for the majority of data there are no differences in the quality of the results from assigning the Bravais lattice at this stage, even if as here it is perfectly obvious what the correct answer is.
 
-If successful, `dials.index` writes the experiments and indexed
-reflections to two new files `indexed.expt` and `indexed.refl` - if
-these are loaded in the reciprocal lattice viewer you can see which
-spots have been indexed and if you have multiple lattices switch them
-"on and off" for comparison.
+If successful, `dials.index` writes the experiments and indexed reflections to two new files `indexed.expt` and `indexed.refl` - if these are loaded in the reciprocal lattice viewer you can see which spots have been indexed and if you have multiple lattices switch them "on and off" for comparison.
 
 The process that the indexing performs is quite complex -
 
-- make a guess at the maximum unit cell from the pairwise separation
-  of spots in reciprocal space
-- transform spot positions to reciprocal space using the best
-  available current model of the experimental geometry
-- perform a Fourier transform of these positions or other algorithm to
-  identify the _basis vectors_ of these positions e.g. the spacing
-  between one position and the next
-- determine a set of these basis vectors which best describes the
-  reciprocal space positions
-- transform this set of three basis vectors into a unit cell
-  description, which is then manipulated according to some standard
-  rules to give the best _triclinic_ unit cell to describe the
-  reflections - if a unit cell and space group have been provided
-  these will be enforced at this stage
-- _assign indices_ to the reflections by "dividing through"
-  the reciprocal space position by the unit cell parallelopiped (this
-  is strictly the actual indexing step)
-- take the indexed reflections and refine the unit cell parameters and
-  model of the experimental geometry by comparing where the
-  reflections should be and where they are found
-- save the indexed reflections and experiment models to the output
-  files
+- make a guess at the maximum unit cell from the pairwise separation of spots in reciprocal space
+- transform spot positions to reciprocal space using the best available current model of the experimental geometry
+- perform a Fourier transform of these positions or other algorithm to identify the _basis vectors_ of these positions e.g. the spacing between one position and the next
+- determine a set of these basis vectors which best describes the reciprocal space positions
+- transform this set of three basis vectors into a unit cell description, which is then manipulated according to some standard rules to give the best _triclinic_ unit cell to describe the reflections - if a unit cell and space group have been provided these will be enforced at this stage
+- _assign indices_ to the reflections by "dividing through" the reciprocal space position by the unit cell parallelopiped (this is strictly the actual indexing step)
+- take the indexed reflections and refine the unit cell parameters and model of the experimental geometry by comparing where the reflections should be and where they are found
+- save the indexed reflections and experiment models to the output files
 
-The indexing process takes place over a number of cycles, where low
-resolution reflections are initially indexed and refined before
-including more reflections at high resolution - this improves the
-overall success of the procedure by allowing some refinement as a part
-of the process. 
+The indexing process takes place over a number of cycles, where low resolution reflections are initially indexed and refined before including more reflections at high resolution - this improves the overall success of the procedure by allowing some refinement as a part of the process.
   
-During this process an effort is made to eliminate "outlier"
-reflections - these are reflections which do not strictly belong to
-the crystal lattice but are accidentally close to a reciprocal space
-position and hence can be indexed. Most often this is an issue with
-small satellite lattices or ice / powder on the sample. Usually this
-should not be a cause for concern.
+During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern.
 
 ## Bravais Lattice Determination (optional!)
 
-Once you have indexed the data you may optionally attempt to infer the
-correct Bravais lattice and assign this to constrain the unit cell in
-subsequent processing. If, for example, the unit cell from indexing
-has all three angles close to 90° and two unit cell lengths
-with very similar values you could guess that the unit cell is
-tetragonal. In `dials.refine_bravais_settings` we take away the
-guesswork by transforming the unit cell to all possible Bravais
-lattices which approximately match the triclinic unit cell, and then
-performing some refinement - if the lattice constraints are correct
-then imposing them should have little impact on the deviations between
-the observed and calculated reflection positions (known as the R.M.S.
-deviations). If a lattice constraint is incorrect it will manifest as
-a significant increase in a deviation - however care must be taken as
-it can be the case that the true _symmetry_ is lower than the shape of
-the unit cell would indicate.
+Once you have indexed the data you may optionally attempt to infer the correct Bravais lattice and assign this to constrain the unit cell in subsequent processing. If, for example, the unit cell from indexing has all three angles close to 90° and two unit cell lengths with very similar values you could guess that the unit cell is tetragonal. In `dials.refine_bravais_settings` we take away the guesswork by transforming the unit cell to all possible Bravais lattices which approximately match the triclinic unit cell, and then performing some refinement - if the lattice constraints are correct then imposing them should have little impact on the deviations between the observed and calculated reflection positions (known as the R.M.S. deviations). If a lattice constraint is incorrect it will manifest as a significant increase in a deviation - however care must be taken as it can be the case that the true _symmetry_ is lower than the shape of the unit cell would indicate.
 
-In the general case there is little harm in skipping this step,
-however for information if you run
+In the general case there is little harm in skipping this step, however for information if you run
 
 ```
 dials.refine_bravais_settings indexed.expt indexed.refl
 ```
 
-you will see a table of possible unit cell / Bravais lattice /
-R.M.S. deviations printed in the output - in the case of this tutorial
-data they will all match, as the true symmetry is tetragonal.
+you will see a table of possible unit cell / Bravais lattice / R.M.S. deviations printed in the output - in the case of this tutorial data they will all match, as the true symmetry is tetragonal.
 
 ```
 Chiral space groups corresponding to each Bravais lattice:
@@ -405,26 +312,13 @@ tP: P4 P41 P42 P43 P422 P4212 P4122 P41212 P4222 P42212 P4322 P43212
 +------------+--------------+--------+--------------+----------+-----------+------------------------------------------+----------+------------+
 ```
 
-If you wish to use one of the output experiments from this process
-e.g. `bravais_setting_9.expt` you will need to reindex the reflection
-data from indexing to match this - we do not output every option of
-reindexed data as these files can be large. In most cases it is
-simpler to re-run `dials.index` setting the chosen space group. 
+If you wish to use one of the output experiments from this process e.g. `bravais_setting_9.expt` you will need to reindex the reflection data from indexing to match this - we do not output every option of reindexed data as these files can be large. In most cases it is simpler to re-run `dials.index` setting the chosen space group.
 
-The reader is reminded here - in most cases it is absolutely fine to
-proceed without worrying about the crystal symmetry at this stage 🙂.
+The reader is reminded here - in most cases it is absolutely fine to proceed without worrying about the crystal symmetry at this stage 🙂.
 
 ## Refinement
 
-The model is already refined during indexing, but this is assuming
-that a single crystal model is appropriate for every image in the data
-set - in reality there are usually small changes in the unit cell and
-crystal orientation throughout the experiment as the sample is
-rotated. `dials.refine` will first re-run refinement with a fixed unit
-cell and then perform scan-varying refinement. If you have indexed
-multiple sweeps earlier in processing (not covered in this tutorial)
-then the crystal models will be copied and split at this stage to
-allow per-crystal-per-scan models to be refined. 
+The model is already refined during indexing, but this is assuming that a single crystal model is appropriate for every image in the data set - in reality there are usually small changes in the unit cell and crystal orientation throughout the experiment as the sample is rotated. `dials.refine` will first re-run refinement with a fixed unit cell and then perform scan-varying refinement. If you have indexed multiple sweeps earlier in processing (not covered in this tutorial) then the crystal models will be copied and split at this stage to allow per-crystal-per-scan models to be refined.
 
 By and large one may run:
 
