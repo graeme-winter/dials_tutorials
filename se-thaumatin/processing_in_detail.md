@@ -326,9 +326,7 @@ By and large one may run:
 dials.refine indexed.expt indexed.refl
 ```
 
-without any options and the program will do something sensible - if
-you compare the R.M.S. deviations from the end of indexing with the
-end of refinement you should see a small improvement e.g.
+without any options and the program will do something sensible - if you compare the R.M.S. deviations from the end of indexing with the end of refinement you should see a small improvement e.g.
 
 ```
 RMSDs by experiment:
@@ -352,86 +350,41 @@ RMSDs by experiment:
 +-------+--------+----------+----------+------------+
 ```
 
-If you look at
-the output of `dials.report` at this stage you should see small
-variations in the unit cell and sample orientation as the crystal is
-rotated - if these do not appear small then it is likely that
-something has happened during data collection e.g. severe radiation
-damage:
+If you look at the output of `dials.report` at this stage you should see small variations in the unit cell and sample orientation as the crystal is rotated - if these do not appear small then it is likely that something has happened during data collection e.g. severe radiation damage:
 
 ![Refinement graphs](./images/refine-report-sv.png)
 
 ## Integration
 
-Once you have refined the model the next step is to integrate the
-data - in effect this is using the refined model to calculate the
-positions where all of the reflections in the data set will be found
-and measure the background-subtracted intensities:
+Once you have refined the model the next step is to integrate the data - in effect this is using the refined model to calculate the positions where all of the reflections in the data set will be found and measure the background-subtracted intensities:
 
 ```
 dials.integrate refined.expt refined.refl
 ```
 
-By default this will pass through the data twice, first looking at the
-shapes of the predicted spots to form a reference profile model then
-passing through a second time to use this profile model to integrate
-the data, by being fit to the transformed pixel values. This is by far
-the most computationally expensive step in the processing of the data!
+By default this will pass through the data twice, first looking at the shapes of the predicted spots to form a reference profile model then passing through a second time to use this profile model to integrate the data, by being fit to the transformed pixel values. This is by far the most computationally expensive step in the processing of the data.
 
-by default all the processors in your computer are used, unless we
-think this will exceed the memory available in the machine. At times,
-however, if you have a large unit cell and / or a large data set you
-may find that processing on a desktop workstation is more appropriate
-than e.g. a laptop.
+by default all the processors in your computer are used, unless we think this will exceed the memory available in the machine. At times, however, if you have a large unit cell and / or a large data set you may find that processing on a desktop workstation is more appropriate than e.g. a laptop.
 
-If you know in advance that the data do not diffract to anything close
-to the edges of the detector you can assign a resolution limit at this
-stage by adding `prediction.d_min=1.8` (say) to define a 1.8 Å
-resolution limit - this should in general not be necessary. At the end
-of integration two new files are created - `integrated.refl` and
-`integrated.expt` - looking at these in the image viewer e.g.
+If you know in advance that the data do not diffract to anything close to the edges of the detector you can assign a resolution limit at this stage by adding `prediction.d_min=1.8` (say) to define a 1.8 Å resolution limit - this should in general not be necessary. At the end of integration two new files are created - `integrated.refl` and `integrated.expt` - looking at these in the image viewer e.g.
 
 ```
 dials.image_viewer integrated.expt integrated.refl
 ```
 
-can be very enlightening as you should see little red boxes around
-every reflection - if you select "integrated only" you can see what
-was and was not integrated. You may see a selection of reflections
-close to the rotation axis are missed - these are not well modelled or
-predicted in any program so typically excluded from processing. 
+can be very enlightening as you should see little red boxes around every reflection - if you select "integrated only" you can see what was and was not integrated. You may see a selection of reflections close to the rotation axis are missed - these are not well modelled or predicted in any program so typically excluded from processing.
 
 ## Symmetry analysis
 
-Before the data may be scaled it is necessary that the crystal
-symmetry is known - if this was assigned correctly at indexing
-e.g. `space_group=P41212` then you can proceed directly to scaling. In
-the majority of cases however it will be unknown or not set at this
-point, so needs to be assigned between integration and scaling. Even
-if the Bravais lattice was assigned earlier, the correct symmetry
-_within_ that lattice is needed.
+Before the data may be scaled it is necessary that the crystal symmetry is known - if this was assigned correctly at indexing e.g. `space_group=P41212` then you can proceed directly to scaling. In the majority of cases however it will be unknown or not set at this point, so needs to be assigned between integration and scaling. Even if the Bravais lattice was assigned earlier, the correct symmetry _within_ that lattice is needed.
 
-The symmetry analysis in DIALS takes the information from the spot
-positions and also the spot intensities. The former are used to
-effectively re-run `dials.refine_bravais_settings` to identify
-possible lattices and hence candidate symmetry operations, and the
-latter are used to assess the presence or absence of these symmetry
-operations. Once the operations are found, the crystal rotational
-symmetry is assigned by composing these operations into a putative
-space group. In addition, systematically absent reflections are also
-assessed to assign a best guess to translational elements of the
-symmetry - though these are not needed for scaling, they may help with
-downstream analysis rather than you having to manually identify them.
+The symmetry analysis in DIALS takes the information from the spot positions and also the spot intensities. The former are used to effectively re-run `dials.refine_bravais_settings` to identify possible lattices and hence candidate symmetry operations, and the latter are used to assess the presence or absence of these symmetry operations. Once the operations are found, the crystal rotational symmetry is assigned by composing these operations into a putative space group. In addition, systematically absent reflections are also assessed to assign a best guess to translational elements of the symmetry - though these are not needed for scaling, they may help with downstream analysis rather than you having to manually identify them.
 
 ```
 dials.symmetry integrated.expt integrated.refl
 ```
 
-is how this step is run. At this point it is important to note that
-the program is trying to identify all symmetry elements, and does not
-know that e.g. inversion centres are not possible - so for an oP
-lattice it will be testing for P/mmm symmetry which corresponds to
-P2?2?2? in standard MX.
+is how this step is run. At this point it is important to note that the program is trying to identify all symmetry elements, and does not know that e.g. inversion centres are not possible - so for an oP lattice it will be testing for P/mmm symmetry which corresponds to P2?2?2? in standard MX.
 
 In the output you'll see first the individual symmetry operation:
 
@@ -451,10 +404,7 @@ Scoring individual symmetry elements
 +--------------+--------+------+--------+-----+---------------+
 ```
 
-followed by the results of composing these into the possible space
-groups and the likelihood assessment of these - which takes into
-consideration the elements present in the space group and also those
-not present:
+followed by the results of composing these into the possible space groups and the likelihood assessment of these - which takes into consideration the elements present in the space group and also those not present:
 
 ```
 Scoring all possible sub-groups
@@ -477,11 +427,7 @@ Scoring all possible sub-groups
 Best solution: P 4/m m m
 ```
 
-Here the symmetry appears to be `P4/mmm` i.e. 4-fold rotation and
-three 2-fold mirror axes - and corresponds to some variation of
-`P4?2?2` - this information is sufficient for scaling though for
-structure solution identification of the correct space group is
-necessary - `dials.symmetry` will also attempt to guess this as:
+Here the symmetry appears to be `P4/mmm` i.e. 4-fold rotation and three 2-fold mirror axes - and corresponds to some variation of `P4?2?2` - this information is sufficient for scaling though for structure solution identification of the correct space group is necessary - `dials.symmetry` will also attempt to guess this as:
 
 ```
 +---------------+---------+
@@ -500,15 +446,7 @@ Space group with equivalent score (enantiomorphic pair): P 43 21 2
 
 ## Scaling and Merging
 
-During the experiment there are effects which alter the measured
-intensity of the reflections, not least radiation damage, changes to
-beam intensity or illuminated volume or absorption within the
-sample. The purpose of `dials.scale`, like all scaling programs, is to
-attempt to correct for these effects by using the fact that symmetry
-related reflections should share a common intensity. By default no
-attempt is made to merge the reflections - this may be done
-independently in `dials.merge` - but a table of merging statistics is
-printed at the end along with resolution recommendations.
+During the experiment there are effects which alter the measured intensity of the reflections, not least radiation damage, changes to beam intensity or illuminated volume or absorption within the sample. The purpose of `dials.scale`, like all scaling programs, is to attempt to correct for these effects by using the fact that symmetry related reflections should share a common intensity. By default no attempt is made to merge the reflections - this may be done independently in `dials.merge` - but a table of merging statistics is printed at the end along with resolution recommendations.
 
 ```
 dials.scale symmetrized.expt symmetrized.refl [anomalous=True]
@@ -520,27 +458,13 @@ runs everything with the defaults which allows for:
 - changes in overall intensity
 - modest sample absorption
 
-with the latter being the parameter most likely changed. If you have a
-data set recorded from a sample containing a large amount of metal
-(not common in MX) or recorded at long wavelength e.g, for sulphur SAD
-it may be necessary to adjust the extent to which the absorption
-correction is constrained with
+with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with
 
 ```
 absorption_level=(low|medium|high)
 ```
 
-where setting low, the default, corresponds to ~ 1% absorption, medium to ~
-5% and high to ~ 25% - these are not absolute, more a sense of what
-you may expect. Testing has indicated that setting it too high is
-unlikely to do any harm, but setting it too low can have a measurable
-impact on the quality of the data for phasing
-experiments. `dials.scale` generates a HTML report `dials.scale.html`
-which includes a lot of information about how the models look, as well
-as regions of the data which agree well and poorly - from a practical
-perspective this is the point where you really _know_ about the final
-quality of the data. The overall summary data are printed to the console and
-the log file e.g.:
+where setting low, the default, corresponds to ~ 1% absorption, medium to ~ 5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data. The overall summary data are printed to the console and the log file e.g.:
 
 ```
             -------------Summary of merging statistics--------------           
@@ -578,14 +502,11 @@ Error model details:
   estimated I/sigma asymptotic limit: 43.369
 ```
 
-which is very useful for basic diagnostics. This is immediately comparable with
-the ISa statistic from XDS. 
+which is very useful for basic diagnostics. This is immediately comparable with the ISa statistic from XDS.
 
 ## Merging or Exporting
 
-Most downstream software depends on a scaled _and merged_ data set
-e.g. for molecular replacement, so at the end of processing you can
-run
+Most downstream software depends on a scaled _and merged_ data set e.g. for molecular replacement, so at the end of processing you can run
 
 ```
 dials.export scaled.expt scaled.refl
@@ -597,5 +518,4 @@ to simply export the scaled reflections in MTZ format or
 dials.merge scaled.expt scaled.refl
 ```
 
-which will output a scaled and merged MTZ file. What you can go do
-with this is [explored](./next.md) but out of context for this tutorial.
+which will output a scaled and merged MTZ file. What you can go do with this is [explored](./next.md) but out of context for this tutorial.
