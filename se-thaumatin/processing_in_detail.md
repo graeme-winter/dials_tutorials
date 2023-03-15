@@ -1,55 +1,30 @@
-# Processing in Detail: selenourea soaked thaumatin (APS / CCP4 2021)
+# Processing in Detail: selenourea soaked thaumatin (APS / CCP4 2023)
 
 ## Introduction
 
-DIALS processing may be performed by either running the individual
-tools (spot finding, indexing, refinement, integration, symmetry,
-scaling, exporting to MTZ) or you can run `xia2`, which makes
-informed choices for you at each stage. In this tutorial we will run
-through each of the steps in turn, taking a look at the output as we
-go. We will also look at enforcing the correct lattice symmetry.
+DIALS processing may be performed by either running the individual tools (spot finding, indexing, refinement, integration, symmetry, scaling, exporting to MTZ) or you can run `xia2`, which makes informed choices for you at each stage. In this tutorial we will run through each of the steps in turn, taking a look at the output as we go. We will also look at enforcing the correct lattice symmetry.
 
-This data set is slightly more substantial than the small 50° set used
-for the other thaumatin tutorial, but more "realistic" in processing
-time and allows phasing from the data that are processed if you are so
-inclined.
+This data set is slightly more substantial than the small 50° set used for the other thaumatin tutorial, but more "realistic" in processing time and allows phasing from the data that are processed if you are so inclined.
 
-The aim of this tutorial is to introduce you to the tools, not teach
-about data processing - it is assumed you have some idea of the
-overall process from e.g. associated lectures. With the graphical
-tools, I am not making so much effort to explain the options as simply
-"playing" will give you a chance to learn your way around and also
-find the settings which work for you. Particularly with looking at
-diffraction images, the "best" settings are very personal.
+The aim of this tutorial is to introduce you to the tools, not teach about data processing - it is assumed you have some idea of the overall process from e.g. associated lectures. With the graphical tools, I am not making so much effort to explain the options as simply "playing" will give you a chance to learn your way around and also find the settings which work for you. Particularly with looking at diffraction images, the "best" settings are very personal.
 
 ## DIALS version
 
-This tutorial assumes you are using [DIALS
-version 3.8 or later](https://dials.github.io/installation.html) and that you
-have this set up (i.e. you've sourced the setup file, or module loaded
-`ccp4-workshop`).
+This tutorial assumes you are using [DIALS version 3.11 or later](https://dials.github.io/installation.html) and that you have this set up (i.e. you've sourced the setup file).
 
 If you type `dials.version` you should see something like:
 
 ```
-DIALS 3.8.0-gdc8ae18-release
-Python 3.7.12
-Installed in: /dls_sw/apps/ccp4/8.0.001/ccp4-8.0/lib/python3.7/site-packages/dials
+DIALS 3.12.1-2-g1c07bc2b3-release
+Python 3.9.13
+Installed in: /dls_sw/apps/dials/dials-v3-12-1-2/modules/dials/src/dials
 ```
 
-If you are running at home on Linux or macOS then you should be
-able to reproduce the results in here. If you are on Windows, try
-installing the Linux version in a WSL terminal using e.g. Ubuntu.
+If you are running at home on Linux or macOS then you should be able to reproduce the results in here. If you are on Windows, try installing the Linux version in a WSL terminal using e.g. Ubuntu.
 
 ## Tutorial data
 
-The following example uses a selenourea soaked Thaumatin data set
-collected on beamline i04 at Diamond Light Source, which is available
-[from OneDrive](https://dlsltd-my.sharepoint.com/:f:/g/personal/graeme_winter_diamond_ac_uk/EnAVwtJMH1tFpkCVMQCodUQB8rfrfDT8coLdW8noM0rDmg?e=kzujT6). You
-are probably better off downloading the files one at a time rather
-than as a zip file, as some systems struggle with zip files > 4GB. For
-the workshop at Diamond, the data are at
-`/dls/i03/data/2021/mx30951-8/tutorial_data/dials`.
+The following example uses a selenourea soaked Thaumatin data set collected on beamline i04 at Diamond Light Source, which is available [from OneDrive](https://dlsltd-my.sharepoint.com/:f:/g/personal/graeme_winter_diamond_ac_uk/EnAVwtJMH1tFpkCVMQCodUQB8rfrfDT8coLdW8noM0rDmg?e=kzujT6). You are probably better off downloading the files one at a time rather than as a zip file, as some systems struggle with zip files > 4GB.
 
 ## Files
 
@@ -58,91 +33,57 @@ DIALS creates two principal file types:
 - experiment files called `something.expt`
 - reflection files called `something.refl`
 
-"Experiment" in DIALS has a very specific meaning - the capturing of
-data from one set of detector, beam, goniometer and crystal - so if
-you have two scans from one crystal this is two experiments, if you
-have two lattices on one data set this is two experiments. In most
-cases you can ignore this distinction though.
+"Experiment" in DIALS has a very specific meaning - the capturing of data from one set of detector, beam, goniometer and crystal - so if you have two scans from one crystal this is two experiments, if you have two lattices on one data set this is two experiments. In most cases you can ignore this distinction though.
 
-Usually the output filenames will correspond to the name of the DIALS
-program that created them e.g. `indexed.refl` and `indexed.expt` from
-`dials.index`. The only deviations from this are on import (see below)
-where we are only reading experiment models and spot finding where we
-find _strong_ reflections so write these to `strong.refl` - and we
-create no models so (by default) there is no output experiment file.
+Usually the output filenames will correspond to the name of the DIALS program that created them e.g. `indexed.refl` and `indexed.expt` from `dials.index`. The only deviations from this are on import (see below) where we are only reading experiment models and spot finding where we find _strong_ reflections so write these to `strong.refl` - and we create no models so (by default) there is no output experiment file.
 
-At any time you can _look_ at these files with `dials.show` which will
-summarise the content of the files to the terminal. You can also `dials.show` reflection files which gives a tabular symmary of the content but this can be rather slow, as the data are much more substantial.
+At any time you can _look_ at these files with `dials.show` which will summarise the content of the files to the terminal. You can also `dials.show` reflection files which gives a tabular symmary of the content but this can be rather slow, as the data are much more substantial.
 
 [If you're impatient...](./tldr.md)
 
 ## Parameters
 
-All DIALS programs accept parameters in the form of
-`parameter=value` - in most cases this will be sufficient though some
-less frequently used options may require "name space" clarification
-e.g. `index_assignment.method=local`. All of the DIALS programs
-support the option
+All DIALS programs accept parameters in the form of `parameter=value` - in most cases this will be sufficient though some less frequently used options may require "name space" clarification e.g. `index_assignment.method=local`. All of the DIALS programs support the option
 
 ```
 dials.program -c -e2
 ```
 
-which will show you all possible configuration options - if you are
-looking for an option this is the simplest way to search so e.g.
+which will show you all possible configuration options - if you are looking for an option this is the simplest way to search so e.g.
 
 ```
 dials.index -c -e2 | less
 ```
 
-will allow you to scroll through the extensive list of options you can
-adjust. In most cases the defaults are relatively sensible for
-synchrotron data from a pixel array detector, as we are using in this
-tutorial.
+will allow you to scroll through the extensive list of options you can adjust. In most cases the defaults are relatively sensible for synchrotron data from a pixel array detector, as we are using in this tutorial.
 
 ## Output
 
-In the majority of cases the `dials` programs write their output to
-`dials.program.log` e.g. `dials.find_spots.log` etc. - everything
-which is printed to the terminal is also saved in this file, so you
-can review the processing later. In the case where you are reporting
-an issue to the developers including these log files in the error
-report (particularly for the step which failed) is very helpful. 
+In the majority of cases the `dials` programs write their output to `dials.program.log` e.g. `dials.find_spots.log` etc. - everything which is printed to the terminal is also saved in this file, so you can review the processing later. In the case where you are reporting an issue to the developers including these log files in the error report (particularly for the step which failed) is very helpful. 
 
-From most stages you can generate a more verbose _report_ of the
-current state of processing with:
+From most stages you can generate a more verbose _report_ of the current state of processing with:
 
 ```
 dials.report step.expt step.refl
 ```
 
-which will generate a detailed report as HTML describing the current
-state of the processing.
+which will generate a detailed report as HTML describing the current state of the processing.
    
 ## Import
 
-The starting point for any processing with DIALS is to _import_ the
-data - here the metadata are read and a description of the data to be
-processed saved to a file named `imported.expt`. This is "human
-readable" in that the file is JSON format (roughly readable text with
-brackets around to structure for computers). While you can edit this
-file if you know what you are doing, usually this is not necessary.
+The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
 
 ```
 dials.import SeThau_1_1_master.h5
 ```
 
-will read the metadata from this `master` file and write
-`imported.expt` from this - equally in this case you could import from
-the NeXus formatted file (which is functionally equivalent) with
+will read the metadata from this `master` file and write `imported.expt` from this - equally in this case you could import from the NeXus formatted file (which is functionally equivalent) with
 
 ```
 dials.import SeThau_1_1.nxs
 ```
 
-It is important to note that for well-behaved data (i.e. anything
-which is well-collected from a well-behaved sample) the commands below
-will often be identical after importing. Once you have `imported.expt` you can look at the content with `dials.show` as:
+It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. Once you have `imported.expt` you can look at the content with `dials.show` as:
 
 ```
 dials.show imported.expt
@@ -217,43 +158,23 @@ Goniometer:
     scan axis: #2 (omega)
 ```
 
-At this point you can also look at the images with the
-`dials.image_viewer` tool -
+At this point you can also look at the images with the `dials.image_viewer` tool -
 
 ```
 dials.image_viewer imported.expt
 ```
 
-in this tool there are many settings you can adjust, which could
-depend on the source of the data and - most importantly - your
-preferences. Personally the author finds for basic inspection of the
-images the brightness is a bit high for pixel array data, and a value
-of 5 / 10 may be better for viewing the diffraction pattern as a
-whole.
+in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences. Personally the author finds for basic inspection of the images the brightness is a bit high for pixel array data, and a value of 5 / 10 may be better for viewing the diffraction pattern as a whole.
 
 ![Image viewer](./images/image-view.png)
 
-To get a sense of how the diffraction spots are spread, stacking
-images can help - for example in this case setting the stack to 10
-gives a good idea of the real separation between reflections. If the
-data are not stacked the spot finding process can also be explored -
-the controls at the bottom of the "Settings" window allow you to step
-through these and can be very useful for getting a "computer's eye
-view" of how the data look (particularly for establishing where the
-diffraction is visible to.)
+To get a sense of how the diffraction spots are spread, stacking images can help - for example in this case setting the stack to 10 gives a good idea of the real separation between reflections. If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
 
-[Here](./import_detail.md) is a short discussion on some more details
-of importing data.
+[Here](./import_detail.md) is a short discussion on some more details of importing data.
 
 ## Find Spots
 
-The first "real" task in any processing using DIALS is the spot
-finding. Since this is looking for spots on every image in the
-dataset, this process can take some time so by default will use all of
-the processors available in your machine - if you would like to
-control this adjust with e.g. `nproc=4` - however the default is
-usually sensible unless you are sharing the computer with many
-others.
+The first "real" task in any processing using DIALS is the spot finding. Since this is looking for spots on every image in the dataset, this process can take some time so by default will use all of the processors available in your machine - if you would like to control this adjust with e.g. `nproc=4` - however the default is usually sensible unless you are sharing the computer with many others.
 
 ```
 dials.find_spots imported.expt
