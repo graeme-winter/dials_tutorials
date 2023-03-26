@@ -4,11 +4,11 @@ These tutorials are work-in-progress so not "publication quality" yet but hopefu
 
 ## MX Tutorials
 
-[2022 APS CCP4 workshop: thaumatin](./thaumatin/processing_in_detail.md)
+[2023 APS CCP4 workshop: thaumatin](./thaumatin/processing_in_detail.md)
 
-[2022 APS CCP4 workshop: selenourea thaumatin](./se-thaumatin/processing_in_detail.md)
+[2023 APS CCP4 workshop: selenourea thaumatin](./se-thaumatin/processing_in_detail.md)
 
-[2022 APS CCP4 workshop: multi-crystal](./br-lyso-multi/multicrystal.md)
+[2023 APS CCP4 workshop: multi-crystal](./br-lyso-multi/multicrystal.md)
 
 [Basic scripting](./scripting/basic_scripting.md)
 
