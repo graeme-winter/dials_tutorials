@@ -502,7 +502,17 @@ Error model details:
   estimated I/sigma asymptotic limit: 43.369
 ```
 
-which is very useful for basic diagnostics. This is immediately comparable with the ISa statistic from XDS.
+which is very useful for basic diagnostics. This is immediately comparable with the ISa statistic from XDS. N.B. that the `anomalous=true` option here will make quite a difference to this ISa:
+
+```
+Error model details:
+  Type: basic
+  Parameters: a = 1.00095, b = 0.02054
+  Error model formula: σ'² = a²(σ² + (bI)²)
+  estimated I/sigma asymptotic limit: 48.636
+```
+
+This is because the intenities are _most different_ due to anomalous signal at low resolution, which is where the strongest reflections are.
 
 ## Merging or Exporting
 
