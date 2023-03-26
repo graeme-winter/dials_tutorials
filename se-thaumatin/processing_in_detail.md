@@ -449,10 +449,16 @@ Space group with equivalent score (enantiomorphic pair): P 43 21 2
 During the experiment there are effects which alter the measured intensity of the reflections, not least radiation damage, changes to beam intensity or illuminated volume or absorption within the sample. The purpose of `dials.scale`, like all scaling programs, is to attempt to correct for these effects by using the fact that symmetry related reflections should share a common intensity. By default no attempt is made to merge the reflections - this may be done independently in `dials.merge` - but a table of merging statistics is printed at the end along with resolution recommendations.
 
 ```
-dials.scale symmetrized.expt symmetrized.refl [anomalous=True]
+dials.scale symmetrized.expt symmetrized.refl anomalous=True
 ```
 
-runs everything with the defaults which allows for:
+for anomalous data or
+
+```
+dials.scale symmetrized.expt symmetrized.refl
+```
+
+for native - this will run everything with the defaults which allows for:
 
 - modest radiation damage
 - changes in overall intensity
@@ -461,7 +467,19 @@ runs everything with the defaults which allows for:
 with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with
 
 ```
-absorption_level=(low|medium|high)
+absorption_level=low
+```
+
+_or_
+
+```
+absorption_level=medium
+```
+
+_or_
+
+```
+absorption_level=high
 ```
 
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~ 5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data. The overall summary data are printed to the console and the log file e.g.:

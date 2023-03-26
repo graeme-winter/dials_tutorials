@@ -44,6 +44,8 @@ done
 
 This will import and process each 100 image block and really demonstrates how shell scripting can be powerful. In "real" data collection each data set would probably have a different filename, so the only change would be altering the `dials.import` command.
 
+Very important to note here - the stuff with `$(printf %02d $j)` is about making sure that the numbering we use later is consistent - so we number the data sets from `00` to `30` and then we can use `0*` or `1*` to talk about the first or second ten data sets. There are other ways we could do this but the book keeping will always be a little involved for multi-crystal data sets.
+
 This will generate 31 × `{integrated.refl,integrated.expt}` pairs that are the real input to this process. For this tutorial we will work on the first 10, then _add_ the next ten etc. demonstrating the incremental approach to combining the data.
 
 [If this is all Greek to you then this tutorial is here to help!](../scripting/basic_scripting.md)

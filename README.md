@@ -1,7 +1,6 @@
 # DIALS Tutorials
 
-These tutorials are work-in-progress so not "publication quality" yet
-but hopefully contaim some valuable signal.
+These tutorials are work-in-progress so not "publication quality" yet but hopefully contaim some valuable signal.
 
 ## MX Tutorials
 
@@ -12,3 +11,5 @@ but hopefully contaim some valuable signal.
 [2023 APS CCP4 workshop: multi-crystal](./br-lyso-multi/multicrystal.md)
 
 [Basic scripting](./scripting/basic_scripting.md)
+
+[Python scripting with DIALS](./python-scripting/python_scripting.md)
