@@ -44,6 +44,75 @@ The content of this file can be shown as human-readable text with `dials.show` e
 dials.show imported.expt
 ```
 
+<details>
+  <summary>Full output</summary>
+
+```
+DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
+The following parameters have been modified:
+
+input {
+  experiments = imported.expt
+}
+
+Experiment 0:
+Experiment identifier: 72be34f3-a1bf-1046-9baa-f9ae973b5bb0
+Image template: /Users/graeme/data/i03-2021-run1-small/xtal_1_5.nxs
+Detector:
+Panel:
+  name: /entry/instrument/detector/module
+  type: SENSOR_PAD
+  identifier: 
+  pixel_size:{0.075,0.075}
+  image_size: {4148,4362}
+  trusted_range: {0,9266}
+  thickness: 0.45
+  material: Si
+  mu: 3.92208
+  gain: 1
+  pedestal: 0
+  fast_axis: {1,0,0}
+  slow_axis: {0,-1,0}
+  origin: {-155.992,166.56,289.3}
+  distance: -289.3
+  pixel to millimeter strategy: ParallaxCorrectedPxMmStrategy
+    mu: 3.92208
+    t0: 0.45
+
+
+Max resolution (at corners): 0.515708
+Max resolution (inscribed):  0.545559
+
+Beam:
+    wavelength: 0.976254
+    sample to source direction : {0,0,1}
+    divergence: 0
+    sigma divergence: 0
+    polarization normal: {0,1,0}
+    polarization fraction: 0.999
+    flux: 0
+    transmission: 1
+
+Scan:
+    number of images:   500
+    image range:   {1,500}
+    oscillation:   {0,0.1}
+    exposure time: 0
+
+Goniometer:
+    Rotation axis:   {1,0,0}
+    Fixed rotation:  {1,0,0,0,1,0,0,0,1}
+    Setting rotation:{1,0,0,0,1,0,0,0,1}
+    Axis #0 (phi):  {1,-0.0025,0.0056}
+    Axis #1 (chi):  {-0.006,-0.0264,-0.9996}
+    Axis #2 (omega):  {1,0,0}
+    Angles: 0,0,0
+    scan axis: #2 (omega)
+
+```
+
+</details>
+
 the output of which shows a few derived quantities such as the beam centre and distance which are important for processing. A key point here is if any of these quantities have surprising values it could be an indicator that something is wrong! For example, a negative distance.
 
 ## The Geometry Viewer
