@@ -19,9 +19,9 @@ dials.cosym integrated.expt integrated.refl
 dials.scale symmetrized.expt symmetrized.refl \
   anomalous=true absorption_level=medium
 dials.split_experiments scaled.expt scaled.refl
-for n in 0, 1, 2, do
+for n in 0 1 2; do
   dials.merge split_${n}.expt split_${n}.refl output.mtz=split_${n}.mtz
 done
 ```
 
-(you do not need to process the data together, this is just for convenience)
+(you do not need to process the data together, this is just for convenience) - the key point is bringing the data from integration (here; in P1, but that is not mandatory) together and resolving the symmetry across the population and any indexing ambiguity. After this, the data are suitable for scaling together (which works fine with the defaults). After this the data are then separated out into the original data sets and merged to give MTZ files which are then suitable for `dimple` analysis - after this the maps can be loaded into `coot` for direct comparison.
