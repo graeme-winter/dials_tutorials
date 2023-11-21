@@ -358,3 +358,146 @@ to simply export the scaled reflections in MTZ format or
         dials.merge scaled.expt scaled.refl
 
 which will output a scaled and merged MTZ file.
+
+## Review
+
+If you looked at [tldr](./tldr.md) before working through this many of the commands will be familiar - with good reason, since the script _generally works_ for reasonable data.
+
+If we remind ourselves of what the script looked like:
+
+```
+dials.import /dls/i03/data/2023/mx37045-1/TestInsulin/ins_1/ins_1_1.nxs image_range=1,450
+dials.find_spots imported.expt
+dials.index imported.expt strong.refl
+dials.refine indexed.expt indexed.refl
+dials.integrate refined.expt refined.refl
+dials.symmetry integrated.expt integrated.refl
+dials.scale symmetrized.expt symmetrized.refl
+```
+
+We essentially imported some data, found the spots, then index, refine, integrate and finally decide on the symmetry and scale. If we are processing data from either more than one sweep from one crystal (e.g. for multiple orientation data collection) or from multiple separate crystals, then fundamentally we would like to do _the same workflow_ but with that instead.
+
+Guess what? You can.
+
+But, like everything in life, there are details you need to pay attention to. The second part of this tutorial will explore those details.
+
+## Multiple Sweeps from One Crystal
+
+Multi-axis goniometers allow the crystal to be reorientated with respect to the goniometer scan axis, to allow areas of reciprocal space to be reached which would otherwise be unavailable. The relationship between scans is therefore calculable, provided that the goniometer information is reasonably accurately recorded. This means, in effect, that we can assign one set of unit cell vectors (characterised as an orientation matrix) to both sets of reflections.
+
+We can get the ball rolling with
+
+        dials.import /dls/i03/data/2023/mx37045-1/TestInsulin/ins_1/ins_1_{1,2}.nxs image_range=1,225
+
+This will import the first 225 images of two scans (so, a similar amount of data to the first tutorial run with 450 images). We can then find spots and index _as before_ though the output is a little different, reflecting the fact that we have two distinct data sets here.
+
+        dials.find_spots imported.expt
+        dials.index imported.expt strong.refl
+
+The find spots job will step through each scan one at a time, so you will get two sets of output. The indexing run will map all these reflections to reciprocal space and fit _one_ matrix - you can get a feel for what this looks like with
+
+        dials.reciprocal_lattice_viewer imported.expt strong.refl
+
+as before. The indexing output will however show two sets of output:
+
+```
+RMSDs by experiment:
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |   4499 |  0.83384 |  0.65097 |    0.47335 |
+|     1 |   4499 |  0.56526 |  0.33821 |    0.46412 |
++-------+--------+----------+----------+------------+
+
+Refined crystal models:
+model 1 (12156 reflections):
+Crystal:
+    Unit cell: 67.068(9), 67.033(9), 67.150(7), 109.439(3), 109.455(3), 109.394(4)
+    Space group: P 1
+    U matrix:  {{ 0.1572, -0.2353, -0.9591},
+                {-0.8736, -0.4861, -0.0239},
+                {-0.4606,  0.8416, -0.2820}}
+    B matrix:  {{ 0.0149,  0.0000,  0.0000},
+                { 0.0052,  0.0158,  0.0000},
+                { 0.0091,  0.0091,  0.0182}}
+    A = UB:    {{-0.0076, -0.0124, -0.0175},
+                {-0.0158, -0.0079, -0.0004},
+                {-0.0050,  0.0107, -0.0051}}
+model 2 (12187 reflections):
+Crystal:
+    Unit cell: 67.068(9), 67.033(9), 67.150(7), 109.439(3), 109.455(3), 109.394(4)
+    Space group: P 1
+    U matrix:  {{ 0.1572, -0.2353, -0.9591},
+                {-0.8736, -0.4861, -0.0239},
+                {-0.4606,  0.8416, -0.2820}}
+    B matrix:  {{ 0.0149,  0.0000,  0.0000},
+                { 0.0052,  0.0158,  0.0000},
+                { 0.0091,  0.0091,  0.0182}}
+    A = UB:    {{-0.0076, -0.0124, -0.0175},
+                {-0.0158, -0.0079, -0.0004},
+                {-0.0050,  0.0107, -0.0051}}
++------------+-------------+---------------+-------------+
+|   Imageset |   # indexed |   # unindexed | % indexed   |
+|------------+-------------+---------------+-------------|
+|          0 |       12156 |           357 | 97.1%       |
+|          1 |       12187 |           313 | 97.5%       |
++------------+-------------+---------------+-------------+
+
+Saving refined experiments to indexed.expt
+Saving refined reflections to indexed.refl
+```
+
+here we can see that almost all of the reflections from both scans were indexed but the R.M.S. deviations were rather larger than before - this is a reflection of inaccuracy in the goniometer information and will come out in the wash when we do some refinement.
+
+If here you see only one of the sets properly indexed, and most of the other set not indexed at all, it is likely that the necessary goniometer information is not accurately recorded. We can work around this, as will be shown in the next tutorial example.
+
+The rest of the process largely works as before - we can run
+
+```
+dials.refine indexed.expt indexed.refl
+dials.integrate refined.expt refined.refl
+dials.symmetry integrated.expt integrated.refl
+dials.scale symmetrized.expt symmetrized.refl
+```
+
+just fine - the R.M.S. deviations in refinement are _vastly_ better as we allow the orientations of the lattices to be a little different between scans, but critically the reflections are consistently indexed - this is critical when we come to the symmetry analysis, particularly if the crystal affords the possibility of indexing ambiguity as in this case.
+
+## Multiple Sweeps from Multiple Crystals
+
+In the above run we relied on the fact that the relationship between the data sets was well defined - the sample was deliberately reorientated in a known manner between scans. If we take data from multiple crystals then we can make no such assumptions and instead have to treat each lattice as independent. Happily this involves only a slight deviation from the "main sequence" processing.
+
+First, let's import a few frames from four different crystals:
+
+        dials.import /dls/i03/data/2023/mx37045-1/TestInsulin/ins_{3,4,5,6}/ins_?_1.nxs image_range=1,225
+
+This is taking the first 225 images from the first sweep of four runs - if you have time you could include all the images to get a much higher multiplicity but this is a learning-the-ropes exercise. Spot finding works exactly as before:
+
+        dials.find_spots imported.expt
+
+but when we hit indexing we have to tell `dials.index` not to try and assign a single matrix:
+
+        dials.index imported.expt strong.refl joint=false
+
+Looking at the spots in the reciprocal lattice viewer will demonstrate the differences in orientation, but once we have indexed the data we have orientation matrices, so we can look at the lattices in the _crystal frame_
+
+![Reciprocal lattice with multiple crystals](./images/reciprocal-lattice-multi.png)
+
+It's much easier to play with the lattice viewer here than look at a static picture. Anyway, the next couple of stages are the same as we are used to -
+
+```
+dials.refine indexed.expt indexed.refl
+dials.integrate refined.expt refined.refl
+```
+
+When we get to the symmetry discovery though, we have to pause as we have no idea if the crystals are consistently indexed ergo simply looking for symmetry could be misleading. Instead we have the `dials.cosym` tool, which is there to resolve the crystal symmetry and indexing ambiguity _at the same time_ by using a lot of maths and group theory. The end game though is we can put in multiple data sets from multiple crystals and get out consistently indexed data with the correct rotational symmetry assigned.
+
+As a reminder:
+
+        dials.cosym integrated.expt integrated.refl
+
+After this the data are again ready for scaling:
+
+        dials.scale symmetrized.expt symmetrized.refl
+
+And you can of course apply resolution limits and suchlike. Really the tool for _this_ job is `xia2.multiplex` but this is a different tutorial.
