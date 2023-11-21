@@ -66,6 +66,13 @@ From most stages you can generate a more verbose _report_ of the current state o
 which will generate a detailed report as HTML describing the current
 state of the processing.
 
+## Before You Start
+
+DIALS programs make files - with standard names - so to keep things simple, make a new directory for each processing run. Since this is a tutorial with three parts, I suggest tutorial-1, tutorial-2, tutorial-3.
+
+        mkdir tutorial-1
+        cd tutorial-1
+
 ## Import
 
 The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
@@ -383,6 +390,12 @@ But, like everything in life, there are details you need to pay attention to. Th
 
 ## Multiple Sweeps from One Crystal
 
+Before you start
+
+        cd ..
+        mkdir tutorial-2
+        cd tutorial-2
+
 Multi-axis goniometers allow the crystal to be reorientated with respect to the goniometer scan axis, to allow areas of reciprocal space to be reached which would otherwise be unavailable. The relationship between scans is therefore calculable, provided that the goniometer information is reasonably accurately recorded. This means, in effect, that we can assign one set of unit cell vectors (characterised as an orientation matrix) to both sets of reflections.
 
 We can get the ball rolling with
@@ -464,6 +477,12 @@ dials.scale symmetrized.expt symmetrized.refl
 just fine - the R.M.S. deviations in refinement are _vastly_ better as we allow the orientations of the lattices to be a little different between scans, but critically the reflections are consistently indexed - this is critical when we come to the symmetry analysis, particularly if the crystal affords the possibility of indexing ambiguity as in this case.
 
 ## Multiple Sweeps from Multiple Crystals
+
+Before you start
+
+        cd ..
+        mkdir tutorial-3
+        cd tutorial-3
 
 In the above run we relied on the fact that the relationship between the data sets was well defined - the sample was deliberately reorientated in a known manner between scans. If we take data from multiple crystals then we can make no such assumptions and instead have to treat each lattice as independent. Happily this involves only a slight deviation from the "main sequence" processing.
 
