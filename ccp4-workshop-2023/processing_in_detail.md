@@ -159,7 +159,7 @@ Crystal:
 +------------+-------------+---------------+-------------+
 ```
 
-If the fraction of indexed reflections is substantially below 100%, go look - there is probably a reason (and I would place a small wager that your crystal has split). A successful `dials.index` writes the experiments and indexed reflections to two new files `indexed.expt` and `indexed.refl` - if these are loaded in the reciprocal lattice viewer you can see which spots have been indexed and if you have multiple lattices switch them "on and off" for comparison.
+If the fraction of indexed reflections is substantially below 100%, go look - there is probably a reason (and I would place a small wager that your crystal has split). A successful `dials.index` job writes the experiments and indexed reflections to two new files `indexed.expt` and `indexed.refl` - if these are loaded in the reciprocal lattice viewer you can see which spots have been indexed and if you have multiple lattices switch them "on and off" for comparison.
 
 The process that the indexing performs is quite complex -
 
