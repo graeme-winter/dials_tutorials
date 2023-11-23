@@ -336,13 +336,7 @@ runs everything with the defaults which allows for:
 - changes in overall intensity
 - modest sample absorption
 
-with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with one of these options:
-
-- `absorption_level=low`
-- `absorption_level=medium`
-- `absorption_level=high`
-        
-where setting low, the default, corresponds to ~ 1% absorption, medium to ~5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data.
+with the latter being the parameter most likely changed i.e. by adjusting `absorption_level` from the default of `low` to `medium`. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained using `absorption_level=medium` or `absorption_level=high`. In the general case the absorption correction is well constrained so this is not likely to overfit the data. Tsetting `low` corresponds to ~ 1% absorption, `medium` to ~5% and `high` to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data.
 
 ## Estimating resolution
 
