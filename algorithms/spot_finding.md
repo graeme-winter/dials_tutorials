@@ -34,6 +34,8 @@ and
 
 `T = i_sum * sigma_b * sqrt(2 * (m_sum - 1))`
 
+### Signal
+
 If a pixel `p` is excluded from being background it can be tested whether it is _strong_ i.e. significantly above the mean and variance of the local population with another inequality: `Y > S` where
 
 `Y = p * m_sum - i_sum`
@@ -43,3 +45,39 @@ and
 `S = sigma_s * sqrt(i_sum * m_sum)`
 
 If both of these conditions are satisfied the pixel is strong and will be recorded for later grouping.
+
+## Extended Dispersion Spot Finding
+
+Obviously if the mean and variance of a background region are computed, the mean used is a good estimator of the appropriate rate constant for assessment of the variance. If there are however signal pixels in this region, the mean will be skewed (as will the variance) thus making the tests above less reliable. The essence of the dispersion extended algorithm is to first identify the background-like regions of the image, then compute the mean of these to use for thresholding the other pixels for signal.
+
+The background elimination above will by design overestimate the pixels which are non-background, as a noisy / signal pixel on the edge of the kernel region will mean that the central pixel is non-background. Using a process known as [erosion](https://en.wikipedia.org/wiki/Erosion_(morphology)) the pixels masked as non-background can be reduced, by removing any pixels where there are background pixels within the kernel region.
+
+It turns out that the implementation in `dials.find_spots` actually performs this operation on a smaller box than the kernel - 5x5 rather than 7x7 - meaning that there is a 1-pixel buffer between the excluded pixels and the true background. The author of this description notes that (i) this may not be deliberate and (ii) finding this took quite some time.
+
+### Background
+
+The background pixel identification is functionally identical to the description above, computing the mean and variance over a 7x7 region of pixels.
+
+### Erosion
+
+The implementaion in `dials.find_spots` achieves this by computing an array of the distance between every pixel and the nearest background pixel, as measured in terms of moves of a king on a chess board. Any pixel which is within two pixels of a background pixel is removed from the non-background (i.e. potentially signal) list. This is performed twice, first walking "down and right" from 0, 0 then moving up and left (north, south, east, west used in the code).
+
+I note here that the same can be achieved by simply walking in a grid around every identified pixel, testing if any are background: if they are, remove them from the mask in the output. In this calculation it is important to also include bad pixels as _excluded_ from background, as we don't know what they are.
+
+I also note we could compute the erosion with an integral image, if we were so inclined.
+
+The result of this is a collection of pixels which should be excluded from the calculation of the mean for signal assessment.
+
+### Signal
+
+In moving to the signal estimation, the kernel is increased in size from +/- 3 (i.e. 7x7) to +/-5 (i.e. 11x11) pixels. Pixels are then accepted as signal if:
+
+- they are valid
+- they are non-background (i.e. the pixel survived the erosion above)
+- they are above the local mean according to `signal = p >= (mean + sigma_s * sqrt(mean))`
+
+Where `p` is the pixel value and `sigma_s` is the parameter as before.
+
+## Summary
+
+These are the algorithms for the first part of the spot finding i.e. the signal pixel identification. Combining these into _spots_ depends on aggregation i.e. determining which pixels are connected to others and collecting them into these continuous objects. The current implementation uses `boost::adjacency_list` and `boost::graph` but simpler methods are possible, if not necessarily performant.
