@@ -41,7 +41,7 @@ dials.import
 
 You may have to scroll up to read the full output. If you add the option `-h` to this command you will not only see the help message, but also the structured definitions of the command line parameters that can be passed to the program.
 
-> [!TIP]
+> [!NOTE]
 > What happens if you pass multiple `h` and `v` characters? Try this out later with other DIALS programs too.
 
 Now we are ready to import the images. You can do this by entering the following command (adjust if the path to the files differs on your computer):
@@ -79,7 +79,7 @@ Although we are doing command-line data processing, we should still look at the 
 dials.image_viewer imported.expt
 ```
 
-> [!TIP]
+> [!NOTE]
 > Take a moment to explore the controls in the image viewer. Can you drag the image around and zoom using the mouse? Can you see the intensity and resolution information for a single pixel? What is your preferred colour scheme and brightness? Can you scroll through and see how the diffraction images change as data collection proceeds? Don't be afraid to play with the controls - nothing you can do here will affect processing of the data set.
 
 There is a horizontal backstop shadow across the images. We could mask this out if we wanted, however looking at the rotation axis orientation using `dials.image_viewer`, we see that this is aligned with the backstop shadow. Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?). So we will not bother to mask the shadow here.
@@ -88,7 +88,7 @@ There is a horizontal backstop shadow across the images. We could mask this out 
 
 With the image viewer open, select the "Threshold pixels" checkbox. This shows you which pixels the spot-finding algorithm considers to be "strong".
 
-> [!TIP]
+> [!NOTE]
 > Do the strong pixels match the diffraction spots? What happens if you modify parameters of the threshold algorithm (like kernel size and gain)? What happens if you select different threshold algorithms?
 
 The default parameters seem pretty good for this data set, so exit the image viewer and run a default spot-finding job:
@@ -96,3 +96,44 @@ The default parameters seem pretty good for this data set, so exit the image vie
 ```console
 dials.find_spots imported.expt
 ```
+
+DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts equally well throughout the scan:
+
+```
+Histogram of per-image spot count for imageset 0:
+307302 spots found on 800 images (max 5525 / bin)
+*                                * **** ** * * **  ** *    *
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+1                         image                          800
+
+--------------------------------------------------------------------------------
+Saved 307302 reflections to strong.refl
+```
+
+## Viewing the reciprocal lattice
+
+Now we can pass both the metadata `imported.expt`, and spot file `strong.refl` to `dials.reciprocal_lattice_viewer`:
+
+```console
+dials.reciprocal_lattice_viewer imported.expt strong.refl
+```
+
+> [!TIP]
+> The Windows terminal appears not to allow tab-completion on DIALS command names. Why?! To avoid having to type out the whole of `dials.reciprocal_lattice_viewer` you can use its alias `dials.rlv` instead.
+
+Take some time to explore the controls in the `dials.reciprocal_lattice_viewer`
+
+> [!NOTE]
+> What does middle-button drag do? Try setting "Max Z" to something small, like 5. What does this show you? Align the view down the rotation axis and then click to increase the Max Z value (Use Alt-click to jump in blocks of 100). Can you see how data collection sweeps out a volume of reciprocal space? Can you align the view in a direction that clearly shows the crystal lattice?
+
+The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems.
+
+## Indexing
