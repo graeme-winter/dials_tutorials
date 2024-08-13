@@ -1,6 +1,6 @@
 # DIALS Tutorials
 
-These tutorials are work-in-progress so not "publication quality" yet but hopefully contaim some valuable signal.
+These tutorials are work-in-progress so not "publication quality" yet but hopefully contain some valuable signal.
 
 ## MX Tutorials
 
