@@ -4,6 +4,8 @@ These tutorials are work-in-progress so not "publication quality" yet but hopefu
 
 ## MX Tutorials
 
+[2024 CCP4 BCA workshop: THAS1](./CCP4-BCA-2024/command-line-processing.md)
+
 [2023 APS CCP4 workshop: thaumatin](./thaumatin/processing_in_detail.md)
 
 [2023 APS CCP4 workshop: selenourea thaumatin](./se-thaumatin/processing_in_detail.md)
