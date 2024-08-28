@@ -80,7 +80,7 @@ dials.image_viewer imported.expt
 ```
 
 > [!NOTE]
-> Take a moment to explore the controls in the image viewer. Can you drag the image around and zoom using the mouse? Can you see the intensity and resolution information for a single pixel? What is your preferred colour scheme and brightness? Can you scroll through and see how the diffraction images change as data collection proceeds? Don't be afraid to play with the controls - nothing you can do here will affect processing of the data set.
+> Take a moment to explore the controls in the image viewer. Can you drag the image around and zoom using the mouse? Can you see the intensity and resolution information for a single pixel? What is your preferred colour scheme and brightness? Can you page through and see how the diffraction images change as data collection proceeds? Don't be afraid to play with the controls - nothing you can do here will affect processing of the data set.
 
 There is a horizontal backstop shadow across the images. We could mask this out if we wanted, however looking at the rotation axis orientation using `dials.image_viewer`, we see that this is aligned with the backstop shadow. Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?). So we will not bother to mask the shadow here.
 
@@ -97,7 +97,7 @@ The default parameters seem pretty good for this data set, so exit the image vie
 dials.find_spots imported.expt
 ```
 
-DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts equally well throughout the scan:
+DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can then be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts consistently well throughout the scan:
 
 ```
 Histogram of per-image spot count for imageset 0:
@@ -127,9 +127,9 @@ dials.reciprocal_lattice_viewer imported.expt strong.refl
 ```
 
 > [!TIP]
-> The Windows terminal appears not to allow tab-completion on DIALS command names. Why?! To avoid having to type out the whole of `dials.reciprocal_lattice_viewer` you can use its alias `dials.rlv` instead.
+> The Windows terminal appears not to allow tab-completion on DIALS command names :roll_eyes:. To avoid having to type out the whole of `dials.reciprocal_lattice_viewer` you can use its alias `dials.rlv` instead.
 
-Take some time to explore the controls in the `dials.reciprocal_lattice_viewer`
+Take some time to explore the controls in the `dials.reciprocal_lattice_viewer`.
 
 > [!NOTE]
 > What does middle-button drag do? Try setting "Max Z" to something small, like 5. What does this show you? Align the view down the rotation axis and then click to increase the Max Z value (Use Alt-click to jump in blocks of 100). Can you see how data collection sweeps out a volume of reciprocal space? Can you align the view in a direction that clearly shows the crystal lattice?
@@ -137,7 +137,7 @@ Take some time to explore the controls in the `dials.reciprocal_lattice_viewer`
 The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems.
 
 > [!NOTE]
-> When you exit the `dials.reciprocal_lattice_viewer` you may see some errors written to the terminal. These can be safely ignored.
+> When you exit the `dials.reciprocal_lattice_viewer` you may see some errors written to the terminal. Another strange bit of Windows weirdness. These can be safely ignored.
 
 ## Indexing
 
@@ -152,15 +152,15 @@ It is worth taking a moment to read the log output. The program runs through a f
 - Setting up for indexing (calculate `max_cell`, setting resolution limits, mapping spots to reciprocal space and forming the FFT grid)
 - Performing the FFT, searching for real space basis vectors and forming candidate solutions (in this case 50)
 - Ranking the solutions and choosing the single best
-- Performing geometry refinement in macrocycles with increasing resolution. At each stage this does:
-  - Identifying outliers
+- Performing geometry refinement in macrocycles with increasing resolution. At each stage this:
+  - Identifies outliers
   - Parameterises the diffraction geometry
   - Refines this geometry against the observations
   - Increases resolution for the next macrocycle
 - Once the resolution limit includes all reflections the final refined model and reflections are written to the files `indexed.expt` and `indexed.expt`
 
 > [!NOTE]
-> The behaviour of all of these stages can be controlled by parameters given to `dials.index` (remember option switches like `-hhhvv`), but in most cases the defaults suffice.
+> The behaviour of all of these stages can be controlled by parameters given to `dials.index` (remember option switches like `-hhhvv` to see the parameters), but in most cases the defaults suffice.
 
 Now we have a crystal model it is worth looking at the reciprocal lattice again:
 
@@ -175,7 +175,7 @@ The spots are now coloured according to whether they are indexed or not.
 
 ## Determining the Bravais lattice
 
-The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ \nd $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices we run:
+The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ and $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices we run:
 
 ```console
 dials.refine_bravais_settings indexed.expt indexed.refl
@@ -203,7 +203,7 @@ oP: P222 P2221 P21212 P212121
 ```
 The program writes out experimental geometry for all of these solutions (files `bravais_setting_1.expt` to `bravais_setting_5.expt`) but the associated reflections are not written out, as these files are larger and there is no point wasting disk space for the solutions that are not taken on further. The decision of which solution to choose is down to the user, but the program marks solutions deemed acceptable with an asterisk: `*`. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one.
 
-In general, to get appropriately reindexed reflections we should run the `dials.reindex` program, passing the change of basis operator printed in the last column of the table. In this case that operator is just `a,b,c`, which is identity - the reflections come out with the same indices as they go in, so the reindexing step is not necessary in this case. Nevertheless, we show the command here anyway:
+In general, to get appropriately reindexed reflections we should run the `dials.reindex` program, passing the change of basis operator printed in the last column of the table. In this case that operator is just `a,b,c`, which is identity - the reflections come out with the same indices as they go in, so the reindexing step is not necessary in this case. Nevertheless, we show the command here for completeness:
 
 ```console
 dials.reindex indexed.refl change_of_basis_op=a,b,c
@@ -211,7 +211,7 @@ dials.reindex indexed.refl change_of_basis_op=a,b,c
 
 ## Refining the solution
 
-We did some refinement during indexing, and again during Bravais lattice determination. Nevertheless, it is still worth running an additional step of refinement using `dials.refine`. This will use a more sophisticated outlier rejection algorithm than before, and it will also refine a "scan-varying" model of the crystal, in which changes to the orientation and unit cell are allowed as a function of the position in the rotation scan. Using the chosen Bravais lattice and our (unnecessarily) reindexed reflections, we type:
+We did some refinement during indexing, and again during Bravais lattice determination. Nevertheless, we will still run an additional step of refinement using `dials.refine`. This will use a more sophisticated outlier rejection algorithm than before, and it will also refine a "scan-varying" model of the crystal, in which changes to the orientation and unit cell are allowed as a function of the position in the rotation scan. Using the chosen Bravais lattice and our (unnecessarily) reindexed reflections, we type:
 
 ```console
 dials.refine bravais_setting_5.expt reindexed.refl
@@ -270,7 +270,7 @@ Calculating E.S.D Reflecting Range (mosaicity).
  sigma m: 0.062834 degrees
 ```
 
-The `sigma m` value is the standard deviation of the reflecting range of reflections, which is sometimes called mosacicity. It is good to check that this value is not too high. Here it is significantly less than 0.1°, so the sample seems very well behaved.
+The `sigma m` value is the standard deviation of the reflecting range of reflections, which is sometimes (and inaccurately) called "mosaicity". It is good to check that this value is not too high. Here it is significantly less than 0.1°, so the sample seems very well behaved.
 
 After this step, `dials.integrate` will split the processing over as many processors as you have available, first modelling reflection profiles, and then performing the actual integration, using both summation integration and profile fitting methods. There are some summary tables at the end of the log file that are worth a glance, but really we don't have a good idea of the quality of the data set until we do scaling.
 
@@ -365,4 +365,24 @@ Hopefully by now the xia2 job you started on CCP4 Cloud will have finished. Foll
 
 Now import your `scaled.mtz` from DIALS processing, and also follow that with a "no scaling only merge" Aimless job.
 
-XXXXXX
+Once both jobs have finished you can open both results windows to compare results side-by-side. Navigate to the "Scaling and merging" section in each case to compare merging statistics from Aimless.
+
+Which job looks better, yours or xia2's? Or does it not matter?
+
+## Optional advanced tutorial - diagnosing problems with autoprocessing
+
+If you made it this far - well done! :tada: Now we will move away from the ADH4 / THAS1 data set and look at a case where autoprocessing didn't _quite_ go right. Can you work out what is wrong?
+
+The data set was collected on a thermolysin crystal at beamline BL41XU at the Japanese synchrotron, SPring-8. The wavelength was 1.2824 Å and the data set was fine-sliced (0.1° per image) and collected on an EIGER X 16M detector. The xia2 autoprocessing results have been provided for you in the directory `C:\CourseFiles\ccp4\ccp4school2018_bl41xu\xia2`. You may open this directory in the Windows file explorer, and also open it in a CCP4Console Terminal window so that you can run DIALS commands to look at the data.
+
+The file `xia2.txt` contains the basic log output from xia2. The table at the bottom of this file does not look especially problematic, but the low res shell $R_\textrm{meas}$ seems a bit high, at 10% rather than <5% as we would expect from a good crystal at a good beamline. Look through the various steps xia2 took in this file. Can you see where xia2 "changed its mind"?
+
+The xia2 processing intermediate files are in the subdirectory `DEFAULT\NATIVE\SWEEP1`. Navigate here, and look through the log file output for the programs (xia2 helpfully prefixes the files with a number indicating the order in which jobs were run). You can also open up the images and the reciprocal lattice in the DIALS viewers with commands like this:
+
+```console
+cd index
+dials.rlv 5_indexed.expt 5_indexed.refl
+dials.image_viewer 5_indexed.expt 5_indexed.refl
+```
+
+Can you see any issues with the images or the reciprocal lattice? What do _you_ think went wrong here?
