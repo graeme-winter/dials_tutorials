@@ -47,7 +47,7 @@ You may have to scroll up to read the full output. If you add the option `-h` to
 Now we are ready to import the images. You can do this by entering the following command (adjust if the path to the files differs on your computer):
 
 ```console
-dials.import C:\CourseFiles\ccp4\ADH4_data\ADH4_diffraction_data\ADH4_M7S9_6_*.cbf
+dials.import C:\CourseFiles\ccp4\ADH4_data\ADH4_M7S9_6_*.cbf
 ```
 
 Note the use of the wildcard `*` character in this command. This is not DIALS syntax, but is expanded by the Windows shell to match every image file in that directory, from `ADH4_M7S9_6_0001.cbf` to `ADH4_M7S9_6_0800.cbf`. What `dials.import` does is read the header of each of these files, checks the diffraction geometry, and determines the relationship between the files. All going well you will see output containing
