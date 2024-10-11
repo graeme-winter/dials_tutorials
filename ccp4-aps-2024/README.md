@@ -8,7 +8,9 @@ This tutorial deviates slightly from the mainstream by _starting_ with data from
 
 ## The Data
 
-[The data](https://zenodo.org/records/13890874) were taken on i24 at Diamond Light Source as part of routine commissioning work, with a number of data sets recorded from micro-crystals mounted on meshes. Crystals were prepared of the protein insulin from cows, pigs and people (as described on the Zenodo deposition; bovine, porcine and human insulin, of course all grown in e-coli anyway).
+[The data](https://zenodo.org/records/13890874) were taken on i24 at Diamond Light Source as part of routine commissioning work, with a number of data sets recorded from different crystals. Crystals were prepared of the protein insulin from cows, pigs and people (as described on the Zenodo deposition; bovine, porcine and human insulin, of course all grown in e-coli anyway).
+
+All data have symmetry I213 and very similar unit cell constants so you can _try_ to merge them together and it will work, but won't give you good results as you will be measuring a mixture of structures. The data on the deposition are in `tar` archives so I am assuming you have already downloaded them all and unpacked them into `../data`: if you have done something different you will need to take a little care at the `dials.import` stage.
 
 ## The Workflow
 
@@ -25,5 +27,128 @@ As mentioned above the flow is to read the data, find spots, index, refine, inte
 - `dials.scale` - correct the data for sample decay, overall scale from beam or illuminated volume and absorption
 - `dials.export` - output processed data for e.g. use in CCP4 or PHENIX
 
+With multiple sweeps from a single crystal, we can assign a single orientation matrix and then use this throughout the processing (the default) - however if you have data from multiple crystals some of the assumptions will break down so we need to (i) tell the software that the crystals _do not_ share a matrix and in the symmetry determination also resolve any indexing ambiguity: we therefore replace `dials.symmetry` with `dials.cosym`.
+
+## Import
+
+The data are in `../data`: for the first pass through this tutorial we will just process the "cow" data `CIX...` to keep things simple. There are data from 12 crystals in here and if we simply import every frame, `dials.import` will make sense of what it finds:
+
+```
+dials.import ../data/CIX*gz
+```
+
+to get:
+
+```
+DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
+DIALS 3.dev.1184-gb491c224e
+The following parameters have been modified:
+
+input {
+  experiments = <image files>
+}
+
+--------------------------------------------------------------------------------
+  format: <class 'dxtbx.format.FormatCBFFullPilatus.FormatCBFFullPilatus'>
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX1_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX2_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX3_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX5_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX6_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX8_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX9_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX10_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX11_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX12_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX14_1_#####.cbf.gz:1:100
+  template: /Users/graeme/data/ccp4-aps-tutorials/cix/data/CIX15_1_#####.cbf.gz:1:100
+  num images: 1200
+  sequences:
+    still:    0
+    sweep:    12
+  num stills: 0
+--------------------------------------------------------------------------------
+Writing experiments to imported.expt
+```
+
+This shows the filename patterns, how many images for each and the total it found - 12 sweeps each of 100 images. We can get much more detail on this with `dials.show` which can print the "DIALS understanding" of what the data look like. There are ways to streamline this for very large numbers of images, but for now this is fine.
+
+At this point: scan the output - do you have what you expected? Many problems with DIALS processing can be solved here.
+
+## Spot Finding
+
+Spot finding is exactly what it sounds like: finding where all the spots are in the data sets. In DIALS spots in the same place on adjacent images are considered to be joined so the spot is a three dimensional object. You can explore the spot finding by opening the images in `dials.image_viewer` with
+
+```
+dials.image_viewer imported.expt
+```
+
+and then clicking through the options at the bottom of the control window (I will demo this in real life, and make a video, but you can click through the steps to "threshold" which is the set of pixels the spot fiding will pick out). The spot finding will give a summary of the number of signal pixels on every image, the number of found spots on each run and at the end a histogram of the distribution of spots across the images on each run, as:
+
+```
+Histogram of per-image spot count for imageset 10:
+7446 spots found on 100 images (max 231 / bin)
+*                                                          *
+*                                                          *
+*                                                          *
+*                                                          *
+** *    *   **   *          *  **     *  * * *  *    *     *
+*************************** * *** *** ** ********** ********
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+1                         image                          100
+
+Histogram of per-image spot count for imageset 11:
+7370 spots found on 100 images (max 209 / bin)
+*                                                           
+*                                                          *
+*                                                          *
+* *     *                                             *    *
+**** * ***  **  ***  *** *********   * * ******* * *  *** **
+********************************** *************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+1                         image                          100
+
+--------------------------------------------------------------------------------
+Saved 80603 reflections to strong.refl
+```
+
+You can also look at the spot finding result in the image viewer with
 
 
+```
+dials.image_viewer imported.expt strong.refl
+```
+
+which should look like:
+
+![Image with spots](./images/spots.png)
+
+Now that we have found the spots we can start to consider some initial analysis - for example, looking at the distribution of the spots in reciprocal space. For a single scan we will see a single lattice, but in this case we will see the same 10° wedge many times, because right now we don't know anything about the reciprocal space orientation. You can pick out one lattice and rotate it, to see the actual reciprocal space orientations.
+
+![Reciprocal view](./images/rlv0.png)
+
+## Indexing
+
+If you played with the lattice viewer in the previous step you will have seen some nice lattices. The computational approach to finding them is to use `dials.index`: you pass the experiments and the spots and it will puzzle everything out. Here, we have multiple lattices so we need to tell the program that:
+
+```
+dials.index imported.expt strong.refl joint=false
+```
+
+This will go through and assign a lattice for each run. You can best look at what it has done by again using the reciprocal lattice viewer and this time passing the output:
+
+```
+dials.reciprocal_lattice_viewer indexed.expt indexed.refl
+```
+
+If you select "show in crystal frame" you can see how the lattices _may_ align in reciprocal space - at this point we don't have a true understanding of the symmetry, only the unit cell, but already you can check for things like preferred orientation. With these data, the distribution looks like:
+
+![Reciprocal view](./images/rlv1.png)
+
+i.e. there is no evidence of preferential orientation.
