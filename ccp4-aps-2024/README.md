@@ -312,5 +312,96 @@ here it is well worth looking at the HTML output. We have no need to split the d
 
 ## Cows, Pigs and People
 
-Now, let's re-do all the above steps but this time with a mixture of data sets: 12 each from human, bovine and porcine insulin. On a coarse scale they are isomorphous, but obviously deviate from one another at the scale of individual residues: this split is small enough that we could accidentally merge the data from all crystals if we were not careful: let's be careful.
+Now, let's re-do all the above steps but this time with a mixture of data sets: 12 each from human, bovine and porcine insulin. On a coarse scale they are isomorphous, but obviously deviate from one another at the scale of individual residues: this split is small enough that we could accidentally merge the data from all crystals if we were not careful: let's be careful. But first, let's be ignorant and see how that works out!
 
+Going back to the instructions above, we carefully imported just the `CIX` data with:
+
+```
+dials.import ../data/CIX*gz
+```
+
+This time around, we will be importing _all_ the data and proceeding as before as far as the `dials.cosym` step. As a reminder:
+
+```
+dials.import ../data/*gz
+dials.find_spots imported.expt
+dials.index imported.expt strong.refl joint=False
+dials.refine indexed.expt indexed.refl
+dials.integrate refined.expt refined.refl
+dials.cosym integrated.expt integrated.refl
+```
+
+At this point we have found a common symmetry and indexing setting, and derived an average unit cell:
+
+```
+Best solution: I m -3
+Unit cell: 77.842, 77.842, 77.842, 90.000, 90.000, 90.000
+Reindex operator: -b-c,a+c,-a-b
+Laue group probability: 1.000
+Laue group confidence: 1.000
+Reindexing operators:
+-x+y,y,y-z: [2, 3, 5, 10, 11, 13, 14, 15, 16, 18, 19, 20, 21, 22, 27, 34, 35]
+x,y,z: [0, 1, 4, 6, 7, 8, 9, 12, 17, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33]
+```
+
+however at this stage we can also start looking at the isomorphism analysis performed by cosym, by looking at `dials.cosym.html` - this includes some measure of unit cell isomorphism, but from the dendrogram you can see it does not cleanly split into three categories:
+
+![Unit cell dendrogram](./images/unit-cell-dendro.png)
+
+Scaling the data is "succcessful" in that you get results, but the merging stats are pretty poor. Looking at the logs you can see the data split (not shown) but it is not obvious unless you know in advance that there are different crystals here.
+
+We can however see the different groups if we run `dials.correlation_matrix` - a new tool to run after cosym which helps to look for different isomorphism classes. This is rather more helpful: using the correlation coefficients to define distances, then using the OPTICS algorithm to define clusters.
+
+```
+dials.correlation_matrix symmetrized.expt symmetrized.refl
+```
+
+Will recommend clusters:
+
+```
+Cluster 0
+  Number of datasets: 12
+  Completeness: 90.2 %
+  Multiplicity: 9.55
+  Datasets:0,1,2,3,4,5,6,7,8,9,10,11
+Cluster 1
+  Number of datasets: 12
+  Completeness: 90.0 %
+  Multiplicity: 9.52
+  Datasets:12,13,14,15,16,17,18,19,20,21,22,23
+Cluster 2
+  Number of datasets: 12
+  Completeness: 90.0 %
+  Multiplicity: 9.51
+  Datasets:24,25,26,27,28,29,30,31,32,33,34,35
+```
+
+but more usefully shows the lattice separation superbly on a pairwise correlation matrix, as modified using the cosine-angle procedure from `cosym`:
+
+![Correlation matrix](./images/block-matrix.png)
+
+Here you can clearly see the three clusters. If `significant_clusters.output=True` is added to the command line, the program will split the data according to the clusters for further analysis:
+
+```
+-rw-r--r--   1 graeme  staff     528939 14 Oct 14:19 cluster_0.expt
+-rw-r--r--   1 graeme  staff  150001603 14 Oct 14:19 cluster_0.refl
+-rw-r--r--   1 graeme  staff     527726 14 Oct 14:19 cluster_1.expt
+-rw-r--r--   1 graeme  staff  147913867 14 Oct 14:19 cluster_1.refl
+-rw-r--r--   1 graeme  staff     528436 14 Oct 14:19 cluster_2.expt
+-rw-r--r--   1 graeme  staff  151291087 14 Oct 14:19 cluster_2.refl
+```
+
+These can be scaled as above, e.g. by making a directory for each. The algorithm may leave outlier data sets from inclusion in any cluster, so it is possible only one cluster appears as a result. In this case I merged each cluster separately with:
+
+```
+mkdir 0 1 2
+cd 0
+dials.scale ../cluster_0.expt cluster_0.refl
+cd ../1
+dials.scale ../cluster_1.expt cluster_1.refl
+cd ../2
+dials.scale ../cluster_2.expt cluster_2.refl
+cd ..
+```
+
+Individually the merging statistics from each cluster look far better than the three combined.
