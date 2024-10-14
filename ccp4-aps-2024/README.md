@@ -133,7 +133,7 @@ Now that we have found the spots we can start to consider some initial analysis 
 
 ![Reciprocal view](./images/rlv0.png)
 
-## Indexing
+## Indexing and Refinement
 
 If you played with the lattice viewer in the previous step you will have seen some nice lattices. The computational approach to finding them is to use `dials.index`: you pass the experiments and the spots and it will puzzle everything out. Here, we have multiple lattices so we need to tell the program that:
 
@@ -151,4 +151,72 @@ If you select "show in crystal frame" you can see how the lattices _may_ align i
 
 ![Reciprocal view](./images/rlv1.png)
 
-i.e. there is no evidence of preferential orientation.
+i.e. there is no evidence of preferential orientation. Obviously at this point we would hope that the data have a consistent unit cell - you can look at this by switching on the unit cell view in the reciprocal lattice viewer, or by running `dials.show` and checking the unit cells:
+
+```
+Ethics-Gradient tutorial :( $ dials.show indexed.expt | grep "Unit cell"
+    Unit cell: 67.459(10), 67.524(8), 67.498(7), 109.470(2), 109.519(4), 109.401(4)
+    Unit cell: 67.442(10), 67.423(9), 67.377(7), 109.432(5), 109.421(4), 109.507(5)
+    Unit cell: 67.279(9), 67.246(5), 67.248(5), 109.3630(16), 109.500(4), 109.517(4)
+    Unit cell: 67.456(8), 67.478(9), 67.505(6), 109.496(4), 109.488(3), 109.392(4)
+    Unit cell: 67.61(2), 67.465(12), 67.472(11), 109.474(3), 109.457(8), 109.491(8)
+    Unit cell: 67.307(10), 67.333(6), 67.317(7), 109.4589(13), 109.420(5), 109.486(3)
+    Unit cell: 67.342(11), 67.370(6), 67.380(6), 109.4701(10), 109.458(4), 109.484(4)
+    Unit cell: 67.361(9), 67.346(9), 67.230(13), 109.517(6), 109.429(5), 109.489(2)
+    Unit cell: 67.489(12), 67.464(8), 67.454(8), 109.479(2), 109.427(6), 109.467(4)
+    Unit cell: 67.306(14), 67.316(13), 67.287(9), 109.439(5), 109.463(6), 109.470(6)
+    Unit cell: 67.503(9), 67.554(5), 67.480(7), 109.475(2), 109.398(4), 109.516(4)
+    Unit cell: 67.404(11), 67.421(6), 67.419(7), 109.449(2), 109.479(5), 109.474(5)
+```
+
+Here we can see they are all variations on a theme of 67Å / 109° x 3 - what I would expect for cubic insulin. If there are outliers you can re-run with the known cell as a prior, as
+
+```
+dials.index imported.expt strong.refl joint=false unit_cell=67,67,67,109,109,109
+```
+
+to give consistency: this is not necessary here.
+
+After indexing, we can refine the models used to describe the data - this allows for e.g. variations in the unit cell parameters or small amounts of movement of the crystal with respect to the goniometer. The refinement will improve the alignment between where the spots are observed to be and where they are calculated to be from the current models, which ideally should be substantially under a pixel e.g.
+
+```
+RMSDs by experiment:
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |   4357 |  0.14889 |  0.17023 |   0.11384  |
+|     1 |   5744 |  0.16005 |  0.18727 |   0.13167  |
+|     2 |   7394 |  0.18018 |  0.20274 |   0.12098  |
+|     3 |   5806 |  0.15758 |  0.19395 |   0.092621 |
+|     4 |   3202 |  0.16366 |  0.18025 |   0.17487  |
+|     5 |   4672 |  0.15909 |  0.18351 |   0.12361  |
+|     6 |   5083 |  0.16466 |  0.17997 |   0.087815 |
+|     7 |   3589 |  0.17571 |  0.20227 |   0.11977  |
+|     8 |   4545 |  0.17111 |  0.1968  |   0.13475  |
+|     9 |   5350 |  0.20085 |  0.24863 |   0.17832  |
+|    10 |   5765 |  0.1588  |  0.1747  |   0.086947 |
+|    11 |   5718 |  0.17015 |  0.18516 |   0.081736 |
++-------+--------+----------+----------+------------+
+```
+
+in this case.
+
+## Integration
+
+Given a refined model, we need to now compute the locations of all the spots on the images and measure their intensities: this process has a few steps:
+
+- calculation of the location of all the spots from the current model
+- esimation of the spot dimensions modelled as Gaussians on the image and in rotation
+- gathering of the spot to compute a reciprocal space "average" spot shape
+- scaling this against the observed spots on the images
+
+For education, these steps can be run somewhat independently (e.g. using `dials.create_profile_mdoel` and `dials.predict`) which can allow inspection of what the models are _before_ attempting integration, which can be useful for investigating problematic data sets. Viewing the results of integration can be reassuring, but is generally not necessary (use `dials.image_viewer integrated.expt integrated.refl`):
+
+![Integrated images](./images/integ.png)
+
+This step can be computationally challenging for substantial data sets but for this set it should be pretty quick.
+
+## Symmetry Determination
+
+
