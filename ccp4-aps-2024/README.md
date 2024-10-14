@@ -217,6 +217,100 @@ For education, these steps can be run somewhat independently (e.g. using `dials.
 
 This step can be computationally challenging for substantial data sets but for this set it should be pretty quick.
 
-## Symmetry Determination
+## Symmetry Determination and Scaling
 
+Up to now all of the processing has ignored the crystal symmetry, working with a triclinic cell. For scaling the symmetry relationships between reflections are needed. For a single data set, `dials.symmetry` will determine the Patterson symmetry and frequently the correct space group. In this case we have 12 data sets which are individually rather incomplete, and we know there is some indexing ambiguity i.e. the lattice symmetry is higher than the rotational symmetry of the data.
+
+For this tutorial we have 12 data sets, so we will use `dials.cosym` to derive the symmetry and resolve indexing ambiguity simultaneously. This will first try and align the lattices in reciprocal space, then estimates the crystal symmetry based on the alignment: in this case identifying the Patterson symmetry `I m -3` with close to half-half split across the "twin" operation:
+
+```
+Best solution: I m -3
+Unit cell: 77.855, 77.855, 77.855, 90.000, 90.000, 90.000
+Reindex operator: -b-c,a+c,-a-b
+Laue group probability: 1.000
+Laue group confidence: 1.000
+Reindexing operators:
+x,y,z: [2, 3, 5, 10, 11]
+-x+y,y,y-z: [0, 1, 4, 6, 7, 8, 9]
+```
+
+In many cases there will be no indexing ambiguity, so there will only be one reindexing operation. After deriving the symmetry the data can be placed onto a common scale with `dials.scale`: this adjusts the scale factors to accomodate:
+
+- variation in illuminated volume / beam intensity
+- sample decay as modelled by a teperature factor
+- sample absorption (though not in this case as the sweeps are narrow)
+
+This is the first point where we can really assess the quality and completeness of the data, and the resolution of diffraction. The initial scaling is performed with:
+
+```
+dials.scale symmetrized.expt symmetrized.refl
+```
+
+This will produce a _lot_ of output then:
+
+```
+Resolution limit suggested from CC½ fit (limit CC½=0.3): 1.26
+```
+
+At this point it is up to the user to decide the resolution of the data to keep, but at this stage we have no more insight than this, so
+
+```
+dials.scale symmetrized.expt symmetrized.refl d_min=1.26
+```
+
+is a rational action. This gives the table of merging statistics but more importantly a long log file in HTML format with useful graphs. The "table 1" is included at the end which usually gives a good indication of data quality:
+
+```
+                                             Overall    Low     High
+High resolution limit                           1.26    3.42    1.26
+Low resolution limit                           55.06   55.11    1.28
+Completeness                                  100.0   100.0   100.0
+Multiplicity                                   12.8    12.3    10.9
+I/sigma                                        12.5    64.2     0.4
+Rmerge(I)                                     0.082   0.047   2.445
+Rmerge(I+/-)                                  0.079   0.045   2.337
+Rmeas(I)                                      0.086   0.049   2.566
+Rmeas(I+/-)                                   0.086   0.048   2.580
+Rpim(I)                                       0.024   0.014   0.765
+Rpim(I+/-)                                    0.033   0.018   1.066
+CC half                                       0.999   0.999   0.320
+Anomalous completeness                         99.9    99.9    98.6
+Anomalous multiplicity                          6.6     6.8     5.6
+Anomalous correlation                         0.060   0.140  -0.057
+Anomalous slope                               0.436
+dF/F                                          0.051
+dI/s(dI)                                      0.595
+Total observations                           272777   14068   11963
+Total unique                                  21392    1142    1100
+```
+
+## Isomorphism and Clustering
+
+In the processing so far, we have assumed that the data are isomorphous i.e. merge together well but we have not _tested_ this hypothesis. DIALS now has a tool (`dials.correlation_matrix`) to measure the similarity of data sets and cluster isomorphous ones. In this case
+
+```
+dials.correlation_matrix symmetrized.expt symmetrized.refl
+```
+
+will classify the data into one cluster with no outliers, which aligns well with the preconceptions exposed above:
+
+```
+Evaluating Significant Clusters from Cosine-Angle Coordinates:
+Using OPTICS Algorithm (M. Ankerst et al, 1999, ACM SIGMOD)
+Setting Minimum Samples to 5
+OPTICS identified 1 clusters and 0 outlier datasets.
+Cluster 0
+  Number of datasets: 12
+  Completeness: 90.2 %
+  Multiplicity: 9.55
+  Datasets:0,1,2,3,4,5,6,7,8,9,10,11
+For separated clusters in DIALS .expt/.refl output please re-run with significant_clusters.output=True
+Saving graphical output of correlation matrices to dials.correlation_matrix.html.
+```
+
+here it is well worth looking at the HTML output. We have no need to split the data are there _is_ only one cluster and no outliers, so we did the right thing above just scaling the data. However it is not always that way.
+
+## Cows, Pigs and People
+
+Now, let's re-do all the above steps but this time with a mixture of data sets: 12 each from human, bovine and porcine insulin. On a coarse scale they are isomorphous, but obviously deviate from one another at the scale of individual residues: this split is small enough that we could accidentally merge the data from all crystals if we were not careful: let's be careful.
 
