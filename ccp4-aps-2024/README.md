@@ -129,7 +129,7 @@ which should look like:
 
 ![Image with spots](./images/spots.png)
 
-Now that we have found the spots we can start to consider some initial analysis - for example, looking at the distribution of the spots in reciprocal space. For a single scan we will see a single lattice, but in this case we will see the same 10° wedge many times, because right now we don't know anything about the reciprocal space orientation. You can pick out one lattice and rotate it, to see the actual reciprocal space orientations.
+Now that we have found the spots we can start to consider some initial analysis - for example, looking at the distribution of the spots in reciprocal space. For a single scan we will see a single lattice, but in this case we will see the same 10° wedge many times, because right now we don't know anything about the reciprocal space orientation. You can pick out one lattice and rotate it, to see the actual reciprocal space orientations. You may want to run this in full-screen to see the options e.g. to select individual runs.
 
 ![Reciprocal view](./images/rlv0.png)
 
@@ -207,7 +207,7 @@ in this case.
 Given a refined model, we need to now compute the locations of all the spots on the images and measure their intensities: this process has a few steps:
 
 - calculation of the location of all the spots from the current model
-- esimation of the spot dimensions modelled as Gaussians on the image and in rotation
+- estimation of the spot dimensions modelled as Gaussians on the image and in rotation
 - gathering of the spot to compute a reciprocal space "average" spot shape
 - scaling this against the observed spots on the images
 
@@ -292,7 +292,13 @@ In the processing so far, we have assumed that the data are isomorphous i.e. mer
 dials.correlation_matrix symmetrized.expt symmetrized.refl
 ```
 
-will classify the data into one cluster with no outliers, which aligns well with the preconceptions exposed above:
+_or_
+
+```
+dials.correlation_matrix scaled.expt scaled.refl
+```
+
+will classify the data into one cluster with no outliers, which aligns well with the preconceptions exposed above. The program may take either scaled data, which may be biased but will show clearer clusters, or unscaled data which is less biased but may be more "fuzzy" - you may find you get a clearer signal one way or the other.
 
 ```
 Evaluating Significant Clusters from Cosine-Angle Coordinates:
@@ -376,7 +382,7 @@ Cluster 2
   Datasets:24,25,26,27,28,29,30,31,32,33,34,35
 ```
 
-but more usefully shows the lattice separation superbly on a pairwise correlation matrix, as modified using the cosine-angle procedure from `cosym`:
+but more usefully shows the lattice separation superbly on a pairwise correlation matrix, as modified using the cosine-angle procedure from `cosym`[2,3]:
 
 ![Correlation matrix](./images/block-matrix.png)
 
@@ -405,3 +411,13 @@ cd ..
 ```
 
 Individually the merging statistics from each cluster look far better than the three combined.
+
+## Automation
+
+This is a manual process which allows you to look closely at your data. A more automated approach to this can be via `xia2.multiplex` [1] which automates much of the process. That isn't however the objective of this tutorial.
+
+## References
+
+1. [xia2.multiplex](https://journals.iucr.org/d/issues/2022/06/00/gm5092/)
+2. [dials.cosym](https://journals.iucr.org/d/issues/2018/05/00/rr5155/)
+3. [Brehm-Diederichs algorithm](https://journals.iucr.org/d/issues/2014/01/00/wd5226/)
