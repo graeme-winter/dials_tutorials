@@ -244,9 +244,15 @@ This step can be computationally challenging for substantial data sets but for t
 
 ## Symmetry Determination and Scaling
 
-Up to now all of the processing has ignored the crystal symmetry, working with a triclinic cell. For scaling the symmetry relationships between reflections are needed. For a single data set, `dials.symmetry` will determine the Patterson symmetry and frequently the correct space group. In this case we have 12 data sets which are individually rather incomplete, and we know there is some indexing ambiguity i.e. the lattice symmetry is higher than the rotational symmetry of the data.
+Up to now all of the processing has ignored the crystal symmetry, working with a triclinic cell. For scaling the symmetry relationships between reflections are needed. For a single sweep data set, `dials.symmetry` will determine the Patterson symmetry and frequently the correct space group. In this case we have 12 data sets which are individually rather incomplete, and we know there is some indexing ambiguity i.e. the lattice symmetry is higher than the rotational symmetry of the data.
 
-For this tutorial we have 12 data sets, so we will use `dials.cosym` to derive the symmetry and resolve indexing ambiguity simultaneously. This will first try and align the lattices in reciprocal space, then estimates the crystal symmetry based on the alignment: in this case identifying the Patterson symmetry `I m -3` with close to half-half split across the "twin" operation:
+For this tutorial we have 12 data sets, so we will use `dials.cosym` to derive the symmetry and resolve indexing ambiguity simultaneously:
+
+```
+dials.cosym integrated.expt integrated.refl
+```
+
+This will first try and align the lattices in reciprocal space, then estimates the crystal symmetry based on the alignment: in this case identifying the Patterson symmetry `I m -3` with close to half-half split across the "twin" operation:
 
 ```
 Best solution: I m -3
@@ -262,7 +268,7 @@ x,y,z: [2, 3, 5, 10, 11]
 In many cases there will be no indexing ambiguity, so there will only be one reindexing operation. After deriving the symmetry the data can be placed onto a common scale with `dials.scale`: this adjusts the scale factors to accomodate:
 
 - variation in illuminated volume / beam intensity
-- sample decay as modelled by a teperature factor
+- sample decay as modelled by a temperature factor
 - sample absorption (though not in this case as the sweeps are narrow)
 
 This is the first point where we can really assess the quality and completeness of the data, and the resolution of diffraction. The initial scaling is performed with:
