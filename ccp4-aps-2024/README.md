@@ -83,7 +83,13 @@ Spot finding is exactly what it sounds like: finding where all the spots are in 
 dials.image_viewer imported.expt
 ```
 
-and then clicking through the options at the bottom of the control window (I will demo this in real life, and make a video, but you can click through the steps to "threshold" which is the set of pixels the spot fiding will pick out). The spot finding will give a summary of the number of signal pixels on every image, the number of found spots on each run and at the end a histogram of the distribution of spots across the images on each run, as:
+and then clicking through the options at the bottom of the control window (I will demo this in real life, and make a video, but you can click through the steps to "threshold" which is the set of pixels the spot fiding will pick out). The spot finding:
+
+```
+dials.find_spots imported.expt
+```
+
+will give a summary of the number of signal pixels on every image, the number of found spots on each run and at the end a histogram of the distribution of spots across the images on each run, as:
 
 ```
 Histogram of per-image spot count for imageset 10:
