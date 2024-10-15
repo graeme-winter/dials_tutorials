@@ -12,6 +12,18 @@ This tutorial deviates slightly from the mainstream by _starting_ with data from
 
 All data have symmetry I213 and very similar unit cell constants so you can _try_ to merge them together and it will work, but won't give you good results as you will be measuring a mixture of structures. The data on the deposition are in `tar` archives so I am assuming you have already downloaded them all and unpacked them into `../data`: if you have done something different you will need to take a little care at the `dials.import` stage.
 
+If you don't already have the data downloaded, you can do this with this script on linux / UNIX:
+
+```
+mkdir data
+cd data
+for set in CIX1_1 CIX2_1 CIX3_1 CIX5_1 CIX6_1 CIX8_1 CIX9_1 CIX10_1 CIX11_1 CIX12_1 CIX14_1 CIX15_1 PIX5_1 PIX6_1 PIX7_1 PIX8_1 PIX9_1 PIX10_1 PIX11_1 PIX12_1 PIX13_1 PIX14_1 PIX15_1 PIX16_1 X1_1 X2_1 X3_1 X4_1 X5_1 X6_1 X7_1 X8_1 X9_1 X11_1 X13_1 X14_1 ; do
+wget https://zenodo.org/records/13890874/files/${set}.tar
+tar xvf ${set}.tar
+rm -v ${set}.tar
+done
+```
+
 ## The Workflow
 
 The [workflow](../se-thaumatin/processing_in_detail.md) is the same with one data set as with many, with some small deviations - data from multiple crystals will not in general share an orientation matrix so the indexing will need to _not_ join all the lattices.
