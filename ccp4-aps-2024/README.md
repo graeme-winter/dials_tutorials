@@ -8,7 +8,7 @@ This tutorial deviates slightly from the mainstream by _starting_ with data from
 
 ## The Data
 
-[The data](https://zenodo.org/records/13890874) were taken on i24 at Diamond Light Source as part of routine commissioning work, with a number of data sets recorded from different crystals. Crystals were prepared of the protein insulin from cows, pigs and people (as described on the Zenodo deposition; bovine, porcine and human insulin, of course all grown in e-coli anyway).
+[The data](https://zenodo.org/records/13890874) (~6GB)were taken on i24 at Diamond Light Source as part of routine commissioning work, with a number of small rotation data sets recorded from different crystals. Crystals were prepared of the protein insulin from cows, pigs and people (as described on the Zenodo deposition; bovine, porcine and human insulin, of course all grown in e-coli anyway).
 
 All data have symmetry I213 and very similar unit cell constants so you can _try_ to merge them together and it will work, but won't give you good results as you will be measuring a mixture of structures. The data on the deposition are in `tar` archives so I am assuming you have already downloaded them all and unpacked them into `../data`: if you have done something different you will need to take a little care at the `dials.import` stage.
 
@@ -135,7 +135,15 @@ which should look like:
 
 ![Image with spots](./images/spots.png)
 
-Now that we have found the spots we can start to consider some initial analysis - for example, looking at the distribution of the spots in reciprocal space. For a single scan we will see a single lattice, but in this case we will see the same 10° wedge many times, because right now we don't know anything about the reciprocal space orientation. You can pick out one lattice and rotate it, to see the actual reciprocal space orientations. You may want to run this in full-screen to see the options e.g. to select individual runs.
+More details about the image viewer can be found [here](./image_viewer.md). Now that we have found the spots we can start to consider some initial analysis - for example, looking at the distribution of the spots in reciprocal space. For a single scan we will see a single lattice, but in this case we will see the same 10° wedge many times, because right now we don't know anything about the reciprocal space orientation. You can pick out one lattice and rotate it, to see the actual reciprocal space orientations. You may want to run this in full-screen to see the options e.g. to select individual runs.
+
+Open the reciprocal lattice view with:
+
+```
+dials.reciprocal_lattice_viewer imported.expt strong.refl
+```
+
+which should look a little like this:
 
 ![Reciprocal view](./images/rlv0.png)
 
