@@ -168,7 +168,12 @@ If you select "show in crystal frame" you can see how the lattices _may_ align i
 i.e. there is no evidence of preferential orientation. Obviously at this point we would hope that the data have a consistent unit cell - you can look at this by switching on the unit cell view in the reciprocal lattice viewer, or by running `dials.show` and checking the unit cells:
 
 ```
-Ethics-Gradient tutorial :( $ dials.show indexed.expt | grep "Unit cell"
+dials.show indexed.expt | grep "Unit cell"
+```
+
+should look like:
+
+```
     Unit cell: 67.459(10), 67.524(8), 67.498(7), 109.470(2), 109.519(4), 109.401(4)
     Unit cell: 67.442(10), 67.423(9), 67.377(7), 109.432(5), 109.421(4), 109.507(5)
     Unit cell: 67.279(9), 67.246(5), 67.248(5), 109.3630(16), 109.500(4), 109.517(4)
@@ -225,7 +230,13 @@ Given a refined model, we need to now compute the locations of all the spots on 
 - gathering of the spot to compute a reciprocal space "average" spot shape
 - scaling this against the observed spots on the images
 
-For education, these steps can be run somewhat independently (e.g. using `dials.create_profile_mdoel` and `dials.predict`) which can allow inspection of what the models are _before_ attempting integration, which can be useful for investigating problematic data sets. Viewing the results of integration can be reassuring, but is generally not necessary (use `dials.image_viewer integrated.expt integrated.refl`):
+For education, these steps can be run somewhat independently (e.g. using `dials.create_profile_model` and `dials.predict`) which can allow inspection of what the models are _before_ attempting integration, which can be useful for investigating problematic data sets. Actual integration is run with:
+
+```
+dials.integrate refined.expt refined.refl
+```
+
+Which will take some time. Viewing the results of integration can be reassuring, but is generally not necessary (use `dials.image_viewer integrated.expt integrated.refl`):
 
 ![Integrated images](./images/integ.png)
 
