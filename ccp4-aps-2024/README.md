@@ -397,7 +397,7 @@ however at this stage we can also start looking at the isomorphism analysis perf
 
 ![Unit cell dendrogram](./images/unit-cell-dendro.png)
 
-Scaling the data is "succcessful" in that you get results, but the merging stats are pretty poor. Looking at the logs you can see the data split (not shown) but it is not obvious unless you know in advance that there are different crystals here.
+Scaling the data is "succcessful" in that you get results, but the merging stats are pretty poor. Looking at the logs you can see the data split (not shown) but it is not obvious unless you know in advance that there are different crystals here. Take a look at `dials.scale.html` and look at the merging statistics as a function of image / batch number.
 
 We can however see the different groups if we run `dials.correlation_matrix` - a new tool to run after cosym which helps to look for different isomorphism classes. This is rather more helpful: using the correlation coefficients to define distances, then using the OPTICS algorithm to define clusters.
 
@@ -445,11 +445,11 @@ These can be scaled as above, e.g. by making a directory for each. The algorithm
 ```
 mkdir 0 1 2
 cd 0
-dials.scale ../cluster_0.expt cluster_0.refl
+dials.scale ../cluster_0.expt ../cluster_0.refl
 cd ../1
-dials.scale ../cluster_1.expt cluster_1.refl
+dials.scale ../cluster_1.expt ../cluster_1.refl
 cd ../2
-dials.scale ../cluster_2.expt cluster_2.refl
+dials.scale ../cluster_2.expt ../cluster_2.refl
 cd ..
 ```
 
