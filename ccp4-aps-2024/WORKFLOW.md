@@ -403,17 +403,27 @@ Scoring individual symmetry elements
 +--------------+--------+------+--------+-----+---------------+
 |   likelihood |   Z-CC |   CC |      N |     | Operator      |
 |--------------+--------+------+--------+-----+---------------|
-|        0.94  |   9.9  | 0.99 | 362986 | *** | 1 |(0, 0, 0)  |
-|        0.94  |   9.92 | 0.99 | 751640 | *** | 4 |(0, 0, 1)  |
-|        0.941 |   9.92 | 0.99 | 373768 | *** | 2 |(1, 0, 0)  |
-|        0.941 |   9.93 | 0.99 | 393952 | *** | 2 |(0, 1, 0)  |
-|        0.94  |   9.91 | 0.99 | 364832 | *** | 2 |(0, 0, 1)  |
-|        0.94  |   9.9  | 0.99 | 389620 | *** | 2 |(1, 1, 0)  |
-|        0.94  |   9.91 | 0.99 | 367896 | *** | 2 |(-1, 1, 0) |
+|        0.903 |   9.83 | 0.98 | 172280 | *** | 1 |(0, 0, 0)  |
+|        0.148 |   4.35 | 0.44 | 341088 |     | 4 |(1, 1, 0)  |
+|        0.15  |   4.39 | 0.44 | 332088 |     | 4 |(1, 0, 1)  |
+|        0.15  |   4.4  | 0.44 | 332022 |     | 4 |(0, 1, 1)  |
+|        0.904 |   9.75 | 0.97 | 332526 | *** | 3 |(1, 0, 0)  |
+|        0.904 |   9.74 | 0.97 | 332464 | *** | 3 |(0, 1, 0)  |
+|        0.904 |   9.75 | 0.98 | 332462 | *** | 3 |(0, 0, 1)  |
+|        0.904 |   9.74 | 0.97 | 332444 | *** | 3 |(1, 1, 1)  |
+|        0.903 |   9.84 | 0.98 | 170444 | *** | 2 |(1, 1, 0)  |
+|        0.156 |   4.5  | 0.45 | 169708 |     | 2 |(-1, 1, 0) |
+|        0.905 |   9.64 | 0.96 | 170348 | *** | 2 |(1, 0, 1)  |
+|        0.15  |   4.39 | 0.44 | 166058 |     | 2 |(-1, 0, 1) |
+|        0.905 |   9.63 | 0.96 | 169936 | *** | 2 |(0, 1, 1)  |
+|        0.15  |   4.38 | 0.44 | 166076 |     | 2 |(0, -1, 1) |
+|        0.154 |   4.47 | 0.45 | 171232 |     | 2 |(1, 1, 2)  |
+|        0.15  |   4.39 | 0.44 | 166076 |     | 2 |(1, 2, 1)  |
+|        0.151 |   4.4  | 0.44 | 166030 |     | 2 |(2, 1, 1)  |
 +--------------+--------+------+--------+-----+---------------+
 ```
 
-followed by the results of composing these into the possible space groups and the likelihood assessment of these - which takes into consideration the elements present in the space group and also those not present:
+Which shows clear 2 and 3 fold symmetry but no 4-fold symmetry. This will prove to be important in the main tutorial as this creates ambiguity. These are followed by the results of composing these into the possible space groups and the likelihood assessment of these - which takes into consideration the elements present in the space group and also those not present:
 
 ```
 Scoring all possible sub-groups
@@ -421,37 +431,46 @@ Scoring all possible sub-groups
 +-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------+
 | Patterson group   |     |   Likelihood |   NetZcc |   Zcc+ |   Zcc- |   CC |   CC- |   delta | Reindex operator   |
 |-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------|
-| P 4/m m m         | *** |        0.999 |     9.91 |   9.91 |   0    | 0.99 |  0    |     0.1 | a,b,c              |
-| P m m m           |     |        0     |     0.01 |   9.92 |   9.91 | 0.99 |  0.99 |     0.1 | a,b,c              |
-| C m m m           |     |        0     |    -0.02 |   9.91 |   9.92 | 0.99 |  0.99 |     0.1 | a+b,a-b,-c         |
-| P 4/m             |     |        0     |    -0.01 |   9.91 |   9.92 | 0.99 |  0.99 |     0.1 | a,b,c              |
-| P 1 2/m 1         |     |        0     |     0    |   9.91 |   9.91 | 0.99 |  0.99 |     0   | a,b,c              |
-| P 1 2/m 1         |     |        0     |     0    |   9.91 |   9.91 | 0.99 |  0.99 |     0.1 | b,-a,c             |
-| C 1 2/m 1         |     |        0     |    -0.01 |   9.91 |   9.92 | 0.99 |  0.99 |     0.1 | a-b,-a-b,-c        |
-| P 1 2/m 1         |     |        0     |    -0.01 |   9.91 |   9.92 | 0.99 |  0.99 |     0   | -a,c,b             |
-| C 1 2/m 1         |     |        0     |    -0.01 |   9.9  |   9.92 | 0.99 |  0.99 |     0.1 | a+b,a-b,-c         |
-| P -1              |     |        0     |    -0.01 |   9.9  |   9.91 | 0.99 |  0.99 |     0   | a,b,c              |
+| I m -3            | *** |            1 |     5.33 |   9.74 |   4.41 | 0.97 |  0.44 |       0 | b+c,a+c,a+b        |
+| I m m m           |     |            0 |     3.2  |   9.73 |   6.53 | 0.97 |  0.65 |       0 | -a-c,b+c,a+b       |
+| I 1 2/m 1         |     |            0 |     2.69 |   9.73 |   7.04 | 0.97 |  0.68 |       0 | a+c,b+c,-a-b       |
+| I 1 2/m 1         |     |            0 |     2.69 |   9.73 |   7.04 | 0.97 |  0.68 |       0 | -b-c,-a-c,a+b      |
+| R -3 :H           |     |            0 |     2.75 |   9.78 |   7.03 | 0.98 |  0.66 |       0 | a+b+2*c,a-c,b      |
+| R -3 :H           |     |            0 |     2.75 |   9.79 |   7.03 | 0.98 |  0.66 |       0 | b-c,-a+c,a+b+c     |
+| R -3 :H           |     |            0 |     2.75 |   9.79 |   7.03 | 0.98 |  0.66 |       0 | a+2*b+c,-b+c,a     |
+| R -3 :H           |     |            0 |     2.76 |   9.79 |   7.03 | 0.98 |  0.66 |       0 | 2*a+b+c,-a+b,c     |
+| I 1 2/m 1         |     |            0 |     2.81 |   9.83 |   7.03 | 0.98 |  0.68 |       0 | -a-c,-a-b,b+c      |
+| I 4/m m m         |     |            0 |     0.87 |   7.91 |   7.04 | 0.7  |  0.7  |       0 | b+c,a+c,a+b        |
+| I 4/m m m         |     |            0 |     0.85 |   7.9  |   7.05 | 0.7  |  0.7  |       0 | a+c,a+b,b+c        |
+| I 4/m m m         |     |            0 |     0.85 |   7.9  |   7.05 | 0.7  |  0.7  |       0 | a+b,b+c,a+c        |
+| I 4/m             |     |            0 |     1.14 |   8.34 |   7.2  | 0.7  |  0.7  |       0 | a+c,a+b,b+c        |
+| I 4/m             |     |            0 |     1.15 |   8.34 |   7.2  | 0.7  |  0.7  |       0 | a+b,b+c,a+c        |
+| I 4/m             |     |            0 |     1.23 |   8.41 |   7.18 | 0.71 |  0.7  |       0 | b+c,a+c,a+b        |
+| I m -3 m          |     |            0 |     7.41 |   7.41 |   0    | 0.7  |  0    |       0 | b+c,a+c,a+b        |
+| P -1              |     |            0 |     2.59 |   9.83 |   7.23 | 0.98 |  0.69 |       0 | a,b,c              |
+| F m m m           |     |            0 |     0.3  |   7.64 |   7.34 | 0.71 |  0.7  |       0 | a+b,-a+b,a+b+2*c   |
+| F m m m           |     |            0 |     0.18 |   7.55 |   7.37 | 0.7  |  0.7  |       0 | b+c,-b+c,2*a+b+c   |
+| F m m m           |     |            0 |     0.18 |   7.55 |   7.37 | 0.7  |  0.7  |       0 | -a-c,-a+c,a+2*b+c  |
+| I 1 2/m 1         |     |            0 |     0.26 |   7.64 |   7.38 | 0.72 |  0.7  |       0 | c,-a+b,-a-b-c      |
+| I 1 2/m 1         |     |            0 |     0.25 |   7.63 |   7.38 | 0.71 |  0.7  |       0 | -a,-a-b-2*c,-b     |
+| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | -b,-2*a-b-c,-c     |
+| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | b,a-c,-a-b-c       |
+| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | -a,a+2*b+c,-c      |
+| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | a,-b+c,-a-b-c      |
+| R -3 m :H         |     |            0 |    -0.47 |   7.08 |   7.55 | 0.71 |  0.7  |       0 | 2*a+b+c,-a+b,c     |
+| R -3 m :H         |     |            0 |    -0.47 |   7.08 |   7.55 | 0.71 |  0.7  |       0 | b-c,-a+c,a+b+c     |
+| R -3 m :H         |     |            0 |    -0.48 |   7.07 |   7.55 | 0.7  |  0.7  |       0 | a+b+2*c,a-c,b      |
+| R -3 m :H         |     |            0 |    -0.48 |   7.07 |   7.55 | 0.7  |  0.7  |       0 | a+2*b+c,-b+c,a     |
 +-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------+
 
-Best solution: P 4/m m m
+Best solution: I m -3
+Unit cell: 77.727, 77.727, 77.727, 90.000, 90.000, 90.000
+Reindex operator: b+c,a+c,a+b
+Laue group probability: 1.000
+Laue group confidence: 1.000
 ```
 
-Here the symmetry appears to be `P4/mmm` i.e. 4-fold rotation and three 2-fold mirror axes - and corresponds to some variation of `P4?2?2` - this information is sufficient for scaling though for structure solution identification of the correct space group is necessary - `dials.symmetry` will also attempt to guess this as:
-
-```
-+---------------+---------+
-| Space group   |   score |
-|---------------+---------|
-| P 4 2 2       |       0 |
-| P 4 21 2      |       0 |
-| P 41 2 2      |       0 |
-| P 42 2 2      |       0 |
-| P 41 21 2     |       1 |
-| P 42 21 2     |       0 |
-+---------------+---------+
-Recommended space group: P 41 21 2
-Space group with equivalent score (enantiomorphic pair): P 43 21 2
-```
+Here the symmetry appears to be `I m -3` i.e. 3-fold rotation and three 2-fold mirror axes - and corresponds to some variation of `I2?3` - this information is sufficient for scaling though for structure solution identification of the correct space group is necessary - `dials.symmetry` will also attempt to guess this but in this case it is impossible to see the difference as the screw axes are masked by the centring operation.
 
 ## Scaling and Merging
 
@@ -476,12 +495,6 @@ for native - this will run everything with the defaults which allows for:
 with the latter being the parameter most likely changed. If you have a data set recorded from a sample containing a large amount of metal (not common in MX) or recorded at long wavelength e.g, for sulphur SAD it may be necessary to adjust the extent to which the absorption correction is constrained with
 
 ```
-absorption_level=low
-```
-
-_or_
-
-```
 absorption_level=medium
 ```
 
@@ -497,26 +510,26 @@ where setting low, the default, corresponds to ~ 1% absorption, medium to ~ 5% a
             -------------Summary of merging statistics--------------           
 
                                             Suggested   Low    High  Overall
-High resolution limit                           1.18    3.20    1.18    1.08
-Low resolution limit                          150.04  151.27    1.20  150.04
-Completeness                                   93.3   100.0    59.9    79.6
-Multiplicity                                   12.1    12.2     6.2    11.3
-I/sigma                                        14.0    79.8     0.3    12.7
-Rmerge(I)                                     0.086   0.031   1.904   0.088
-Rmerge(I+/-)                                  0.082   0.028   1.731   0.083
-Rmeas(I)                                      0.090   0.032   2.076   0.092
-Rmeas(I+/-)                                   0.089   0.031   2.005   0.090
-Rpim(I)                                       0.025   0.009   0.798   0.026
-Rpim(I+/-)                                    0.034   0.012   0.996   0.035
-CC half                                       0.999   1.000   0.316   0.999
-Anomalous completeness                         92.9   100.0    57.8    77.5
-Anomalous multiplicity                          6.4     7.1     3.2     6.0
-Anomalous correlation                         0.192   0.300  -0.018   0.206
-Anomalous slope                               0.519                        
-dF/F                                          0.067                        
-dI/s(dI)                                      0.565                        
-Total observations                           957119   56962   15339  988441
-Total unique                                  79095    4663    2492   87260
+High resolution limit                           1.38    3.74    1.38    1.20
+Low resolution limit                           54.96   55.00    1.40   54.96
+Completeness                                   94.8   100.0    64.1    74.7
+Multiplicity                                   38.0    40.0    23.5    34.4
+I/sigma                                        20.1   108.2     0.4    17.0
+Rmerge(I)                                     0.089   0.038   3.580   0.091
+Rmerge(I+/-)                                  0.088   0.037   3.489   0.090
+Rmeas(I)                                      0.090   0.038   3.659   0.092
+Rmeas(I+/-)                                   0.090   0.038   3.644   0.092
+Rpim(I)                                       0.014   0.006   0.727   0.015
+Rpim(I+/-)                                    0.020   0.008   1.015   0.020
+CC half                                       1.000   0.999   0.269   1.000
+Anomalous completeness                         94.8   100.0    64.7    73.8
+Anomalous multiplicity                         19.8    22.1    12.0    17.9
+Anomalous correlation                         0.148   0.231  -0.044   0.188
+Anomalous slope                               0.667                        
+dF/F                                          0.038                        
+dI/s(dI)                                      0.723                        
+Total observations                           586945   34847   12553  629390
+Total unique                                  15431     871     534   18292
 ```
 
 as well as a better estimate for the resolution, if this is lower than the full extent of the data. Further up you will also see an analysis of the error model:
@@ -524,22 +537,12 @@ as well as a better estimate for the resolution, if this is lower than the full 
 ```
 Error model details:
   Type: basic
-  Parameters: a = 0.98564, b = 0.02339
+  Parameters: a = 0.90579, b = 0.03820
   Error model formula: σ'² = a²(σ² + (bI)²)
-  estimated I/sigma asymptotic limit: 43.369
+  estimated I/sigma asymptotic limit: 28.900
 ```
 
-which is very useful for basic diagnostics. This is immediately comparable with the ISa statistic from XDS. N.B. that the `anomalous=true` option here will make quite a difference to this ISa:
-
-```
-Error model details:
-  Type: basic
-  Parameters: a = 1.00095, b = 0.02054
-  Error model formula: σ'² = a²(σ² + (bI)²)
-  estimated I/sigma asymptotic limit: 48.636
-```
-
-This is because the intenities are _most different_ due to anomalous signal at low resolution, which is where the strongest reflections are.
+which is very useful for basic diagnostics. This is immediately comparable with the ISa statistic from XDS. If you have a lot of anomalous signal the difference in error model between `anomalous=true` and `false` can be substantial, as it will be inflating the errors to account for the differences.
 
 ## Merging or Exporting
 
@@ -555,4 +558,4 @@ to simply export the scaled reflections in MTZ format or
 dials.merge scaled.expt scaled.refl
 ```
 
-which will output a scaled and merged MTZ file. What you can go do with this is [explored](./next.md) but out of context for this tutorial.
+which will output a scaled and merged MTZ file. At this stage, adding the resolution limit proposed at the end of scaling may be appropriate.
