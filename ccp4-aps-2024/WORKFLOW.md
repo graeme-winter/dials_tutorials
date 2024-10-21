@@ -14,7 +14,7 @@ If you are running at home on Linux or macOS then you should be able to reproduc
 
 ## Tutorial data
 
-The following example uses cubic insulin collected on beamline i04-1 at Diamond Light Source: TODO upload to Zenodo and add a link. The purposes of this is _not_ to be an interesting data set, rather to show how the tools work when there are no problems as a preamble to processing more interesting data sets [in the main tutorial](./README.md).
+The following example uses [cubic insulin collected on beamline i04 at Diamond Light Source](https://zenodo.org/records/8376818): this was collected with a large beam, depositing ~ 1MGy / scan of dose on the sample. To speed things up, you can run with just a subset of the data rather than a full sweep or all four data sets. The purposes of this is _not_ to be an interesting data set, rather to show how the tools work when there are no problems as a preamble to processing more interesting data sets [in the main tutorial](./README.md). If you have all teh time in the world you can process all four together with only a minor change to the import command.
 
 ## Files
 
@@ -64,25 +64,39 @@ which will generate a HTML html describing the current state of the processing.
 The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
 
 ```
-dials.import ../Insulin_6_2.nxs
+dials.import ../ins10_1.nxs
 ```
 
-will read the metadata from this `NeXus` file and write `imported.expt` from this. It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. The output from importing describes what was found: this should correspond to our expectations.
+will read the metadata from this `NeXus` file and write `imported.expt` from this. For this tutorial I am only processing the first 1200 images so we actually import with:
 
 ```
-Ethics-Gradient work :) [main] $ cat dials.import.log 
+dials.import ../ins10_1.nxs image_range=1,1200
+```
+
+It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. The output from importing describes what was found: this should correspond to our expectations.
+
+```
 DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
-DIALS 3.dev.953-g748efeb99
+DIALS 3.dev.1215-gb54762037
 The following parameters have been modified:
 
 input {
   experiments = <image files>
 }
+geometry {
+  scan {
+    image_range = 1 1200
+  }
+}
+
+
+Applying input geometry in the following order:
+  1. Manual geometry
 
 --------------------------------------------------------------------------------
-  format: <class 'dxtbx.format.FormatNXmxDLS.FormatNXmxDLS'>
-  template: /Users/graeme/data/i04-1-run3-ins/Insulin_6_2.nxs:1:1800
-  num images: 1800
+  format: <class 'dxtbx.format.FormatNXmxDLS16M.FormatNXmxDLS16M'>
+  template: /Users/graeme/data/i04-ins-1MGy/ins10_1.nxs:1:1200
+  num images: 1200
   sequences:
     still:    0
     sweep:    1
@@ -91,7 +105,7 @@ input {
 Writing experiments to imported.expt
 ```
 
-Once you have `imported.expt` you can, if you like, look at the content with `dials.show` as `dials.show imported.expt`. This is a general program in DIALS to allow you to print the current state of models, with output which looks like:
+You will see that the log file includes the additional commands passed in, which is useful for tracing the processing options used and in this case confirms that we have read ~1200 images. Once you have `imported.expt` you can, if you like, look at the content with `dials.show` as `dials.show imported.expt`. This is a general program in DIALS to allow you to print the current state of models, with output which looks like:
 
 ```
 DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
@@ -102,36 +116,36 @@ input {
 }
 
 Experiment 0:
-Experiment identifier: af2eaa2f-7f6a-e188-464b-6adfde052baf
-Image template: /Users/graeme/data/i04-1-run3-ins/Insulin_6_2.nxs
+Experiment identifier: 82dbf00d-4836-aded-b32f-c1789f2de707
+Image template: /Users/graeme/data/i04-ins-1MGy/ins10_1.nxs
 Detector:
 Panel:
   name: /entry/instrument/detector/module
   type: SENSOR_PAD
   identifier: 
   pixel_size:{0.075,0.075}
-  image_size: {3108,3262}
-  trusted_range: {0,31881}
+  image_size: {4148,4362}
+  trusted_range: {0,33005}
   thickness: 0.45
   material: Si
-  mu: 3.27636
+  mu: 3.66309
   gain: 1
   pedestal: 0
   fast_axis: {1,0,0}
   slow_axis: {0,-1,0}
-  origin: {-108.3,120.975,-177.904}
-  distance: 177.904
+  origin: {-159.08,166.6,-170}
+  distance: 170
   pixel to millimeter strategy: ParallaxCorrectedPxMmStrategy
-    mu: 3.27636
+    mu: 3.66309
     t0: 0.45
 
 
-Max resolution (at corners): 1.209174
-Max resolution (inscribed):  1.701016
+Max resolution (at corners): 1.058512
+Max resolution (inscribed):  1.337295
 
 Beam:
     probe: x-ray
-    wavelength: 0.918076
+    wavelength: 0.953738
     sample to source direction : {0,0,1}
     divergence: 0
     sigma divergence: 0
@@ -142,21 +156,25 @@ Beam:
     sample to source distance: 0
 
 Beam centre: 
-    mm: (108.30,120.98)
-    px: (1444.00,1613.00)
+    mm: (159.08,166.60)
+    px: (2121.07,2221.33)
 
 Scan:
-    number of images:   1800
-    image range:   {1,1800}
+    number of images:   1200
+    image range:   {1,1200}
     epoch:    0
     exposure time:    0
-    oscillation:   {252,0.2}
+    oscillation:   {0,0.1}
 
 Goniometer:
     Rotation axis:   {1,0,0}
     Fixed rotation:  {1,0,0,0,1,0,0,0,1}
     Setting rotation:{1,0,0,0,1,0,0,0,1}
-    
+    Axis #0 (phi):  {1,-0.0037,0.002}
+    Axis #1 (chi):  {-0.0046,0.0372,-0.9993}
+    Axis #2 (omega):  {1,0,0}
+    Angles: 0,0,0
+    scan axis: #2 (omega)    
 ```
 
 I recognise that this is quite "computer" in the way that the numbers are presented, but there are a few useful things you can look for in here: does the wavelength, distance, beam centre look OK? Are the number of images what you would expect?
@@ -167,7 +185,7 @@ At this point you can also look at the images with the `dials.image_viewer` tool
 dials.image_viewer imported.expt
 ```
 
-in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences. Personally the author finds for basic inspection of the images stacking e.g. 5 images makes the lattice clearer for finely sliced images, and adjusting the brightness depending on how your data were collected:
+in this tool there are many settings you can adjust, which could depend on the source of the data and - most importantly - your preferences. Personally the author finds for basic inspection of the images stacking e.g. 10 images makes the lattice clearer for finely sliced images, and adjusting the brightness depending on how your data were collected:
 
 ![Image viewer](./images/image-view.png)
 
@@ -201,7 +219,7 @@ dials.reciprocal_lattice_viewer imported.expt strong.refl
 
 No matter the sample orientation you should be able to rotate the space to "look down" the lines of reflections. If you cannot, or the lines are not straight, it is likely that there are some errors in the experiment parameters e.g. detector distance or beam centre. If these are not too large they will likely be corrected in the subsequent analysis.
 
-![Reciprocal viewer](./images/reciprocal-lattice.png)
+![Reciprocal viewer](./images/rlv0.png)
 
 Have a play with the settings - you can change the beam centre in the viewer to see how nicely aligned spots move out of alignment. Some of the options will only work after you have indexed the data. If the geometry is not accurately recorded you may find it useful to run:
 
@@ -235,23 +253,23 @@ are the ways to trigger the program, and the most common parameters to set are t
 
 ```
 Refined crystal models:
-model 1 (129747 reflections):
+model 1 (52907 reflections):
 Crystal:
-    Unit cell: 67.3031(14), 67.3035(14), 67.3293(14), 109.4796(4), 109.4814(4), 109.4312(4)
+    Unit cell: 67.4575(12), 67.4621(13), 67.5064(10), 109.4906(6), 109.5223(5), 109.4697(5)
     Space group: P 1
-    U matrix:  {{ 0.5947,  0.8039,  0.0044},
-                { 0.1567, -0.1105, -0.9815},
-                {-0.7885,  0.5844, -0.1916}}
-    B matrix:  {{ 0.0149,  0.0000,  0.0000},
-                { 0.0052,  0.0158,  0.0000},
+    U matrix:  {{ 0.2465,  0.5564, -0.7935},
+                { 0.9448, -0.3204,  0.0689},
+                {-0.2159, -0.7667, -0.6046}}
+    B matrix:  {{ 0.0148,  0.0000,  0.0000},
+                { 0.0052,  0.0157,  0.0000},
                 { 0.0091,  0.0091,  0.0182}}
-    A = UB:    {{ 0.0131,  0.0127,  0.0001},
-                {-0.0072, -0.0107, -0.0179},
-                {-0.0104,  0.0075, -0.0035}}
+    A = UB:    {{-0.0007,  0.0015, -0.0144},
+                { 0.0130, -0.0044,  0.0013},
+                {-0.0127, -0.0176, -0.0110}}
 +------------+-------------+---------------+-------------+
 |   Imageset |   # indexed |   # unindexed |   % indexed |
 |------------+-------------+---------------+-------------|
-|          0 |      129747 |          2621 |          98 |
+|          0 |       52907 |          2522 |        95.5 |
 +------------+-------------+---------------+-------------+
 ```
 
@@ -274,7 +292,9 @@ The process that the indexing performs is quite complex -
 
 The indexing process takes place over a number of cycles, where low resolution reflections are initially indexed and refined before including more reflections at high resolution - this improves the overall success of the procedure by allowing some refinement as a part of the process.
   
-During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern.
+During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern. To look at the crystal lattice(s) in the reciprocal space crystal frame you can select "crystal frame":
+
+![Reciprocal viewer](./images/rlv1.png)
 
 ## Bravais Lattice Determination (optional!)
 
@@ -289,6 +309,15 @@ dials.refine_bravais_settings indexed.expt indexed.refl
 you will see a table of possible unit cell / Bravais lattice / R.M.S. deviations printed in the output - in the case of this tutorial data they will all match, as the true symmetry is cubic.
 
 ```
+DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
+DIALS 3.dev.1215-gb54762037
+The following parameters have been modified:
+
+input {
+  experiments = indexed.expt
+  reflections = indexed.refl
+}
+
 Chiral space groups corresponding to each Bravais lattice:
 aP: P1
 oF: F222
@@ -300,28 +329,28 @@ mI: I2
 +------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
 |   Solution |   Metric fit |   rmsd | min/max cc   |   #spots | lattice   | unit_cell                                 |   volume | cb_op             |
 |------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------|
-|   *     22 |       0.0384 |  0.041 | 0.779/0.968  |    36000 | cI        | 77.79  77.79  77.79  90.00  90.00  90.00  |   470650 | b+c,a+c,a+b       |
-|   *     21 |       0.0372 |  0.04  | 0.781/0.799  |    36000 | hR        | 110.01 110.01  67.35  90.00  90.00 120.00 |   705911 | a+2*b+c,-b+c,a    |
-|   *     20 |       0.0384 |  0.04  | 0.779/0.796  |    36000 | hR        | 110.01 110.01  67.35  90.00  90.00 120.00 |   705811 | a+b+2*c,a-c,b     |
-|   *     19 |       0.0384 |  0.041 | 0.779/0.797  |    36000 | hR        | 110.00 110.00  67.37  90.00  90.00 120.00 |   705895 | 2*a+b+c,-a+b,c    |
-|   *     18 |       0.0338 |  0.04  | 0.779/0.796  |    36000 | hR        | 109.98 109.98  67.37  90.00  90.00 120.00 |   705788 | b-c,-a+c,a+b+c    |
-|   *     17 |       0.0375 |  0.039 | 0.622/0.968  |    36000 | tI        | 77.71  77.71  77.74  90.00  90.00  90.00  |   469501 | b+c,a+c,a+b       |
-|   *     16 |       0.0375 |  0.04  | 0.505/0.957  |    36000 | tI        | 77.77  77.77  77.75  90.00  90.00  90.00  |   470209 | a+b,b+c,a+c       |
-|   *     15 |       0.0384 |  0.04  | 0.491/0.962  |    36000 | tI        | 77.77  77.77  77.75  90.00  90.00  90.00  |   470272 | a+c,a+b,b+c       |
-|   *     14 |       0.0375 |  0.039 | 0.957/0.968  |    36000 | oI        | 77.71  77.71  77.75  90.00  90.00  90.00  |   469516 | -a-c,b+c,a+b      |
-|   *     13 |       0.0375 |  0.04  | 0.504/0.957  |    36000 | oF        | 77.75 109.98 109.99  90.00  90.00  90.00  |   940536 | -a-c,-a+c,a+2*b+c |
-|   *     12 |       0.0384 |  0.04  | 0.491/0.962  |    36000 | oF        | 77.75 109.98 109.99  90.00  90.00  90.00  |   940547 | b+c,-b+c,2*a+b+c  |
-|   *     11 |       0.0375 |  0.039 | 0.957/0.957  |    36000 | mI        | 77.72  77.72  77.75  90.00  90.00  90.00  |   469594 | -b-c,-a-c,a+b     |
-|   *     10 |       0.0331 |  0.039 | 0.504/0.504  |    36000 | mI        | 67.33 109.99  67.36  90.00 109.49  90.00  |   470295 | b,a-c,-a-b-c      |
-|   *      9 |       0.0375 |  0.039 | 0.962/0.962  |    36000 | mI        | 77.72  77.72  77.75  90.00  90.00  90.00  |   469683 | a+c,b+c,-a-b      |
-|   *      8 |       0.0338 |  0.039 | 0.493/0.493  |    36000 | mI        | 67.33 109.98  67.36  90.00 109.49  90.00  |   470288 | a,-b+c,-a-b-c     |
-|   *      7 |       0.0372 |  0.04  | 0.507/0.507  |    36000 | mI        | 67.33 109.99  67.35  90.00 109.49  90.00  |   470261 | -a,a+2*b+c,-c     |
-|   *      6 |       0.0384 |  0.04  | 0.491/0.491  |    36000 | mI        | 67.34 109.99  67.35  90.00 109.48  90.00  |   470283 | -b,-2*a-b-c,-c    |
-|   *      5 |       0.006  |  0.037 | 0.633/0.968  |    36000 | oF        | 77.75 109.87 109.94  90.00  90.00  90.00  |   939123 | a+b,-a+b,a+b+2*c  |
-|   *      4 |       0.0059 |  0.037 | 0.968/0.968  |    36000 | mI        | 77.72  77.75  77.72  90.00  90.04  90.00  |   469625 | -a-c,-a-b,b+c     |
-|   *      3 |       0.0014 |  0.037 | 0.633/0.633  |    36000 | mI        | 67.32 109.87  67.33  90.00 109.47  90.00  |   469594 | c,-a+b,-a-b-c     |
-|   *      2 |       0.006  |  0.037 | 0.635/0.635  |    36000 | mI        | 67.30 109.94  67.30  90.00 109.43  90.00  |   469555 | -a,-a-b-2*c,-b    |
-|   *      1 |       0      |  0.037 | -/-          |    36000 | aP        | 67.30  67.30  67.33 109.48 109.48 109.43  |   234799 | a,b,c             |
+|   *     22 |       0.1001 |  0.051 | 0.835/0.951  |    12000 | cI        | 77.96  77.96  77.96  90.00  90.00  90.00  |   473773 | b+c,a+c,a+b       |
+|   *     21 |       0.1001 |  0.05  | 0.873/0.874  |    12000 | hR        | 110.24 110.24  67.50  90.00  90.00 120.00 |   710380 | a+2*b+c,-b+c,a    |
+|   *     20 |       0.1001 |  0.052 | 0.835/0.837  |    12000 | hR        | 110.25 110.25  67.55  90.00  90.00 120.00 |   711095 | a+b+2*c,a-c,b     |
+|   *     19 |       0.1001 |  0.051 | 0.539/0.839  |    12000 | tI        | 77.95  77.95  77.96  90.00  90.00  90.00  |   473640 | b+c,a+c,a+b       |
+|   *     18 |       0.0971 |  0.05  | 0.550/0.841  |    12000 | tI        | 77.98  77.98  77.94  90.00  90.00  90.00  |   473898 | a+b,b+c,a+c       |
+|         17 |       0.0971 |  0.052 | 0.492/0.932  |    12000 | tI        | 77.96  77.96  77.99  90.00  90.00  90.00  |   474003 | a+c,a+b,b+c       |
+|   *     16 |       0.0971 |  0.051 | 0.839/0.932  |    12000 | oI        | 77.95  77.98  78.00  90.00  90.00  90.00  |   474063 | a+c,a+b,b+c       |
+|   *     15 |       0.1001 |  0.051 | 0.501/0.839  |    12000 | oF        | 77.97 110.24 110.25  90.00  90.00  90.00  |   947615 | -a-b,a+b+2*c,-a+b |
+|   *     14 |       0.0971 |  0.051 | 0.839/0.839  |    12000 | mI        | 77.95  77.98  78.00  90.00  90.01  90.00  |   474126 | -a-c,a+b,-b-c     |
+|   *     13 |       0.1001 |  0.051 | 0.501/0.501  |    12000 | mI        | 67.51 110.24  67.54  90.00 109.47  90.00  |   473885 | -a,-a-b-2*c,-b    |
+|   *     12 |       0.0722 |  0.037 | 0.526/0.841  |    12000 | oF        | 77.88 110.11 110.28  90.00  90.00  90.00  |   945747 | a+c,a+2*b+c,-a+c  |
+|   *     11 |       0.0575 |  0.035 | 0.950/0.951  |    12000 | hR        | 110.05 110.05  67.48  90.00  90.00 120.00 |   707843 | 2*a+b+c,-a+b,c    |
+|   *     10 |       0.0663 |  0.038 | 0.566/0.932  |    12000 | oF        | 77.91 110.10 110.26  90.00  90.00  90.00  |   945776 | -b-c,2*a+b+c,-b+c |
+|   *      9 |       0.0722 |  0.037 | 0.841/0.841  |    12000 | mI        | 77.92  77.89  77.95  90.00  90.09  90.00  |   473148 | a+b,-a-c,b+c      |
+|   *      8 |       0.0663 |  0.037 | 0.932/0.932  |    12000 | mI        | 77.90  77.91  77.92  90.00  90.08  90.00  |   472909 | a+c,-b-c,a+b      |
+|   *      7 |       0.0575 |  0.03  | 0.586/0.586  |    12000 | mI        | 67.43 110.05  67.49  90.00 109.54  90.00  |   471963 | -a,a+2*b+c,-c     |
+|   *      6 |       0.0561 |  0.035 | 0.613/0.613  |    12000 | mI        | 67.45 110.06  67.50  90.00 109.50  90.00  |   472342 | -b,-2*a-b-c,-c    |
+|   *      5 |       0.0445 |  0.033 | 0.884/0.884  |    12000 | hR        | 110.27 110.27  67.43  90.00  90.00 120.00 |   710034 | b-c,-a+c,a+b+c    |
+|   *      4 |       0.0445 |  0.033 | 0.526/0.526  |    12000 | mI        | 67.43 110.29  67.50  90.00 109.46  90.00  |   473288 | -a-b-c,-a+c,b     |
+|   *      3 |       0.0439 |  0.032 | 0.566/0.566  |    12000 | mI        | 67.42 110.27  67.48  90.00 109.43  90.00  |   473134 | -a-b-c,b-c,a      |
+|   *      2 |       0.0247 |  0.028 | 0.586/0.586  |    12000 | mI        | 67.39 110.14  67.50  90.00 109.46  90.00  |   472344 | -a-b-c,a-b,c      |
+|   *      1 |       0      |  0.028 | -/-          |    12000 | aP        | 67.46  67.46  67.50 109.49 109.52 109.47  |   236271 | a,b,c             |
 +------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
 ```
 
@@ -347,7 +376,7 @@ RMSDs by experiment:
 |   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
 |    id |        |     (px) |     (px) |   (images) |
 |-------+--------+----------+----------+------------|
-|     0 |  36000 |  0.32955 |  0.37266 |    0.39759 |
+|     0 |  12000 |  0.25638 |  0.27142 |    0.30518 |
 +-------+--------+----------+----------+------------+
 ```
 
@@ -359,7 +388,7 @@ RMSDs by experiment:
 |   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
 |    id |        |     (px) |     (px) |   (images) |
 |-------+--------+----------+----------+------------|
-|     0 | 110887 |  0.21138 |  0.19914 |    0.21174 |
+|     0 |  42850 |  0.21098 |  0.20732 |    0.21382 |
 +-------+--------+----------+----------+------------+
 ```
 
@@ -403,23 +432,23 @@ Scoring individual symmetry elements
 +--------------+--------+------+--------+-----+---------------+
 |   likelihood |   Z-CC |   CC |      N |     | Operator      |
 |--------------+--------+------+--------+-----+---------------|
-|        0.903 |   9.83 | 0.98 | 172280 | *** | 1 |(0, 0, 0)  |
-|        0.148 |   4.35 | 0.44 | 341088 |     | 4 |(1, 1, 0)  |
-|        0.15  |   4.39 | 0.44 | 332088 |     | 4 |(1, 0, 1)  |
-|        0.15  |   4.4  | 0.44 | 332022 |     | 4 |(0, 1, 1)  |
-|        0.904 |   9.75 | 0.97 | 332526 | *** | 3 |(1, 0, 0)  |
-|        0.904 |   9.74 | 0.97 | 332464 | *** | 3 |(0, 1, 0)  |
-|        0.904 |   9.75 | 0.98 | 332462 | *** | 3 |(0, 0, 1)  |
-|        0.904 |   9.74 | 0.97 | 332444 | *** | 3 |(1, 1, 1)  |
-|        0.903 |   9.84 | 0.98 | 170444 | *** | 2 |(1, 1, 0)  |
-|        0.156 |   4.5  | 0.45 | 169708 |     | 2 |(-1, 1, 0) |
-|        0.905 |   9.64 | 0.96 | 170348 | *** | 2 |(1, 0, 1)  |
-|        0.15  |   4.39 | 0.44 | 166058 |     | 2 |(-1, 0, 1) |
-|        0.905 |   9.63 | 0.96 | 169936 | *** | 2 |(0, 1, 1)  |
-|        0.15  |   4.38 | 0.44 | 166076 |     | 2 |(0, -1, 1) |
-|        0.154 |   4.47 | 0.45 | 171232 |     | 2 |(1, 1, 2)  |
-|        0.15  |   4.39 | 0.44 | 166076 |     | 2 |(1, 2, 1)  |
-|        0.151 |   4.4  | 0.44 | 166030 |     | 2 |(2, 1, 1)  |
+|        0.946 |   9.97 | 1    |  85410 | *** | 1 |(0, 0, 0)  |
+|        0.166 |   4.55 | 0.45 | 168526 |     | 4 |(1, 1, 0)  |
+|        0.172 |   4.66 | 0.47 | 148590 |     | 4 |(1, 0, 1)  |
+|        0.168 |   4.6  | 0.46 | 155754 |     | 4 |(0, 1, 1)  |
+|        0.945 |   9.96 | 1    | 163264 | *** | 3 |(1, 0, 0)  |
+|        0.945 |   9.96 | 1    | 148988 | *** | 3 |(0, 1, 0)  |
+|        0.945 |   9.95 | 1    | 166456 | *** | 3 |(0, 0, 1)  |
+|        0.945 |   9.96 | 1    | 124276 | *** | 3 |(1, 1, 1)  |
+|        0.945 |   9.96 | 1    |  90954 | *** | 2 |(1, 1, 0)  |
+|        0.162 |   4.47 | 0.45 |  84768 |     | 2 |(-1, 1, 0) |
+|        0.945 |   9.95 | 1    |  70454 | *** | 2 |(1, 0, 1)  |
+|        0.173 |   4.67 | 0.47 |  63760 |     | 2 |(-1, 0, 1) |
+|        0.945 |   9.96 | 1    |  75290 | *** | 2 |(0, 1, 1)  |
+|        0.171 |   4.64 | 0.46 |  95580 |     | 2 |(0, -1, 1) |
+|        0.161 |   4.46 | 0.45 |  88804 |     | 2 |(1, 1, 2)  |
+|        0.16  |   4.43 | 0.44 |  77824 |     | 2 |(1, 2, 1)  |
+|        0.159 |   4.41 | 0.44 |  74274 |     | 2 |(2, 1, 1)  |
 +--------------+--------+------+--------+-----+---------------+
 ```
 
@@ -431,40 +460,40 @@ Scoring all possible sub-groups
 +-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------+
 | Patterson group   |     |   Likelihood |   NetZcc |   Zcc+ |   Zcc- |   CC |   CC- |   delta | Reindex operator   |
 |-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------|
-| I m -3            | *** |            1 |     5.33 |   9.74 |   4.41 | 0.97 |  0.44 |       0 | b+c,a+c,a+b        |
-| I m m m           |     |            0 |     3.2  |   9.73 |   6.53 | 0.97 |  0.65 |       0 | -a-c,b+c,a+b       |
-| I 1 2/m 1         |     |            0 |     2.69 |   9.73 |   7.04 | 0.97 |  0.68 |       0 | a+c,b+c,-a-b       |
-| I 1 2/m 1         |     |            0 |     2.69 |   9.73 |   7.04 | 0.97 |  0.68 |       0 | -b-c,-a-c,a+b      |
-| R -3 :H           |     |            0 |     2.75 |   9.78 |   7.03 | 0.98 |  0.66 |       0 | a+b+2*c,a-c,b      |
-| R -3 :H           |     |            0 |     2.75 |   9.79 |   7.03 | 0.98 |  0.66 |       0 | b-c,-a+c,a+b+c     |
-| R -3 :H           |     |            0 |     2.75 |   9.79 |   7.03 | 0.98 |  0.66 |       0 | a+2*b+c,-b+c,a     |
-| R -3 :H           |     |            0 |     2.76 |   9.79 |   7.03 | 0.98 |  0.66 |       0 | 2*a+b+c,-a+b,c     |
-| I 1 2/m 1         |     |            0 |     2.81 |   9.83 |   7.03 | 0.98 |  0.68 |       0 | -a-c,-a-b,b+c      |
-| I 4/m m m         |     |            0 |     0.87 |   7.91 |   7.04 | 0.7  |  0.7  |       0 | b+c,a+c,a+b        |
-| I 4/m m m         |     |            0 |     0.85 |   7.9  |   7.05 | 0.7  |  0.7  |       0 | a+c,a+b,b+c        |
-| I 4/m m m         |     |            0 |     0.85 |   7.9  |   7.05 | 0.7  |  0.7  |       0 | a+b,b+c,a+c        |
-| I 4/m             |     |            0 |     1.14 |   8.34 |   7.2  | 0.7  |  0.7  |       0 | a+c,a+b,b+c        |
-| I 4/m             |     |            0 |     1.15 |   8.34 |   7.2  | 0.7  |  0.7  |       0 | a+b,b+c,a+c        |
-| I 4/m             |     |            0 |     1.23 |   8.41 |   7.18 | 0.71 |  0.7  |       0 | b+c,a+c,a+b        |
-| I m -3 m          |     |            0 |     7.41 |   7.41 |   0    | 0.7  |  0    |       0 | b+c,a+c,a+b        |
-| P -1              |     |            0 |     2.59 |   9.83 |   7.23 | 0.98 |  0.69 |       0 | a,b,c              |
-| F m m m           |     |            0 |     0.3  |   7.64 |   7.34 | 0.71 |  0.7  |       0 | a+b,-a+b,a+b+2*c   |
-| F m m m           |     |            0 |     0.18 |   7.55 |   7.37 | 0.7  |  0.7  |       0 | b+c,-b+c,2*a+b+c   |
-| F m m m           |     |            0 |     0.18 |   7.55 |   7.37 | 0.7  |  0.7  |       0 | -a-c,-a+c,a+2*b+c  |
-| I 1 2/m 1         |     |            0 |     0.26 |   7.64 |   7.38 | 0.72 |  0.7  |       0 | c,-a+b,-a-b-c      |
-| I 1 2/m 1         |     |            0 |     0.25 |   7.63 |   7.38 | 0.71 |  0.7  |       0 | -a,-a-b-2*c,-b     |
-| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | -b,-2*a-b-c,-c     |
-| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | b,a-c,-a-b-c       |
-| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | -a,a+2*b+c,-c      |
-| I 1 2/m 1         |     |            0 |     0.23 |   7.61 |   7.38 | 0.71 |  0.7  |       0 | a,-b+c,-a-b-c      |
-| R -3 m :H         |     |            0 |    -0.47 |   7.08 |   7.55 | 0.71 |  0.7  |       0 | 2*a+b+c,-a+b,c     |
-| R -3 m :H         |     |            0 |    -0.47 |   7.08 |   7.55 | 0.71 |  0.7  |       0 | b-c,-a+c,a+b+c     |
-| R -3 m :H         |     |            0 |    -0.48 |   7.07 |   7.55 | 0.7  |  0.7  |       0 | a+b+2*c,a-c,b      |
-| R -3 m :H         |     |            0 |    -0.48 |   7.07 |   7.55 | 0.7  |  0.7  |       0 | a+2*b+c,-b+c,a     |
+| I m -3            | *** |            1 |     5.42 |   9.96 |   4.55 | 1    |  0.46 |     0.1 | b+c,a+c,a+b        |
+| I m m m           |     |            0 |     3.27 |   9.96 |   6.7  | 1    |  0.66 |     0.1 | -a-c,b+c,a+b       |
+| I m -3 m          |     |            0 |     7.59 |   7.59 |   0    | 0.72 |  0    |     0.1 | b+c,a+c,a+b        |
+| I 4/m m m         |     |            0 |     0.9  |   8.11 |   7.21 | 0.77 |  0.7  |     0.1 | a+b,b+c,a+c        |
+| I 4/m m m         |     |            0 |     0.88 |   8.1  |   7.22 | 0.74 |  0.72 |     0.1 | a+c,a+b,b+c        |
+| I 4/m m m         |     |            0 |     0.86 |   8.08 |   7.23 | 0.73 |  0.72 |     0.1 | b+c,a+c,a+b        |
+| R -3 :H           |     |            0 |     2.75 |   9.97 |   7.22 | 1    |  0.69 |     0.1 | b-c,-a+c,a+b+c     |
+| R -3 :H           |     |            0 |     2.75 |   9.97 |   7.22 | 1    |  0.68 |     0.1 | a+b+2*c,a-c,b      |
+| I 1 2/m 1         |     |            0 |     2.75 |   9.97 |   7.22 | 1    |  0.69 |     0.1 | -a-c,-a-b,b+c      |
+| R -3 :H           |     |            0 |     2.75 |   9.97 |   7.22 | 1    |  0.68 |     0   | a+2*b+c,-b+c,a     |
+| I 1 2/m 1         |     |            0 |     2.75 |   9.97 |   7.22 | 1    |  0.69 |     0.1 | a+c,-b-c,a+b       |
+| I 1 2/m 1         |     |            0 |     2.75 |   9.96 |   7.22 | 1    |  0.7  |     0.1 | -b-c,-a-c,a+b      |
+| R -3 :H           |     |            0 |     2.75 |   9.96 |   7.22 | 1    |  0.68 |     0.1 | 2*a+b+c,-a+b,c     |
+| I 4/m             |     |            0 |     1.2  |   8.57 |   7.37 | 0.77 |  0.72 |     0.1 | a+b,b+c,a+c        |
+| I 4/m             |     |            0 |     1.19 |   8.56 |   7.37 | 0.77 |  0.71 |     0.1 | a+c,a+b,b+c        |
+| I 4/m             |     |            0 |     1.18 |   8.55 |   7.37 | 0.74 |  0.72 |     0.1 | b+c,a+c,a+b        |
+| P -1              |     |            0 |     2.56 |   9.97 |   7.42 | 1    |  0.71 |     0   | a,b,c              |
+| F m m m           |     |            0 |     0.2  |   7.75 |   7.54 | 0.76 |  0.72 |     0.1 | -a-c,-a+c,a+2*b+c  |
+| F m m m           |     |            0 |     0.2  |   7.74 |   7.54 | 0.74 |  0.72 |     0.1 | -b-c,2*a+b+c,-b+c  |
+| F m m m           |     |            0 |     0.17 |   7.72 |   7.55 | 0.73 |  0.72 |     0.1 | a+b,-a+b,a+b+2*c   |
+| I 1 2/m 1         |     |            0 |     0.22 |   7.79 |   7.56 | 0.81 |  0.72 |     0.1 | b,a-c,-a-b-c       |
+| I 1 2/m 1         |     |            0 |     0.21 |   7.78 |   7.57 | 0.75 |  0.72 |     0   | a,-b+c,-a-b-c      |
+| I 1 2/m 1         |     |            0 |     0.16 |   7.73 |   7.57 | 0.74 |  0.72 |     0.1 | c,-a+b,-a-b-c      |
+| I 1 2/m 1         |     |            0 |     0.15 |   7.72 |   7.57 | 0.75 |  0.72 |     0   | -a,-a-b-2*c,-b     |
+| I 1 2/m 1         |     |            0 |     0.14 |   7.72 |   7.57 | 0.76 |  0.72 |     0   | -a,a+2*b+c,-c      |
+| I 1 2/m 1         |     |            0 |     0.14 |   7.71 |   7.58 | 0.73 |  0.72 |     0.1 | -b,-2*a-b-c,-c     |
+| R -3 m :H         |     |            0 |    -0.49 |   7.24 |   7.73 | 0.72 |  0.73 |     0.1 | b-c,-a+c,a+b+c     |
+| R -3 m :H         |     |            0 |    -0.53 |   7.21 |   7.75 | 0.73 |  0.72 |     0.1 | a+b+2*c,a-c,b      |
+| R -3 m :H         |     |            0 |    -0.54 |   7.21 |   7.75 | 0.73 |  0.72 |     0   | a+2*b+c,-b+c,a     |
+| R -3 m :H         |     |            0 |    -0.58 |   7.18 |   7.76 | 0.72 |  0.73 |     0.1 | 2*a+b+c,-a+b,c     |
 +-------------------+-----+--------------+----------+--------+--------+------+-------+---------+--------------------+
 
 Best solution: I m -3
-Unit cell: 77.727, 77.727, 77.727, 90.000, 90.000, 90.000
+Unit cell: 77.889, 77.889, 77.889, 90.000, 90.000, 90.000
 Reindex operator: b+c,a+c,a+b
 Laue group probability: 1.000
 Laue group confidence: 1.000
@@ -510,26 +539,26 @@ where setting low, the default, corresponds to ~ 1% absorption, medium to ~ 5% a
             -------------Summary of merging statistics--------------           
 
                                             Suggested   Low    High  Overall
-High resolution limit                           1.38    3.74    1.38    1.20
-Low resolution limit                           54.96   55.00    1.40   54.96
-Completeness                                   94.8   100.0    64.1    74.7
-Multiplicity                                   38.0    40.0    23.5    34.4
-I/sigma                                        20.1   108.2     0.4    17.0
-Rmerge(I)                                     0.089   0.038   3.580   0.091
-Rmerge(I+/-)                                  0.088   0.037   3.489   0.090
-Rmeas(I)                                      0.090   0.038   3.659   0.092
-Rmeas(I+/-)                                   0.090   0.038   3.644   0.092
-Rpim(I)                                       0.014   0.006   0.727   0.015
-Rpim(I+/-)                                    0.020   0.008   1.015   0.020
-CC half                                       1.000   0.999   0.269   1.000
-Anomalous completeness                         94.8   100.0    64.7    73.8
-Anomalous multiplicity                         19.8    22.1    12.0    17.9
-Anomalous correlation                         0.148   0.231  -0.044   0.188
-Anomalous slope                               0.667                        
-dF/F                                          0.038                        
-dI/s(dI)                                      0.723                        
-Total observations                           586945   34847   12553  629390
-Total unique                                  15431     871     534   18292
+High resolution limit                           1.29    3.50    1.29    1.05
+Low resolution limit                           55.08   55.13    1.31   55.08
+Completeness                                  100.0   100.0   100.0    88.7
+Multiplicity                                   13.4    12.9    13.1    10.4
+I/sigma                                        17.9   104.0     0.4    11.1
+Rmerge(I)                                     0.065   0.024   3.437   0.073
+Rmerge(I+/-)                                  0.062   0.023   3.306   0.069
+Rmeas(I)                                      0.067   0.025   3.576   0.076
+Rmeas(I+/-)                                   0.067   0.025   3.584   0.075
+Rpim(I)                                       0.018   0.007   0.984   0.022
+Rpim(I+/-)                                    0.025   0.009   1.378   0.029
+CC half                                       1.000   1.000   0.268   1.000
+Anomalous completeness                        100.0   100.0   100.0    79.1
+Anomalous multiplicity                          7.0     7.1     6.7     5.6
+Anomalous correlation                        -0.019  -0.035  -0.016  -0.013
+Anomalous slope                               0.680                        
+dF/F                                          0.050                        
+dI/s(dI)                                      0.697                        
+Total observations                           267970   13812   13029  335453
+Total unique                                  19928    1071     994   32271
 ```
 
 as well as a better estimate for the resolution, if this is lower than the full extent of the data. Further up you will also see an analysis of the error model:
@@ -537,9 +566,9 @@ as well as a better estimate for the resolution, if this is lower than the full 
 ```
 Error model details:
   Type: basic
-  Parameters: a = 0.90579, b = 0.03820
+  Parameters: a = 0.82350, b = 0.02606
   Error model formula: σ'² = a²(σ² + (bI)²)
-  estimated I/sigma asymptotic limit: 28.900
+  estimated I/sigma asymptotic limit: 46.595
 ```
 
 which is very useful for basic diagnostics. This is immediately comparable with the ISa statistic from XDS. If you have a lot of anomalous signal the difference in error model between `anomalous=true` and `false` can be substantial, as it will be inflating the errors to account for the differences.
