@@ -14,7 +14,25 @@ If you are running at home on Linux or macOS then you should be able to reproduc
 
 ## Tutorial data
 
-The following example uses [cubic insulin collected on beamline i04 at Diamond Light Source](https://zenodo.org/records/8376818): this was collected with a large beam, depositing ~ 1MGy / scan of dose on the sample. To speed things up, you can run with just a subset of the data rather than a full sweep or all four data sets. The purposes of this is _not_ to be an interesting data set, rather to show how the tools work when there are no problems as a preamble to processing more interesting data sets [in the main tutorial](./README.md). If you have all teh time in the world you can process all four together with only a minor change to the import command.
+The following example uses [cubic insulin collected on beamline i04 at Diamond Light Source](https://zenodo.org/records/8376818): this was collected with a large beam, depositing ~ 1MGy / scan of dose on the sample. To speed things up, you can run with just a subset of the data rather than a full sweep or all four data sets. The purposes of this is _not_ to be an interesting data set, rather to show how the tools work when there are no problems as a preamble to processing more interesting data sets [in the main tutorial](./README.md). If you have all the time in the world you can process all four together with only a minor change to the import command.
+
+Fetching the data can be performed by writing a file containing
+
+```
+https://zenodo.org/records/8376818/files/ins10_1.nxs
+https://zenodo.org/records/8376818/files/ins10_1_000001.h5
+https://zenodo.org/records/8376818/files/ins10_1_000002.h5
+https://zenodo.org/records/8376818/files/ins10_1_000003.h5
+https://zenodo.org/records/8376818/files/ins10_1_000004.h5
+https://zenodo.org/records/8376818/files/ins10_1_master.h5
+https://zenodo.org/records/8376818/files/ins10_1_meta.h5
+```
+
+then:
+
+```
+wget -i file.list
+```
 
 ## Files
 
@@ -190,6 +208,14 @@ in this tool there are many settings you can adjust, which could depend on the s
 ![Image viewer](./images/image-view.png)
 
 If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
+
+If you have the time and interest to download all four data sets from the deposition above, you can import all four at once with:
+
+```
+dials.import ../ins10_?.nxs
+```
+
+Then proceed through the entire tutorial with _all four sweeps_ - note though that this is only possible without changing the defaults as the data were taken from a single sample, with the goniometer rotations correctly recorded. [The main tutorial](./README.md) covers what to do if this is not the case.
 
 ## Find Spots
 
