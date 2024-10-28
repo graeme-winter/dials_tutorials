@@ -14,6 +14,14 @@ If you are running at home on Linux or macOS then you should be able to reproduc
 
 ## Tutorial data
 
+If you are at the workshop then the data are already on disk at:
+
+```
+/opt/xtal/Tutorials/dials/WORKFLOW
+```
+
+So replace `../data` or whatever with that. If you are doing this on your own computer, or you are at home, or not part of the workshop then you need to follow these instructions.
+
 The following example uses [cubic insulin collected on beamline i04 at Diamond Light Source](https://zenodo.org/records/8376818): this was collected with a large beam, depositing ~ 1MGy / scan of dose on the sample. To speed things up, you can run with just a subset of the data rather than a full sweep or all four data sets. The purposes of this is _not_ to be an interesting data set, rather to show how the tools work when there are no problems as a preamble to processing more interesting data sets [in the main tutorial](./README.md). If you have all the time in the world you can process all four together with only a minor change to the import command.
 
 Fetching the data can be performed by writing a file containing

@@ -12,6 +12,14 @@ This tutorial deviates slightly from the mainstream by _starting_ with data from
 
 All data have symmetry I213 and very similar unit cell constants so you can _try_ to merge them together and it will work, but won't give you good results as you will be measuring a mixture of structures. The data on the deposition are in `tar` archives so I am assuming you have already downloaded them all and unpacked them into `../data`: if you have done something different you will need to take a little care at the `dials.import` stage.
 
+If you are at the workshop in real life, the data are already in:
+
+```
+/opt/xtal/Tutorial/dials/COWS_PIGS_PEOPLE
+```
+
+so you don't need to download the data - but you'll need to use this path in place of `../data` - you do not need to follow these instructions here.
+
 If you don't already have the data downloaded, you can do this with this script on linux / UNIX:
 
 ```
