@@ -236,7 +236,7 @@ dials.plot_scan_varying_model refined.expt
 
 This will produce a pair of plots as `.png` files, which you can open in a viewer. Alternatively, you could run:
 
-```console
+```bash
 dials.report refined.expt refined.refl
 ```
 
