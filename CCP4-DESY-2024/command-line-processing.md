@@ -1,5 +1,9 @@
 # Data processing tutorial
 
+## Data
+
+To process the data locally using DIALS you will need a copy of the dataset on your computer. If you do not have it already you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
+
 ## Summary
 
 We will start by looking at a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1). The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details provided alongside the images in the file `ADH4_data_info.pdf`.
