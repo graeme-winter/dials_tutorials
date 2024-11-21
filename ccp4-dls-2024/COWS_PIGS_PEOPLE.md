@@ -15,7 +15,7 @@ All data have symmetry I213 and very similar unit cell constants so you can _try
 If you are at the workshop in real life, the data are already in:
 
 ```
-/opt/xtal/Tutorial/dials/COWS_PIGS_PEOPLE
+/dls/i04/data/2024/mx39148-1/tutorial_data/cows_pigs_people
 ```
 
 so you don't need to download the data - but you'll need to use this path in place of `../data` - you do not need to follow these instructions here.
