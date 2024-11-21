@@ -68,6 +68,14 @@ dials.index imported.expt strong.refl
 After a short time we see:
 
 ```
+RMSDs by experiment:
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |   6000 |  0.18628 |    0.245 |    0.20575 |
++-------+--------+----------+----------+------------+
+
 Refined crystal models:
 model 1 (66997 reflections):
 Crystal:
@@ -162,6 +170,10 @@ Saving refined reflections to indexed.refl
 
 We have now indexed almost all the reflections, confirming that we have two lattices, and got good refinement results for each. Looking once more at the reciprocal lattices we see that they are quite well separated:
 
+```
+dials.reciprocal_lattice_viewer indexed.expt indexed.refl
+```
+
 ![Reciprocal lattice view of two lattices](./images/protk-rlv-2.png)
 
 At this point you can also select "view in crystal frame" to see how the two lattices cover potentially different areas of reciprocal space. Viewing the output of
@@ -170,7 +182,7 @@ At this point you can also select "view in crystal frame" to see how the two lat
 dials.report indexed.expt indexed.refl
 ```
 
-Allows the number of reflections indexed on each lattice as a function of rotation angle to be inspected - clearly both lattices are present throughout the data set.
+Allows the number of reflections indexed on each lattice as a function of image number to be inspected - clearly both lattices are present throughout the data set.
 
 ## Continue Processing
 
@@ -183,11 +195,15 @@ dials.integrate refined.expt refined.refl
 
 This will take a little longer than processing a single lattice. After this we consider the impact of having two lattices on the data in terms of the overlapping of reflections - in this case we _probably_ got away with it largely:
 
+```
+dials.image_viewer integrated.expt integrated.refl
+```
+
 ![Image zoomed on two modules of integrated data](./images/protk-image-overlaps.png)
 
 We do however have some potentially overlapped reflections so some of the measurements will be affected.
 
-Since we have multiple independent lattices, we don't know if there is a relationship between the orientation matrices, so need to use `dials.cosym` not `dials.symmetry` to resolve the symmetry and any indexing ambiguity:
+Unlike the simple workflow example, and similarly to the [cows, pigs and people](./COWS_PIGS_PEOPLE.md), we need to use `dials.cosym` to solve the symmetry and resolve any indexing ambiguity, because we have two separate crystals here.
 
 ```
 dials.cosym integrated.expt integrated.refl
@@ -197,6 +213,7 @@ Here we find that the symmetry is P4/mmm (i.e. P13212 or similar) and can procee
 
 ```
 dials.scale symmetrized.expt symmetrized.refl
+dials.merge scaled.expt scaled.refl
 ```
 
 giving:
@@ -232,4 +249,8 @@ Saving the scaled reflections to scaled.refl
 See dials.github.io/dials_scale_user_guide.html for more info on scaling options
 ```
 
-Not the greatest data set, but usable.
+Not the greatest data set, but usable. To get a merged MTZ file for doing other things, like structure solution and refinement, use:
+
+```
+dials.merge scaled.expt scaled.refl
+```
