@@ -5,3 +5,5 @@ This is a pair of tutorials for the CCP4 workshop at GM/CA. The data are from Ze
 [Simple tutorial](./WORKFLOW.md) takes you through some of the basic steps.
 
 [The more interesting](./COWS_PIGS_PEOPLE.md) tutorial takes you through some multi-crystal analysis.
+
+[An even more interesting](./MULTI_LATTICE.md) tutorial which looks at multiple lattices.
