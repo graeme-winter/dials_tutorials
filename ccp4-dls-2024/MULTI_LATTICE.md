@@ -170,8 +170,6 @@ At this point you can also select "view in crystal frame" to see how the two lat
 dials.report indexed.expt indexed.refl
 ```
 
-[Included here](./dials-index-report.html)
-
 Allows the number of reflections indexed on each lattice as a function of rotation angle to be inspected - clearly both lattices are present throughout the data set.
 
 ## Continue Processing
