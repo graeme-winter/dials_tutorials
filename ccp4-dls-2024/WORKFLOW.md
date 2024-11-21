@@ -1,4 +1,4 @@
-# Processing in Detail: Simple Insulin to Learn Workflow (CCP4 / APS 2024)
+# Processing in Detail: Simple Insulin to Learn Workflow (CCP4 / DLS 2024)
 
 ## Introduction
 
