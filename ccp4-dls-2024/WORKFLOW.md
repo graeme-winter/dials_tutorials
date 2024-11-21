@@ -17,7 +17,7 @@ If you are running at home on Linux or macOS then you should be able to reproduc
 If you are at the workshop then the data are already on disk at:
 
 ```
-/opt/xtal/Tutorials/dials/WORKFLOW
+/dls/i04/data/2024/mx39148-1/tutorial_data/workflow
 ```
 
 So replace `../data` or whatever with that. If you are doing this on your own computer, or you are at home, or not part of the workshop then you need to follow these instructions.
