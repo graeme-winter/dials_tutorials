@@ -209,7 +209,7 @@ Unlike the simple workflow example, and similarly to the [cows, pigs and people]
 dials.cosym integrated.expt integrated.refl
 ```
 
-Here we find that the symmetry is P4/mmm (i.e. P13212 or similar) and can proceed to scaling the data:
+Here we find that the symmetry is P4/mmm (i.e. P43212 or similar) and can proceed to scaling the data:
 
 ```
 dials.scale symmetrized.expt symmetrized.refl
