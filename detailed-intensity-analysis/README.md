@@ -326,4 +326,4 @@ Here we are iterating through the experiments and selecting the reflections whic
 
 ## Moving On
 
-There is far more you can do from here, but this shows the essence of working with the data files in DIALS.
+There is far more you can do from here, but this shows the essence of working with the data files in DIALS. For convenience the [full script is included](./rachel_example.py).
