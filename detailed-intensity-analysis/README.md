@@ -237,3 +237,54 @@ for j, expt in enumerate(expts):
 ```
 
 This is commented and can run as it is, to tell you a few things about each of the 12 data sets, but here I will break it down some more to discuss what's what.
+
+### Imports
+
+The imports at the top of the file.
+
+```python
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentList
+from dials.algorithms.scaling.Ih_table import map_indices_to_asu
+```
+
+These are importing:
+
+- fundamental data types for working with DIALS data: `flex` arrays and experiment models
+- an example algorithm (there are a great many) pulled from part of the scaling code
+
+As a warning: sometimes these things don't seem immediately obvious, because _they are not_ - there is much which is weird and idiosyncratic in the DIALS code base. For the record, `flex` arrays fit in the same spot as e.g. `numpy` arrays and you can cheaply map from one to another with `flumpy` (a document for another day.)
+
+### Reading and Filtering Data
+
+The reading of the data files happens in:
+
+```python
+expts = ExperimentList.from_file("scaled.expt")
+refls = flex.reflection_table.from_file("scaled.refl")
+```
+
+You can work straight from here, but this will include some data we probably don't want so we filter out the good stuff with:
+
+```python
+refls = refls.select(refls.get_flags(refls.flags.scaled))
+refls = refls.select(~refls.get_flags(refls.flags.bad_for_scaling, all=False))
+```
+
+This selects the data that are flagged as _scaled_ then removes the ones which are bad for scaling by selecting only those which are _not_ bad for scaling (`~` is a negation.) At this point, we have:
+
+- all our experiments from the data set
+- all the reflections which belong to those experiments
+
+So, let's do something useful.
+
+### Something Useful 1: Adding New Columns
+
+One of the great things about reflection tables is being able to add new columns with derived information. Here, we want to e.g. compute the I/σ(I) for data sets for each experiment, and work out the average multiplicity of the data: this involves working out the reduced Miller index for all the reflections:
+
+```python
+space_group = expts[0].crystal.get_space_group()
+refls["asu_miller_index"] = map_indices_to_asu(refls["miller_index"], space_group)
+```
+
+Of course, this assumes that all the data have the same space group... but we can assume that for now.
