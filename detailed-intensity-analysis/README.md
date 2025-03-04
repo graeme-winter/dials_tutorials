@@ -287,4 +287,43 @@ space_group = expts[0].crystal.get_space_group()
 refls["asu_miller_index"] = map_indices_to_asu(refls["miller_index"], space_group)
 ```
 
-Of course, this assumes that all the data have the same space group... but we can assume that for now.
+Of course, this assumes that all the data have the same space group... but we can assume that for now. This creates a new column in our reflection table called `asu_miller_index` that we can treat the same way as any other column (even though, in this case, the column is a column of _vectors_.)
+
+### Looking at Experiments
+
+One of the things we may want to do is printing all the unit cells, even though we could do that with `dials.show` as above. In that case we would only need the experiments, and would iterate through them with e.g.:
+
+```python
+for j, expt in enumerate(expts):
+    xtal = expt.crystal
+    cell = xtal.get_unit_cell().parameters()
+    space_group = expt.crystal.get_space_group()
+
+    print(f"For experiment {j} the cell is {cell} with space group {space_group}")
+```
+
+This is not interesting, but starts to show how you could explore: putting a `help(expt)` or `help(xtal)` in here will allow you to probe the models in a friendly environment. More usefully though we are supposed to be working with the intenities...
+
+### Working with Intensities
+
+To access the intensities for each experiment involves selecting the ones with the correct `id` value in the column:
+
+```python
+for j, expt in enumerate(expts):
+    data = refls.select(refls["id"] == j)
+
+    uniq = set(data["asu_miller_index"])
+
+    i = data["intensity.scale.value"] / data["inverse_scale_factor"]
+    s = flex.sqrt(data["intensity.scale.variance"]) / data["inverse_scale_factor"]
+    i_s = i / s
+    
+    print(f"For experiment {j} there are {data.size()} reflections")
+    print(f" of which {len(uniq)} are unique with average I/σ(I) of {flex.mean(i_s)}")
+```
+
+Here we are iterating through the experiments and selecting the reflections which belong to each. We can then take the intensities and variances and correct them as done in the scaling, taking the `sqrt` to get the standard deviation - the `flex` array `i_s` contains the I/σ(I) value for each observation, so printing the mean is simple.
+
+## Moving On
+
+There is far more you can do from here, but this shows the essence of working with the data files in DIALS.
