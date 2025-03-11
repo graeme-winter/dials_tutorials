@@ -2,13 +2,13 @@
 
 ## Data
 
-To process the data locally using DIALS you will need a copy of the dataset on your computer. If you do not have it already you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
+To process the data locally using DIALS you will need a copy of the dataset on your computer. If you do not have it already you can download it from [Zenodo](https://zenodo.org/records/14541394/files/zinc_K_edge_data_images_1-800.tar?download=1).
 
 ## Summary
 
-We will start by looking at a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1). The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details provided alongside the images in the file `ADH4_data_info.pdf`.
+We will work on a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1), with thanks to Prof. Dave Lawson for providing the data set. The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details about the data set [here](https://zenodo.org/records/14541394)).
 
-First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep the local PCs free to simultaneously try out DIALS data processing using the command line.
+First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep your local computer free to simultaneously try out DIALS data processing using the DUI2 graphical user interface.
 
 Once you have completed the "manual" processing, you can compare results with the xia2 job. Are there any differences? Which job has better statistics?
 
