@@ -10,7 +10,7 @@ We will work on a data set recorded from crystals of the enzyme tetrahydroalston
 
 First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep your local computer free to simultaneously try out DIALS data processing using the DUI2 graphical user interface.
 
-Once you have completed the "manual" processing, you can compare results with the xia2 job. Are there any differences? Which job has better statistics?
+Once you have completed the interactive processing, you can compare results with the xia2 job. Are there any differences? Which job has better statistics?
 
 ## Processing with xia2 on CCP4 Cloud
 
@@ -23,15 +23,31 @@ There's no need to set any advanced options, just select "Run". Make sure the jo
 > [!WARNING]
 > Running xia2 in CCP4 Cloud requires you first to upload the images to Cloud, so it hasn't been a very popular option in the past. You are more likely to come across xia2 from autoprocessing results at the synchrotron, or by running xia2 locally through ccp4i2 or at the command line. Recently however, uploading images was made easier if you (or your lab) use the Globus file transfer platform, where CCP4 Cloud has an endpoint. However, image data is large and will eventually be deleted from Cloud to save space. So don't consider CCP4 Cloud as a backup solution for your diffraction data!
 
-## Setting up DIALS processing
+## Setting up processing with DUI
 
-Now we will process the images using the DIALS command line. In a terminal with the CCP4 environment sourced, first change to a directory where you want to do the processing (we recommend processing in a different directory from the images themselves):
+Now we will process the images with DIALS via DUI. While it is possible to start DUI from either ccp4i2 or CCP4 Cloud, _this is not recommended!_ The problem is that when DUI is started from one of the CCP4 GUIs, it is not easy to restart DUI from where you left off if the program exists. If DUI is started from a terminal with the CCP4 environment sourced, then it can manage its own history and pick up from a previously unfinished job.
+
+Opening a command line (terminal) window with the CCP4 environment sourced differs by operating system. Please ask for help if you are unsure how to do this. Once it is done, first change to a directory where you want to do the processing (we recommend processing in a different directory from the images themselves), then start `dui2`. For example, using BASH on Linux or Mac:
 
 ```bash
 cd ~
-mkdir ADH4-dials
-cd ADH4-dials
+mkdir THAS1-dials
+cd THAS1-dials
+dui2
 ```
+
+on Windows
+
+```console
+cd %USERPROFILE%
+mkdir THAS1-dials
+cd THAS1-dials
+dui2
+```
+
+Once the program starts you should see something like this:
+
+![The DUI window at start up](./images/dui-start.png "DUI")
 
 ## Importing the images
 
