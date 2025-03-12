@@ -134,8 +134,8 @@ DUI does not yet contain its own reciprocal lattice viewer. However it is able t
 > [!NOTE]
 > What does middle-button drag do? Try setting "Max Z" to something small, like 5. What does this show you? Align the view down the rotation axis and then click to increase the Max Z value (Use Alt-click to jump in blocks of 100). Can you see how data collection sweeps out a volume of reciprocal space? Can you align the view in a direction that clearly shows the crystal lattice?
 
-> [!NOTE]
-> Sorry, there are bugs in the way buttons are display in CCP4's version of `dials.reciprocal_lattice_viewer`. The controls are functional. but the values are hard to read.
+> [!WARNING]
+> Sorry, there are bugs in the way buttons are displayed in CCP4's version of `dials.reciprocal_lattice_viewer`. The controls are functional. but the values are hard to read.
 
 The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems. Here is a view with a nicely aligned lattice, suggesting that indexing should not be a problem:
 
@@ -144,13 +144,9 @@ The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is t
 
 ## Indexing
 
-Go ahead and run a default `dials.index` job, which will find a $P\ 1$ cell, using the 3D FFT algorithm:
+Click the "index" button to set up a `dials.index` job. By default this will find a $P\ 1$ cell, using the 3D FFT algorithm. This is fine for our purposes, but feel free to experiment with the other settings. If a job goes wrong you can always click back to the `find_spots` node on the history tree and start a new "index" job from that point.
 
-```bash
-dials.index imported.expt strong.refl
-```
-
-It is worth taking a moment to read the log output. The program runs through a few stages:
+It is worth taking a moment to read the output in the "Log" tab once the job completes. The program runs through a few stages:
 
 - Setting up for indexing (calculate `max_cell`, setting resolution limits, mapping spots to reciprocal space and forming the FFT grid)
 - Performing the FFT, searching for real space basis vectors and forming candidate solutions (in this case 50)
@@ -162,32 +158,16 @@ It is worth taking a moment to read the log output. The program runs through a f
   - Increases resolution for the next macrocycle
 - Once the resolution limit includes all reflections the final refined model and reflections are written to the files `indexed.expt` and `indexed.expt`
 
-> [!NOTE]
-> The behaviour of all of these stages can be controlled by parameters given to `dials.index` (remember option switches like `-hhhvv`), but in most cases the defaults suffice.
-
-Now we have a crystal model it is worth looking at the reciprocal lattice again:
-
-```bash
-dials.reciprocal_lattice_viewer indexed.expt indexed.refl
-```
-
-The spots are now coloured according to whether they are indexed or not.
+Now we have a crystal model it is worth looking at the reciprocal lattice again, by launching the `dials.reciprocal_lattice_viewer` from the "Reciprocal lattice" tab. The spots are now coloured according to whether they are indexed or not, although in this case almost all spots are indexed.
 
 > [!NOTE]
 > Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, $a^\star$, $b^\star$ or $c^\star$. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
 
 ## Determining the Bravais lattice
 
-The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ \nd $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices we run:
+The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ \nd $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices click on the "refine bravais settings" button and press "Run"
 
-```bash
-dials.refine_bravais_settings indexed.expt indexed.refl
-```
-
-> [!TIP]
-> Like with `dials.reciprocal_lattice_viewer`, `dials.refine_bravais_settings` has a short form alias: `dials.rbs`
-
-This will enforce the Bravais symmetry of compatible lattices (within some tolerance) and run refinement. The results are printed as a table:
+This will enforce the Bravais symmetry of compatible lattices (within some tolerance) and run refinement. The results are printed as a table at the end of the logfile shown in the "Log" tab:
 
 ```
 Chiral space groups corresponding to each Bravais lattice:
@@ -204,23 +184,20 @@ oP: P222 P2221 P21212 P212121
 |   *      1 |       0      |  0.071 | -/-          |    12000 | aP        | 57.11 102.19 112.18  89.99  89.97  90.01  |   654702 | a,b,c    |
 +------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+----------+
 ```
-The program writes out experimental geometry for all of these solutions (files `bravais_setting_1.expt` to `bravais_setting_5.expt`) but the associated reflections are not written out, as these files are larger and there is no point wasting disk space for the solutions that are not taken on further. The decision of which solution to choose is down to the user, but the program marks solutions deemed acceptable with an asterisk: `*`. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one.
 
-In general, to get appropriately reindexed reflections we should run the `dials.reindex` program, passing the change of basis operator printed in the last column of the table. In this case that operator is just `a,b,c`, which is identity - the reflections come out with the same indices as they go in, so the reindexing step is not necessary in this case. Nevertheless, we show the command here anyway:
+However, within DUI it is easier to see this table in the next step - reindexing. So click on the "reindex" button, and the input pane now shows the same information as the text table, with a recommended solution highlighted.
 
-```bash
-dials.reindex indexed.refl change_of_basis_op=a,b,c
-```
+![The table of Bravais lattice solutions](./images/rbs-table.png "Reindexing options")
+
+The decision of which solution to choose is down to the user, but solutions deemed acceptable are marked with a "Y" in the "Ok" column. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one. So ensure that row is highlighted and then press "Run".
+
+You could now check the crystal model under "Experiments" in the "Report" tab to see that the space group has been set to P\ 2\ 2\ 2$. No attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
 
 ## Refining the solution
 
-We did some refinement during indexing, and again during Bravais lattice determination. Nevertheless, it is still worth running an additional step of refinement using `dials.refine`. This will use a more sophisticated outlier rejection algorithm than before, and it will also refine a "scan-varying" model of the crystal, in which changes to the orientation and unit cell are allowed as a function of the position in the rotation scan. Using the chosen Bravais lattice and our (unnecessarily) reindexed reflections, we type:
+We did some refinement during indexing, and again during Bravais lattice determination. Nevertheless, it is still worth running an additional step of refinement using the program `dials.refine`. This will use a more sophisticated outlier rejection algorithm than before, and it will also refine a "scan-varying" model of the crystal, in which changes to the orientation and unit cell are allowed as a function of the position in the rotation scan. So, click on the "Refine" button and click "Run"
 
-```bash
-dials.refine bravais_setting_5.expt reindexed.refl
-```
-
-From the log you should see that initially 13 parameters are refined during the "scan-static" macrocycle. Then this is followed by a "scan-varying" macrocycle using 37 parameters, where the crystal parameters have been made local to regions of the scan and the model is constructed by smoothing between these points. This more sophisticated model is able to fit the predictions to the data better, and you should see lower RMSDs as a result:
+From the log you should see that initially 13 parameters are refined during the "scan-static" macrocycle. Then this is followed by a "scan-varying" macrocycle using 37 parameters, where the crystal parameters have been made local to regions of the scan and the model is constructed by smoothing between these points. This more sophisticated model is able to fit the predictions to the data better, and you should see lower RMSDs as a result. For example:
 
 ```
 RMSDs by experiment:
@@ -232,22 +209,12 @@ RMSDs by experiment:
 +-------+--------+----------+----------+------------+
 ```
 
-> [!NOTE]
-> The space group selected by `dials.refine_bravais_settings` is $P\ 2\ 2\ 2$; that is, no attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
 
-It useful to look at the way the crystal parameters change during the scan, to make sure there are no unrealistic-looking changes. One way to do that is to use the command:
+It useful to look at the way the crystal parameters change during the scan, to make sure there are no unrealistic-looking changes. Click on the "Report" tab and expand the "Analysis of scan-varying crystal model". You should see plots like these:
 
-```bash
-dials.plot_scan_varying_model refined.expt
-```
+![The scan-varying crystal unit cell parameters](./images/sv-cell.png "Scan-varying cell")
 
-This will produce a pair of plots as `.png` files, which you can open in a viewer. Alternatively, you could run:
-
-```bash
-dials.report refined.expt refined.refl
-```
-
-which will produce an HTML document, `dials.report.html`, containing similar plots as well as lot more information about the current stage of the data processing. This can be opened in any web browser.
+![The scan-varying crystal orientation parameters](./images/sv-orientation.png "Scan-varying orientation")
 
 > [!NOTE]
 > Check that the change in unit cell parameters and orientation angles looks small across the whole scan.
