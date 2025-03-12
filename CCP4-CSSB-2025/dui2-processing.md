@@ -59,7 +59,7 @@ To import the data set, click on the "Open images" button and then navigate to t
 For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just select the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
 >
 
-DUI has not actually done the import yet. To do that you need to click on the "Run" button with the DIALS logo, at the bottom of the window. Once that is completed, in the "Log" tab you should see output that looks like this
+DUI has not actually done the import yet. To do that you need to click on the "Run" button with the DIALS logo, at the bottom of the window. Once that is completed, in the "Log" tab you should see output that looks like this:
 
 
 ```
@@ -96,24 +96,15 @@ Click on the "Image" tab to view the diffraction images using DUI's viewer. You 
 
 There is a horizontal backstop shadow across the images. We could mask this out if we wanted although in this case the rotation axis orientation is aligned with the backstop shadow (this is not shown in the DUI viewer, but you can see it by running the command `dials.image_viewer imported.expt`). Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?).
 
-Nevertheless, if you want to try it you can mask out the shadow by clicking the "apply mask" button and then choosing one of the options (I recommend "Polygon") then clicking in the image to define a mask. Be aware that the mask is not actually defined until you click the DIALS "Run" button! After that the masked region will be displayed in translucent red, like this
+Nevertheless, if you want to try it you can mask out the shadow by clicking the "apply mask" button and then choosing one of the options (I recommend "Polygon") then clicking in the image to define a mask. Be aware that the mask is not actually defined until you click the DIALS "Run" button! After that the masked region will be displayed in translucent red, like this:
 
 ![The backstop mask is shown as a translucent red polygon](./images/backstop-mask.png "Backstop mask")
 
 ## Finding spots
 
-With the image viewer open, select the "Threshold pixels" checkbox. This shows you which pixels the spot-finding algorithm considers to be "strong".
+Click the "find spots" button to move to the next step. There are various parameters that can be adjusted to control the spot-finding algorithm. For Pilatus data sets like this one the default parameters are usually sensible. So, just click the "Run" button to start the job.
 
-> [!NOTE]
-> Do the strong pixels match the position of the diffraction spots? What happens if you modify parameters of the threshold algorithm (like kernel size and gain)? What happens if you select different threshold algorithms?
-
-The default parameters seem pretty good for this data set, so exit the image viewer and run a default spot-finding job:
-
-```bash
-dials.find_spots imported.expt
-```
-
-DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts equally well throughout the scan:
+DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure, in the "Log" tab you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts consistently well throughout the scan:
 
 ```
 Histogram of per-image spot count for imageset 0:
@@ -134,23 +125,21 @@ Histogram of per-image spot count for imageset 0:
 Saved 307302 reflections to strong.refl
 ```
 
+Similar information is available graphically in the "Report" tab. Click on "Analysis of strong reflections" to see the per-image counts. You can also see the details about the experiment geometry by clicking on that heading to expand the box.
+
 ## Viewing the reciprocal lattice
 
-Now we can pass both the experimental geometry file `imported.expt`, and spot file `strong.refl` to `dials.reciprocal_lattice_viewer`:
-
-```bash
-dials.reciprocal_lattice_viewer imported.expt strong.refl
-```
-
-> [!TIP]
-> Using tab completion, if supported by your shell, avoids you having to type out long commands or filenames, like `dials.reciprocal_lattice_viewer`. Even if tab complete does not work, in this case you can use the alias `dials.rlv` instead.
-
-Take some time to explore the controls in the `dials.reciprocal_lattice_viewer`
+DUI does not yet contain its own reciprocal lattice viewer. However it is able to launch `dials.reciprocal_lattice_viewer` for you, from a button in the "Reciprocal lattice" tab. Press that, then take some time to explore the controls in the `dials.reciprocal_lattice_viewer`.
 
 > [!NOTE]
 > What does middle-button drag do? Try setting "Max Z" to something small, like 5. What does this show you? Align the view down the rotation axis and then click to increase the Max Z value (Use Alt-click to jump in blocks of 100). Can you see how data collection sweeps out a volume of reciprocal space? Can you align the view in a direction that clearly shows the crystal lattice?
 
-The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems.
+> [!NOTE]
+> Sorry, there are bugs in the way buttons are display in CCP4's version of `dials.reciprocal_lattice_viewer`. The controls are functional. but the values are hard to read.
+
+The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems. Here is a view with a nicely aligned lattice, suggesting that indexing should not be a problem:
+
+![The aligned reciprocal lattice points](./images/rlv.png "dials.reciprocal_lattice_viewer")
 
 
 ## Indexing
