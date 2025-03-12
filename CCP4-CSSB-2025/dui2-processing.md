@@ -163,6 +163,8 @@ Now we have a crystal model it is worth looking at the reciprocal lattice again,
 > [!NOTE]
 > Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, $a^\star$, $b^\star$ or $c^\star$. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
 
+Back in the DUI main window, switch to the "Image" tab. Now we have crystal model we can switch between displaying shoeboxes for the observed spots, and little "`+`" symbols for the predicted spots (see the "Display info" pull down). At a high enough Zoom level the Miller indices for reflections are also displayed.
+
 ## Determining the Bravais lattice
 
 The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ \nd $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices click on the "refine bravais settings" button and press "Run"
@@ -223,9 +225,7 @@ It useful to look at the way the crystal parameters change during the scan, to m
 
 We now have a model for how the data set evolves over the whole scan. We are ready to take this to integrate every spot, including the weak ones that were not found during spot-finding. Integration is the most resource-intensive part of processing and takes the longest. After starting this job, maybe now is a good time to go check on the progress of the xia2 job running on CCP4 Cloud.
 
-```bash
-dials.integrate refined.expt refined.refl
-```
+Click on the "integrate" button and then "Run" to start a job with default parameters. You can switch to the "Log" tab to follow what stage the program is at.
 
 After predicting reflections, `dials.integrate` starts forming a model to determine how big the measurement boxes should be. This is printed to the log at the lines
 
@@ -240,15 +240,15 @@ The `sigma m` value is the standard deviation of the reflecting range of reflect
 
 After this step, `dials.integrate` will split the processing over as many processors as you have available, first modelling reflection profiles, and then performing the actual integration, using both summation integration and profile fitting methods. There are some summary tables at the end of the log file that are worth a glance, but really we don't have a good idea of the quality of the data set until we do scaling.
 
+Once integration is finished there is new information in the "Report" tab, in the "Analysis of reflection intensities" and "Analysis of reference profiles" sections under "DIALS analysis plots".
+
 ## Determining the crystal symmetry
 
-Now we have integrated reflections we have much more useful data to perform symmetry checks. The program `dials.symmetry` will first check the Laue group (and we hope that this indicates our earlier choice of Bravais lattice is confirmed). Then it will look for potential screw axes by looking for apparent systematic absences:
+Now we have integrated reflections we have much more useful data to perform symmetry checks. The program `dials.symmetry` will first check the Laue group (and we hope that this indicates our earlier choice of Bravais lattice is confirmed). Then it will look for potential screw axes by looking for apparent systematic absences.
 
-```bash
-dials.symmetry integrated.expt integrated.refl
-```
+Click the "symmetry" button and "Run" for default parameters.
 
-This systematic absence information is written to a table:
+The systematic absence information is written to a table in the log:
 
 ```
 +--------------+---------+---------------+--------------+---------------+--------------+-------------------+------------------+
@@ -270,13 +270,9 @@ The scaling program, `dials.scale`, uses algorithms similar to Aimless to fit a 
 - a relative B-factor decay term (accounting roughly for the loss of high resolution reflections caused by radiation damage)
 - an absorption surface (accounting for absorption along the differing path lengths of scattered rays through the crystal volume)
 
-The parameters of these components are adjusted in order to minimise the differences between reflections and their symmetry mates (which ought to have the same intensity). While performing this fit, an error model is also optimised so that the errors associated with the merged intensity for each reflection group is appropriate. We run the program with default options:
+The parameters of these components are adjusted in order to minimise the differences between reflections and their symmetry mates (which ought to have the same intensity). While performing this fit, an error model is also optimised so that the errors associated with the merged intensity for each reflection group is appropriate. We run the program with default options by clicking on the "scale" button and then "Run".
 
-```bash
-dials.scale symmetrized.expt symmetrized.refl
-```
-
-At the end of the job a standard table of merging statistics is printed, parts of which may be familiar to you from "Table 1" of crystallographic structure papers:
+At the end of the log file a standard table of merging statistics is printed, parts of which may be familiar to you from "Table 1" of crystallographic structure papers:
 ```
             -------------Summary of merging statistics--------------
 
@@ -306,24 +302,15 @@ Total unique                                 145885    9107     507
 > [!NOTE]
 > Do the summary statistics look okay? Is there any sign of an anomalous signal?
 
-While the summary table is worth a quick glance, graphical representations of the merging statistics are usually more informative. You can see plots of values against resolution and against image number if you open the file `dials.scale.html` in a web browser.
+While the summary table is worth a quick glance, graphical representations of the merging statistics are usually more informative. You can see plots of values against resolution and against image number in the "Report" tab.
 
 > [!NOTE]
-> Open `dials.scale.html` and look at the plots. What is the main factor determining the usable resolution limit in this case? How does the anomalous signal look?
+> Look at the plots in the "Report" tab. What is the main factor determining the usable resolution limit in this case? How does the anomalous signal look?
 
-Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we could use:
+Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we click on the "merge" button and export `merged.mtz`. However, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that we click on the "export" button instead and click "Run".
 
-```bash
-dials.merge scaled.expt scaled.refl
-```
-
-however, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that:
-
-```bash
-dials.export scaled.expt scaled.refl
-```
-
-produces the file `scaled.mtz`, which we can import into CCP4 Cloud.
+> [!WARNING]
+> The exported MTZ is written in a strange location, in a subdirectory of the directory where you started `dui2`, depending on the job number in the history tree. For example, when I ran it, it appeared in `./run_dui2_nodes/run12/scaled.mtz`.
 
 ## Comparing results with xia2
 
