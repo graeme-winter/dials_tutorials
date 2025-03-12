@@ -38,7 +38,7 @@ dui2
 
 on Windows
 
-```console
+```bat
 cd %USERPROFILE%
 mkdir THAS1-dials
 cd THAS1-dials
@@ -51,29 +51,29 @@ Once the program starts you should see something like this:
 
 ## Importing the images
 
-The first task in data processing with DIALS is to import the images. The program used to do this is unimaginatively named `dials.import`. In common with other `dials.something` commands, running the program without options will print a help message with some usage examples:
+The first task in data processing with DIALS is to import the images. The DUI history tree is already highlighting an incomplete `dials.import` node. To see some help for a node that hasn't yet been run, click on the "Log" tab on the right, but note this help message is relevant mainly for the usage of `dials.import` from the command line, and some of the description might not be relevant for DUI.
 
-```bash
-dials.import
-```
-
-You may have to scroll up to read the full output. If you add the option `-h` to this command you will not only see the help message, but also the structured definitions of the command line parameters that can be passed to the program.
+To import the data set, click on the "Open images" button and then navigate to the directory where the images are located. You then need to click on just one of the CBF images, say `ADH4_M7S9_6_0001.cbf`, and then click "Open". DUI will automatically convert that to a template that matches all the images in the data set.
 
 > [!NOTE]
-> What happens if you pass multiple `h` and `v` characters? Try this out later with other DIALS programs too.
+For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just select the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
+>
 
-Now we are ready to import the images. You can do this by entering the following command, after adjusting the path to the files on your computer:
+DUI has not actually done the import yet. To do that you need to click on the "Run" button with the DIALS logo, at the bottom of the window. Once that is completed, in the "Log" tab you should see output that looks like this
 
-```bash
-dials.import /path/to/images/ADH4_M7S9_6_*.cbf
-```
-
-Note the use of the wildcard `*` character in this command. This is not DIALS syntax, but is expanded by the shell to match every image file in that directory, from `ADH4_M7S9_6_0001.cbf` to `ADH4_M7S9_6_0800.cbf`. What `dials.import` does is read the header of each of these files, checks the diffraction geometry, and determines the relationship between the files. All going well you will see output that looks something like this:
 
 ```
+DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
+DIALS 3.21
+The following parameters have been modified:
+
+input {
+  experiments = <image files>
+}
+
 --------------------------------------------------------------------------------
   format: <class 'dxtbx.format.FormatCBFMiniPilatusDLS6MSN100.FormatCBFMiniPilatusDLS6MSN100'>
-  template: /data/ADH4_data_for_summer_school/ADH4_diffraction_data/ADH4_M7S9_6_####.cbf:1:800
+  template: /data/THAS1/images_1-800/ADH4_M7S9_6_####.cbf:1:800
   num images: 800
   sequences:
     still:    0
@@ -83,24 +83,22 @@ Note the use of the wildcard `*` character in this command. This is not DIALS sy
 Writing experiments to imported.expt
 ```
 
-This tells you that DIALS interprets the 800 images as a single rotation sweep, and writes the diffraction geometry and associated metadata into a new file, `imported.expt`. To get human-readable information from that file try
-
-```bash
-dials.show imported.expt
-```
+This tells you that DIALS interprets the 800 images as a single rotation sweep, and writes the diffraction geometry and associated metadata into a new file, `imported.expt`.
 
 ## Viewing the images
 
-Although we are doing command-line data processing, we should still look at the images! DIALS contains a feature-rich image viewer for this purpose:
-
-```bash
-dials.image_viewer imported.expt
-```
+Click on the "Image" tab to view the diffraction images using DUI's viewer. You can use the mousewheel to zoom (if you have one), or the magnifying glass buttons at the upper right of the window. Click and drag to scroll the image. More options to change the contrast and colour scheme are contained in the "Display info" pull down menu.
 
 > [!NOTE]
-> Take a moment to explore the controls in the image viewer. Can you drag the image around and zoom using the mouse? Can you see the intensity and resolution information for a single pixel? What is your preferred colour scheme and brightness? Can you scroll through and see how the diffraction images change as data collection proceeds? Don't be afraid to play with the controls - nothing you can do here will affect processing of the data set.
+> Look at images at various points in the data set - at the beginning, in the middle, and at the end. Does the crystal diffract well throughout? Are there any other features present alongside the diffraction spots?
 
-There is a horizontal backstop shadow across the images. We could mask this out if we wanted, however looking at the rotation axis orientation using `dials.image_viewer`, we see that this is aligned with the backstop shadow. Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?). So we will not bother to mask the shadow here.
+## Masking the backstop shadow (optional)
+
+There is a horizontal backstop shadow across the images. We could mask this out if we wanted although in this case the rotation axis orientation is aligned with the backstop shadow (this is not shown in the DUI viewer, but you can see it by running the command `dials.image_viewer imported.expt`). Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?).
+
+Nevertheless, if you want to try it you can mask out the shadow by clicking the "apply mask" button and then choosing one of the options (I recommend "Polygon") then clicking in the image to define a mask. Be aware that the mask is not actually defined until you click the DIALS "Run" button! After that the masked region will be displayed in translucent red, like this
+
+![The backstop mask is shown as a translucent red polygon](./images/backstop-mask.png "Backstop mask")
 
 ## Finding spots
 
