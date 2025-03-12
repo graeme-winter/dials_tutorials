@@ -307,10 +307,10 @@ While the summary table is worth a quick glance, graphical representations of th
 > [!NOTE]
 > Look at the plots in the "Report" tab. What is the main factor determining the usable resolution limit in this case? How does the anomalous signal look?
 
-Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we click on the "merge" button and export `merged.mtz`. However, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that we click on the "export" button instead and click "Run".
+Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we click on the "merge" button and export `merged.mtz`. However, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that we click on the "export" button instead and click "Run". Once that is finished, click on the button "Download/save hklout file" to save the file to the directory where you started the processing.
 
 > [!WARNING]
-> The exported MTZ is written in a strange location, in a subdirectory of the directory where you started `dui2`, depending on the job number in the history tree. For example, when I ran it, it appeared in `./run_dui2_nodes/run12/scaled.mtz`.
+> DUI will save the file with the name `scaled` by default. That is, you have to add the extension `.mtz` yourself.
 
 ## Comparing results with xia2
 
