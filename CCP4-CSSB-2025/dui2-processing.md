@@ -189,8 +189,6 @@ oP: P222 P2221 P21212 P212121
 
 However, within DUI it is easier to see this table in the next step - reindexing. So click on the "reindex" button, and the input pane now shows the same information as the text table, with a recommended solution highlighted.
 
-![The table of Bravais lattice solutions](./images/rbs-table.png "Reindexing options")
-
 The decision of which solution to choose is down to the user, but solutions deemed acceptable are marked with a "Y" in the "Ok" column. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one. So ensure that row is highlighted and then press "Run".
 
 You could now check the crystal model under "Experiments" in the "Report" tab to see that the space group has been set to P\ 2\ 2\ 2$. No attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
