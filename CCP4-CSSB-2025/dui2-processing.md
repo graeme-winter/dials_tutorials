@@ -320,4 +320,4 @@ Now import your `scaled.mtz` from DIALS processing, and also follow that with a 
 
 Once both jobs have finished you can open both results windows to compare results side-by-side. Navigate to the "Scaling and merging" section in each case to compare merging statistics from Aimless.
 
-Which job looks better, yours or xia2's? Or does it not matter?
+Which job looks better, yours or xia2's? Or are they about the same?
