@@ -4,7 +4,7 @@ The [simple workflow](./WORKFLOW.md) covered the bases for processing a simple d
 
 ![Image of an apparently single protein crystal](./images/protk-oav.png)
 
-The crystals were reported to be fragile, which we will explore. I should upload these data to Zenodo to allow external folks to follow along...
+The crystals were reported to be fragile, which we will explore. [Data are uploaded here](https://zenodo.org/records/15258418) to allow you to follow along.
 
 ## Start of Processing
 
