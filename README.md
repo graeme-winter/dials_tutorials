@@ -13,3 +13,5 @@ These tutorials are work-in-progress so not "publication quality" yet but hopefu
 [Basic scripting](./scripting/basic_scripting.md)
 
 [Python scripting with DIALS](./python-scripting/python_scripting.md)
+
+[NE-CAT staff and user tutorials, 2025](./necat-2025/README.md)
