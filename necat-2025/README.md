@@ -313,4 +313,169 @@ which introduces a smoothed scan varying unit cell and orientation, to aid in mo
 +-------+--------+----------+----------+------------+
 ```
 
-This is a small but measurable improvement.
+This is a small but measurable improvement. _How_ this is achieved is best visualized by generating the HTML report from the data and opening this:
+
+```bash
+dials.report refined.expt refined.refl
+```
+
+which will include e.g. the scan varying crystal orientation parameters:
+
+![Scan varying orientation](./scan-vary.png)
+
+At the end of refinement you can open the experiment and reflections in either the image viewer or reciprocal lattice viewer to see how the geometry has been improved.
+
+## Integration
+
+Despite being the most computationally expensive part of the whole process, the actual integration with DIALS tells you very little beyond how much work it was to perform. What you can do though is look at the integrated reflections, which really shows why we do all the refinement - the calculated and observed spot positions match up very well:
+
+![Integrated boxes](./integrated.png)
+
+## Symmetry Determination and Scaling
+
+Once we have integrated the data we can analyse both the intensities and the refined unit cell to derive the most likely crystal symmetry - this works in a similar manner to pointless, computing the maximum possible symmetry, testing every operation then combining those which appear consistent with the data to arrive at a conclusion. From `dials.symmetry integrated.ref integrated.expt` you will get:
+
+```console
+Input crystal symmetry:
+Unit cell: (67.2202, 67.1596, 67.1764, 109.42, 109.495, 109.494)
+Space group: P 1 (No. 1)
+Change of basis op to minimum cell: x-y,x-z,x
+Crystal symmetry in minimum cell:
+Unit cell: (67.1596, 67.1764, 67.1916, 109.486, 109.467, 109.42)
+Space group: P 1 (No. 1)
+Lattice point group: I m -3 m (y+z,x+z,x+y)
+
+Overall CC for 20000 unrelated pairs: 0.453
+Estimated expectation value of true correlation coefficient E(CC) = 0.918
+Estimated sd(CC) = 0.697 / sqrt(N)
+Estimated E(CC) of true correlation coefficient from identity = 0.955
+
+--------------------------------------------------------------------------------
+
+Scoring individual symmetry elements
+
++--------------+--------+------+--------+----+---------------+
+|   likelihood |   Z-CC |   CC |      N |    | Operator      |
+|--------------+--------+------+--------+----+---------------|
+|        0.885 |   9.12 | 0.91 | 475958 | ** | 1 |(0, 0, 0)  |
+|        0.198 |   5.15 | 0.52 | 806032 |    | 4 |(1, 1, 0)  |
+|        0.195 |   5.11 | 0.51 | 816162 |    | 4 |(1, 0, 1)  |
+|        0.196 |   5.12 | 0.51 | 818434 |    | 4 |(0, 1, 1)  |
+|        0.873 |   9.03 | 0.9  | 822490 | ** | 3 |(1, 0, 0)  |
+|        0.881 |   9.09 | 0.91 | 819092 | ** | 3 |(0, 1, 0)  |
+|        0.884 |   9.12 | 0.91 | 817624 | ** | 3 |(0, 0, 1)  |
+|        0.873 |   9.02 | 0.9  | 814974 | ** | 3 |(1, 1, 1)  |
+|        0.88  |   9.08 | 0.91 | 408352 | ** | 2 |(1, 1, 0)  |
+|        0.198 |   5.15 | 0.51 | 405844 |    | 2 |(-1, 1, 0) |
+|        0.881 |   9.09 | 0.91 | 408116 | ** | 2 |(1, 0, 1)  |
+|        0.195 |   5.11 | 0.51 | 405426 |    | 2 |(-1, 0, 1) |
+|        0.864 |   8.96 | 0.9  | 443252 | ** | 2 |(0, 1, 1)  |
+|        0.196 |   5.12 | 0.51 | 411448 |    | 2 |(0, -1, 1) |
+|        0.196 |   5.13 | 0.51 | 401876 |    | 2 |(1, 1, 2)  |
+|        0.195 |   5.11 | 0.51 | 408816 |    | 2 |(1, 2, 1)  |
+|        0.197 |   5.13 | 0.51 | 410244 |    | 2 |(2, 1, 1)  |
++--------------+--------+------+--------+----+---------------+
+```
+
+as the list of potential operations then
+
+```console
++-------------------+-----+--------------+----------+--------+--------+------+-------+---------+---------------------+
+| Patterson group   |     |   Likelihood |   NetZcc |   Zcc+ |   Zcc- |   CC |   CC- |   delta | Reindex operator    |
+|-------------------+-----+--------------+----------+--------+--------+------+-------+---------+---------------------|
+| I m -3            | *** |            1 |     3.94 |   9.06 |   5.13 | 0.91 |  0.51 |     0.1 | a+b,a+c,-b-c        |
+| I m m m           |     |            0 |     2.47 |   9.06 |   6.59 | 0.91 |  0.68 |     0.1 | a+b,a+c,-b-c        |
+| R -3 :H           |     |            0 |     2.16 |   9.12 |   6.96 | 0.91 |  0.69 |     0.1 | a-b,b-c,a+b+c       |
+| I 1 2/m 1         |     |            0 |     2.14 |   9.11 |   6.97 | 0.91 |  0.71 |     0   | -a-b,-a-c,-b-c      |
+| R -3 :H           |     |            0 |     2.14 |   9.11 |   6.97 | 0.91 |  0.69 |     0.1 | 2*a+b+c,-a-2*b-c,-c |
+| I 1 2/m 1         |     |            0 |     2.13 |   9.1  |   6.97 | 0.91 |  0.71 |     0   | a+b,-b-c,-a-c       |
+| R -3 :H           |     |            0 |     2.1  |   9.07 |   6.97 | 0.91 |  0.7  |     0.1 | a-c,a+b+2*c,-b      |
+| R -3 :H           |     |            0 |     2.1  |   9.07 |   6.97 | 0.91 |  0.7  |     0   | -a-b-2*c,a+2*b+c,a  |
+| I 1 2/m 1         |     |            0 |     2.06 |   9.04 |   6.98 | 0.9  |  0.71 |     0.1 | a+c,a+b,b+c         |
+| I 4/m m m         |     |            0 |     0.66 |   7.63 |   6.97 | 0.73 |  0.72 |     0.1 | a+b,a+c,-b-c        |
+| I 4/m m m         |     |            0 |     0.65 |   7.63 |   6.97 | 0.73 |  0.72 |     0.1 | a+c,-b-c,a+b        |
+| I 4/m m m         |     |            0 |     0.65 |   7.62 |   6.98 | 0.73 |  0.72 |     0.1 | -b-c,a+b,a+c        |
+| I m -3 m          |     |            0 |     7.25 |   7.25 |   0    | 0.72 |  0    |     0.1 | a+b,a+c,-b-c        |
+| I 4/m             |     |            0 |     0.92 |   8    |   7.08 | 0.73 |  0.72 |     0.1 | a+b,a+c,-b-c        |
+| I 4/m             |     |            0 |     0.92 |   8    |   7.08 | 0.73 |  0.72 |     0.1 | -b-c,a+b,a+c        |
+| I 4/m             |     |            0 |     0.86 |   7.95 |   7.09 | 0.73 |  0.72 |     0.1 | a+c,-b-c,a+b        |
+| P -1              |     |            0 |     2    |   9.12 |   7.12 | 0.91 |  0.72 |     0   | a,b,c               |
+| F m m m           |     |            0 |     0.18 |   7.39 |   7.21 | 0.73 |  0.72 |     0   | -b-c,b-c,2*a+b+c    |
+| F m m m           |     |            0 |     0.18 |   7.38 |   7.21 | 0.73 |  0.72 |     0.1 | -a-c,a+2*b+c,a-c    |
+| F m m m           |     |            0 |     0.13 |   7.35 |   7.22 | 0.73 |  0.72 |     0.1 | a+b,a+b+2*c,a-b     |
+| I 1 2/m 1         |     |            0 |     0.18 |   7.41 |   7.23 | 0.74 |  0.72 |     0   | a+b+c,b-c,-a        |
+| I 1 2/m 1         |     |            0 |     0.17 |   7.4  |   7.23 | 0.74 |  0.72 |     0.1 | c,-a+b,-a-b-c       |
+| I 1 2/m 1         |     |            0 |     0.17 |   7.4  |   7.23 | 0.74 |  0.72 |     0   | b,-2*a-b-c,c        |
+| I 1 2/m 1         |     |            0 |     0.17 |   7.4  |   7.23 | 0.74 |  0.72 |     0   | -b,a+b+2*c,-a       |
+| I 1 2/m 1         |     |            0 |     0.16 |   7.39 |   7.23 | 0.74 |  0.72 |     0.1 | b,a-c,-a-b-c        |
+| I 1 2/m 1         |     |            0 |     0.16 |   7.39 |   7.23 | 0.73 |  0.72 |     0   | -c,-a-2*b-c,-a      |
+| R -3 m :H         |     |            0 |    -0.35 |   7    |   7.35 | 0.73 |  0.72 |     0.1 | a-b,b-c,a+b+c       |
+| R -3 m :H         |     |            0 |    -0.36 |   6.99 |   7.35 | 0.73 |  0.72 |     0.1 | 2*a+b+c,-a-2*b-c,-c |
+| R -3 m :H         |     |            0 |    -0.38 |   6.98 |   7.36 | 0.73 |  0.72 |     0   | -a-b-2*c,a+2*b+c,a  |
+| R -3 m :H         |     |            0 |    -0.39 |   6.98 |   7.36 | 0.73 |  0.72 |     0.1 | a-c,a+b+2*c,-b      |
++-------------------+-----+--------------+----------+--------+--------+------+-------+---------+---------------------+
+
+Best solution: I m -3
+Unit cell: 77.581, 77.581, 77.581, 90.000, 90.000, 90.000
+Reindex operator: a+b,a+c,-b-c
+Laue group probability: 1.000
+Laue group confidence: 0.999
+
++-------------------+--------------------------+
+| Patterson group   | Corresponding MX group   |
+|-------------------+--------------------------|
+| I m -3            | I 2 3                    |
++-------------------+--------------------------+
+```
+
+as the summary of the outcomes and the conclusion - unambiguously I23 or I213 here. The scaling which follows then uses the fact that these symmetry related reflections should have the same intensities to derive corrections for experimental factors such as variations in illuminated volume, beam intensity, absorption and radiation damage.
+
+The scaling is run with `dials.scale symmetrized.expt symmetrized.refl` and generates a lot of output, including:
+
+```console
+Resolution limit suggested from CC½ fit (limit CC½=0.3): 1.61
+```
+
+which can be applied by adding `d_min=1.61` above. The rest of the output can now be explored. The overall "reliability" of the data can be assessed by looking at the ISa:
+
+```console
+Error model details:
+  Type: basic
+  Parameters: a = 0.94288, b = 0.04507
+  Error model formula: σ'² = a²(σ² + (bI)²)
+  estimated I/sigma asymptotic limit: 23.533
+```
+
+This is partly a measure of the stability of the beam and partly a measure of sample quality. At the end you will find the "table 1":
+
+```console
+            -------------Summary of merging statistics--------------
+
+                                             Overall    Low     High
+High resolution limit                           1.61    4.37    1.61
+Low resolution limit                           54.86   54.89    1.64
+Completeness                                  100.0   100.0   100.0
+Multiplicity                                   40.6    40.8    41.2
+I/sigma                                        15.2    84.9     0.2
+Rmerge(I)                                     0.117   0.047   8.953
+Rmerge(I+/-)                                  0.116   0.046   8.907
+Rmeas(I)                                      0.118   0.048   9.064
+Rmeas(I+/-)                                   0.119   0.047   9.124
+Rpim(I)                                       0.018   0.007   1.408
+Rpim(I+/-)                                    0.026   0.010   1.975
+CC half                                       1.000   1.000   0.128
+Anomalous completeness                        100.0   100.0   100.0
+Anomalous multiplicity                         21.2    23.0    21.3
+Anomalous correlation                         0.026  -0.048   0.008
+Anomalous slope                               0.520
+dF/F                                          0.050
+dI/s(dI)                                      0.576
+Total observations                           414932   22907   21310
+Total unique                                  10221     561     517
+```
+
+More detailed reporting can be found by opening `dials.scale.html`.
+
+## Damage Analysis
+
+Finally, the presence or absence of radiation damage can be explored by looking at the scaled data with `dials.damage_analysis scaled.expt scaled.refl`. This generates a number of useful statistics which can be used to tension data completeness / multiplicity and the presence of damage. Open `dials.damage_analysis.html` for more info.
