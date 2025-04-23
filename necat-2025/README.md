@@ -224,3 +224,93 @@ At this stage the "too long, didn't read" script above steps straight into the s
 
 ## Optional Aside: Determine Bravais Symmetry
 
+We can proceed to process the data just fine with a triclinic lattice (i.e. in P1) but sometimes things work better if you assign the correct symmetry. Maybe you know this in advance, but if you don't you can run `dials.refine_bravais_settings` to consider which lattices are consistent with this cell, and how well the data refine with that constraint applied. Here we will run
+
+```bash
+dials.refine_bravais_settings indexed.expt indexed.refl
+```
+
+which will test all the possible symmetries: since this is cubic insulin there are _a lot_:
+
+```console
+Selected 36000 / 71205 reflections for calculation
+Chiral space groups corresponding to each Bravais lattice:
+aP: P1
+oF: F222
+oI: I222 I212121
+tI: I4 I41 I422 I4122
+hR: R3:H R32:H
+cI: I23 I213 I432 I4132
+mI: I2
++------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
+|   Solution |   Metric fit |   rmsd | min/max cc   |   #spots | lattice   | unit_cell                                 |   volume | cb_op             |
+|------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------|
+|   *     22 |       0.0633 |  0.03  | 0.812/0.949  |    33651 | cI        | 77.65  77.65  77.65  90.00  90.00  90.00  |   468141 | b+c,a+c,a+b       |
+|   *     21 |       0.0633 |  0.03  | 0.876/0.878  |    33650 | hR        | 109.81 109.81  67.24  90.00  90.00 120.00 |   702104 | a+2*b+c,-b+c,a    |
+|   *     20 |       0.0633 |  0.03  | 0.812/0.813  |    33559 | hR        | 109.80 109.80  67.23  90.00  90.00 120.00 |   701990 | a+b+2*c,a-c,b     |
+|   *     19 |       0.0633 |  0.03  | 0.460/0.949  |    33583 | tI        | 77.64  77.64  77.61  90.00  90.00  90.00  |   467781 | b+c,a+c,a+b       |
+|   *     18 |       0.0633 |  0.029 | 0.530/0.949  |    33490 | oF        | 77.60 109.76 109.79  90.00  90.00  90.00  |   935082 | a+b,-a+b,a+b+2*c  |
+|   *     17 |       0.053  |  0.03  | 0.836/0.838  |    33848 | hR        | 109.86 109.86  67.24  90.00  90.00 120.00 |   702757 | 2*a+b+c,-a+b,c    |
+|   *     16 |       0.0596 |  0.03  | 0.468/0.851  |    33690 | tI        | 77.65  77.65  77.63  90.00  90.00  90.00  |   468054 | a+b,b+c,a+c       |
+|   *     15 |       0.0596 |  0.029 | 0.499/0.847  |    33693 | tI        | 77.60  77.60  77.64  90.00  90.00  90.00  |   467553 | a+c,a+b,b+c       |
+|   *     14 |       0.0596 |  0.029 | 0.847/0.949  |    33680 | oI        | 77.60  77.61  77.63  90.00  90.00  90.00  |   467504 | a+b,a+c,-b-c      |
+|   *     13 |       0.0596 |  0.029 | 0.949/0.949  |    33557 | mI        | 77.59  77.58  77.62  90.00  90.01  90.00  |   467230 | -a-c,-a-b,b+c     |
+|   *     12 |       0.0633 |  0.029 | 0.550/0.550  |    33491 | mI        | 67.21 109.79  67.22  90.00 109.48  90.00  |   467551 | -b,a+b+2*c,-a     |
+|   *     11 |       0.046  |  0.028 | 0.831/0.832  |    33251 | hR        | 109.72 109.72  67.23  90.00  90.00 120.00 |   700949 | b-c,-a+c,a+b+c    |
+|   *     10 |       0.0532 |  0.029 | 0.444/0.851  |    33603 | oF        | 77.62 109.76 109.83  90.00  90.00  90.00  |   935725 | -a-c,-a+c,a+2*b+c |
+|   *      9 |       0.0532 |  0.028 | 0.851/0.851  |    33724 | mI        | 77.59  77.60  77.62  90.00  90.03  90.00  |   467326 | a+b,a+c,-b-c      |
+|   *      8 |       0.046  |  0.027 | 0.444/0.444  |    33344 | mI        | 67.19 109.71  67.23  90.00 109.50  90.00  |   467117 | b,a-c,-a-b-c      |
+|   *      7 |       0.053  |  0.029 | 0.520/0.520  |    33849 | mI        | 67.22 109.86  67.25  90.00 109.47  90.00  |   468227 | -c,-a-2*b-c,-a    |
+|   *      6 |       0.0283 |  0.028 | 0.484/0.847  |    34042 | oF        | 77.63 109.67 109.78  90.00  90.00  90.00  |   934665 | b+c,-b+c,2*a+b+c  |
+|   *      5 |       0.0331 |  0.028 | 0.530/0.530  |    33648 | mI        | 67.18 109.75  67.24  90.00 109.50  90.00  |   467307 | c,-a+b,-a-b-c     |
+|   *      4 |       0.0283 |  0.028 | 0.847/0.847  |    34022 | mI        | 77.58  77.63  77.59  90.00  90.06  90.00  |   467294 | -a-b,-b-c,a+c     |
+|   *      3 |       0.0155 |  0.027 | 0.555/0.555  |    33816 | mI        | 67.19 109.63  67.21  90.00 109.47  90.00  |   466787 | a,-b+c,-a-b-c     |
+|   *      2 |       0.0245 |  0.028 | 0.484/0.484  |    34031 | mI        | 67.19 109.79  67.20  90.00 109.42  90.00  |   467512 | -c,2*a+b+c,-b     |
+|   *      1 |       0      |  0.027 | -/-          |    33897 | aP        | 67.19  67.17  67.16 109.42 109.47 109.49  |   233471 | a,b,c             |
++------------+--------------+--------+--------------+----------+-----------+-------------------------------------------+----------+-------------------+
+* = recommended solution
+```
+
+The correct lattice is cI, which has quite a number of compatible sub-lattices, which have a wide range of different reindexing operations. In addition to the quality of the metric fit, there is also a hint about the actual crystal symmetry derived from looking at the symmetry operations implied by that lattice - the found spot intensities are transformed by each symmetry element, and the lowest and highest correlations with the original data assessed. This gives a maximum and minimum correlation coefficient - if these are both high the solution is probably good, but if one is low it may be a lower symmetry option is better. This can be helpful as an early diagnostic for pseudosymmetry.
+
+In most cases you won't get any surprises!
+
+If you want to use a result from this you will find that the experiment is already reindexed e.g. `bravais_setting_22.expt` for cI, but you will need to manually apply the reindexing operation (ed: check that this is actually _true_ because `change_of_basis_op=auto` may work?) with e.g.:
+
+```bash
+dials.reindex indexed.refl change_of_basis_op=b+c,a+c,a+b
+```
+
+which will output the data as `reindexed.refl` to be used in the subsequent refinement step. For this tutorial though I will assume you have not done this, and will decide the symmetry later.
+
+## Refinement
+
+At the end of indexing the static refinement gave R.M.S. deviations of:
+
+```console
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |  36000 |  0.27885 |  0.25813 |     0.2302 |
++-------+--------+----------+----------+------------+
+```
+
+These are pretty good, but probably not as good as we can make them because in real life the unit cell will be changing slightly and the crystal orientation will usually wobble a little. We improve on this with `dials.refine`:
+
+```bash
+dials.refine indexed.expt indexed.refl
+```
+
+which introduces a smoothed scan varying unit cell and orientation, to aid in modelling the positions of the diffraction spots. In some cases the difference is modest, in others substantial. The key outcome from this is shown in the improved R.M.S. deviations, to:
+
+```console
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |  52901 |  0.21336 |  0.18773 |    0.13341 |
++-------+--------+----------+----------+------------+
+```
+
+This is a small but measurable improvement.
