@@ -103,4 +103,113 @@ At this point simply playing will be useful, but you can learn some more by redu
 
 ![Spot finder view](./spot-finder-view.png)
 
-we will come back to this in a minute. Right now, take a few minutes to play with the settings and decide how best _you_ like to look at the images.
+we will come back to this in a minute. Right now, take a few minutes to play with the settings and decide how best _you_ like to look at the images. Also play with the mouse wheel: you can zoom and pan, which is great for looking at itty bitty little spots.
+
+## An Aside: Files
+
+DIALS creates two principal file types:
+
+- experiment files called `something.expt`
+- reflection files called `something.refl`
+
+"Experiment" in DIALS has a very specific meaning - the capturing of data from one set of detector, beam, goniometer and crystal - so if you have two scans from one crystal this is two experiments, if you have two lattices on one data set this is two experiments. In most cases you can ignore this distinction though.
+
+Usually the output filenames will correspond to the name of the DIALS program that created them e.g. `indexed.refl` and `indexed.expt` from `dials.index`. The only deviations from this are on import (see below) where we are only reading experiment models and spot finding where we find _strong_ reflections so write these to `strong.refl` - and we create no models so (by default) there is no output experiment file.
+
+At any time you can _look_ at these files with `dials.show` which will summarise the content of the files to the terminal.
+
+## Spot Finding
+
+Mostly the spot finding is automatic, assuming you do not have either very special beam characteristics or an experimental detector (neither apply for us here at NE-CAT): `dials.find_spots imported.expt`. Now you're computer's fans will spin up - this is one of the more computationally expensive steps.
+
+After a little while you will see the spot finder summary which looks like this:
+
+```console
+Extracted 115807 spots
+Removed 43692 spots with size < 3 pixels
+Removed 3 spots with size > 1000 pixels
+Calculated 72112 spot centroids
+Calculated 72112 spot intensities
+Filtered 71205 of 72112 spots by peak-centroid distance
+
+Histogram of per-image spot count for imageset 0:
+71205 spots found on 1800 images (max 1382 / bin)
+              *****                         ******* *       
+         ************                   ****************** *
+************************ ****** **  ************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+************************************************************
+1                         image                         1800
+
+--------------------------------------------------------------------------------
+Saved 71205 reflections to strong.refl
+```
+
+This shows an ASCII art histogram of the spots / rotation angle. If you have a full turn of data you should hopefully get back to where you started. Already a lot of pathologies can be spotted at this stage, but this is boring data so there is nothing fun to see. You can now also look at the spot finding results in the image viewer to get a sense of what it has done, with:
+
+```bash
+dials.image_viewer imported.expt strong.refl
+```
+
+Which should look like:
+
+![Spots found view](./spots-found.png)
+
+In the general sense you can look at _any_ `.expt` and `.refl` combo in the image viewer. There are other views to consider as well.
+
+## The Reciprocal Lattice
+
+While the image viewer is useful for individual or small numbers of frames, to look at the data set as a whole we can look at where these spots map to in reciprocal space - this is also an _excellent_ verification of your experimental geometry. Run: `dials.reciprocal_lattice_viewer imported.expt strong.refl` to see:
+
+![Reciprocal lattice view](./reciprocal-lattice-0.png)
+
+This shows where the spots are in reciprocal space: the further away from the centre of the view, the higher the resolution. If you have anisotropy it will be evident here, as will ice rings as they form spherical shells. For us here we have a fairly spherical fuzzy blob with a really obvious ring in - this is the inter-module gap on the detector. You can move this view around to get a feel for the lattice. With some fidding with the mouse you can see the lattice planes nicely:
+
+![Reciprocal view 1](./reciprocal-lattice-1.png)
+
+The lattice lines are still a little squiggly because we have not refined the geometry yet, but the single lattice is clear. For the record I usually use this as either an education tool or for diagnostics, either beamline / instrumentation or working out why the data are not processing well.
+
+## Indexing
+
+The next useful step in processing is indexing: in DIALS this only worries about assigning a triclinic model by default though you can enforce symmetry if you know it (though it does not make that much difference).
+
+```bash
+dials.index imported.expt strong.refl
+```
+
+and some time will pass and a lot of words and numbers will be printed. Only really the stuff at the end matters:
+
+```console
+RMSDs by experiment:
++-------+--------+----------+----------+------------+
+|   Exp |   Nref |   RMSD_X |   RMSD_Y |     RMSD_Z |
+|    id |        |     (px) |     (px) |   (images) |
+|-------+--------+----------+----------+------------|
+|     0 |  36000 |  0.27885 |  0.25813 |     0.2302 |
++-------+--------+----------+----------+------------+
+
+Refined crystal models:
+model 1 (68909 reflections):
+Crystal:
+    Unit cell: 67.1980(14), 67.1782(14), 67.1619(13), 109.4179(3), 109.4693(3), 109.4854(4)
+    Space group: P 1
+    U matrix:  {{-0.1560,  0.2049,  0.9663},
+                {-0.1068, -0.9760,  0.1897},
+                { 0.9820, -0.0736,  0.1742}}
+    B matrix:  {{ 0.0149,  0.0000,  0.0000},
+                { 0.0053,  0.0158,  0.0000},
+                { 0.0091,  0.0091,  0.0182}}
+    A = UB:    {{ 0.0076,  0.0120,  0.0176},
+                {-0.0050, -0.0137,  0.0035},
+                { 0.0158,  0.0004,  0.0032}}
++------------+-------------+---------------+-------------+
+|   Imageset |   # indexed |   # unindexed |   % indexed |
+|------------+-------------+---------------+-------------|
+|          0 |       68909 |          2294 |        96.8 |
++------------+-------------+---------------+-------------+
+```
