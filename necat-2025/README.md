@@ -213,3 +213,14 @@ Crystal:
 |          0 |       68909 |          2294 |        96.8 |
 +------------+-------------+---------------+-------------+
 ```
+
+There are two major pieces of information here: the fraction of reflections which are indexed (anything more than 90% counts as "all of them" in most cases) and the R.M.S. deviation between the observed and calculated spot positions as part of the indexing in refinement. At this stage we are assuming a single orientation matrix, not accounting for any crystal slippage or unit cell variation - the values above represent good results which in turn reflect that this is a single crystal with quite unimodal spot shapes. If the fraction indexed was closer to half, you could have a second lattice or there may be strong ice rings: visualising the indexed and unindexed reflections in the reciprocal lattice viewer is instructive for reassuring yourself that the data are well indexed. In particular, as we will see later, this can be useful when the indexing results are less good.
+
+![Reciprocal lattice 2 - all spots indexed](./reciprocal-lattice-2.png)
+
+![Reciprocal lattice 3 - unindexed spots](./reciprocal-lattice-3.png)
+
+At this stage the "too long, didn't read" script above steps straight into the scan varying refinement step, but at this stage you can also start to explore what the shape of the unit cell is, and assess whether it is likely that the crystal symmetry is higher (in most cases it is). You then also have the opportunity to assign that symmetry in the refinement and later stages which could make the refinement more stable under some circumstances (µED, very low resolution data, narrow sweeps.)
+
+## Optional Aside: Determine Bravais Symmetry
+
