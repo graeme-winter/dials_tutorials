@@ -367,7 +367,7 @@ tells you very little beyond how much work it was to perform. What you can do th
 
 ## Symmetry Determination and Scaling
 
-Once we have integrated the data we can analyse both the intensities and the refined unit cell to derive the most likely crystal symmetry - this works in a similar manner to pointless, computing the maximum possible symmetry, testing every operation then combining those which appear consistent with the data to arrive at a conclusion. From `dials.symmetry integrated.ref integrated.expt` you will get:
+Once we have integrated the data we can analyse both the intensities and the refined unit cell to derive the most likely crystal symmetry - this works in a similar manner to pointless, computing the maximum possible symmetry, testing every operation then combining those which appear consistent with the data to arrive at a conclusion. From `dials.symmetry integrated.refl integrated.expt` you will get:
 
 ```console
 Input crystal symmetry:
