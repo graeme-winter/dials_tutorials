@@ -70,6 +70,10 @@ SPOT_RANGE=1 900
 
 defines what data to use in all processing (`DATA_RANGE=`) and spot finding (`SPOT_RANGE`).
 
+## Running
+
+Type `xds_par`, wait.
+
 ## Results
 
 Review in XDSGUI...
@@ -103,6 +107,23 @@ Review in XDSGUI...
 
 ```console
 INCLUDE_RESOLUTION_RANGE=50 1.7
+```
+
+```console
+ SUBSET OF INTENSITY DATA WITH SIGNAL/NOISE >= -3.0 AS FUNCTION OF RESOLUTION
+ RESOLUTION     NUMBER OF REFLECTIONS    COMPLETENESS R-FACTOR  R-FACTOR COMPARED I/SIGMA   R-meas  CC(1/2)  Anomal  SigAno   Nano
+   LIMIT     OBSERVED  UNIQUE  POSSIBLE     OF DATA   observed  expected                                      Corr
+
+     5.01       14930     658       659       99.8%       4.3%      4.2%    14930   70.37      4.4%    99.9*    44*   1.259     283
+     3.56       25799    1168      1168      100.0%       4.8%      4.7%    25799   63.18      4.9%    99.9*     8    0.999     537
+     2.91       30006    1510      1510      100.0%       8.4%      7.8%    30006   36.01      8.7%    99.9*    -1    0.917     709
+     2.52       38677    1769      1769      100.0%      17.5%     15.8%    38677   19.71     17.9%    99.6*     4    0.897     839
+     2.26       44936    2019      2019      100.0%      32.6%     30.5%    44936   10.79     33.4%    98.7*     2    0.907     961
+     2.06       50437    2253      2253      100.0%      62.1%     60.0%    50437    5.47     63.6%    96.1*     0    0.812    1081
+     1.91       49309    2428      2428      100.0%     137.4%    141.3%    49309    2.00    140.9%    71.6*     1    0.738    1169
+     1.78       52291    2599      2599      100.0%     258.9%    281.0%    52291    0.77    265.6%    30.4*     4    0.670    1253
+     1.68       58297    2796      2796      100.0%     384.7%    428.4%    58297    0.30    394.3%     3.6      1    0.571    1351
+    total      364682   17200     17201      100.0%      11.4%     11.2%   364682   14.60     11.7%    99.9*     3    0.797    8183
 ```
 
 ![Scaling / correction with resolution set](./CORRECT1.png)
