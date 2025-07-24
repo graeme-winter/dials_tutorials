@@ -60,6 +60,12 @@ To keep things simple first look at a _boring_ data set: `insulin_042225_15_1_00
 dials.import ../insulin_042225_15_1_00*cbf
 ```
 
+However to expedite the processing which follows, i.e. make it quicker, you can import only _a bit_ of the data and work on that with:
+
+```bash
+dials.import ../insulin_042225_15_1_00*cbf image_range=1,300
+```
+
 In this case it will show:
 
 ```console
@@ -73,8 +79,8 @@ input {
 
 --------------------------------------------------------------------------------
   format: <class 'dxtbx.format.FormatCBFMiniEiger.FormatCBFMiniEiger'>
-  template: /home/graeme/data/necat-e/insulin-2025-04-22/insulin_042225_15/insulin_042225_15_1_######.cbf:1:1800
-  num images: 1800
+  template: /home/graeme/data/necat-e/insulin-2025-04-22/insulin_042225_15/insulin_042225_15_1_######.cbf:1:300
+  num images: 300
   sequences:
     still:    0
     sweep:    1
@@ -83,7 +89,7 @@ input {
 Writing experiments to imported.expt
 ```
 
-This is printed to the screen but also written to `dials.import.log` - this is helpful when trying to work out what happened later on. Here we see we found 1,800 images forming a single sweep - consistent and therefore reassuring. The most useful things to do now are (i) look at the images and (ii) find spots. Looking at the images is easy enough:
+If you do this, some of the numbers below will be a bit different but the flow will be the same. This is printed to the screen but also written to `dials.import.log` - this is helpful when trying to work out what happened later on. Here we see we found 1,800 images forming a single sweep - consistent and therefore reassuring. The most useful things to do now are (i) look at the images and (ii) find spots. Looking at the images is easy enough:
 
 ```bash
 dials.image_viewer imported.expt
