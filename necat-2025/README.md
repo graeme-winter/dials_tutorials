@@ -144,7 +144,13 @@ At any time you can _look_ at these files with `dials.show` which will summarise
 
 ## Spot Finding
 
-Mostly the spot finding is automatic, assuming you do not have either very special beam characteristics or an experimental detector (neither apply for us here at NE-CAT): `dials.find_spots imported.expt`. Now you're computer's fans will spin up - this is one of the more computationally expensive steps.
+Mostly the spot finding is automatic, assuming you do not have either very special beam characteristics or an experimental detector (neither apply for us here at NE-CAT):
+
+```console
+dials.find_spots imported.expt
+```
+
+Now you're computer's fans will spin up - this is one of the more computationally expensive steps.
 
 After a little while you will see the spot finder summary which looks like this:
 
@@ -367,7 +373,13 @@ tells you very little beyond how much work it was to perform. What you can do th
 
 ## Symmetry Determination and Scaling
 
-Once we have integrated the data we can analyse both the intensities and the refined unit cell to derive the most likely crystal symmetry - this works in a similar manner to pointless, computing the maximum possible symmetry, testing every operation then combining those which appear consistent with the data to arrive at a conclusion. From `dials.symmetry integrated.refl integrated.expt` you will get:
+Once we have integrated the data we can analyse both the intensities and the refined unit cell to derive the most likely crystal symmetry - this works in a similar manner to pointless, computing the maximum possible symmetry, testing every operation then combining those which appear consistent with the data to arrive at a conclusion. From
+
+```console
+dials.symmetry integrated.refl integrated.expt
+```
+
+you will get:
 
 ```console
 Input crystal symmetry:
