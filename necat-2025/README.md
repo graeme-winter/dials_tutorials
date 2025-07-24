@@ -14,6 +14,22 @@ The intent is that the instructions allow you to follow along at your own pace. 
 
 There are also some notes on [processing with XDS](./XDS.md).
 
+## General Advice
+
+To open the HTML reports on Linux, type e.g.
+
+```console
+xdg-open dials.report.html
+```
+
+On macOS, it would be:
+
+```console
+open dials.report.html
+```
+
+These are both equivalent to double clicking on a file in the file browser.
+
 ## Too Long, Didn't read
 
 To be honest most of the time I run this little script then pick through the bones of what was there: if the data are good or OK, this will probably just work:
@@ -222,7 +238,11 @@ Crystal:
 +------------+-------------+---------------+-------------+
 ```
 
-There are two major pieces of information here: the fraction of reflections which are indexed (anything more than 90% counts as "all of them" in most cases) and the R.M.S. deviation between the observed and calculated spot positions as part of the indexing in refinement. At this stage we are assuming a single orientation matrix, not accounting for any crystal slippage or unit cell variation - the values above represent good results which in turn reflect that this is a single crystal with quite unimodal spot shapes. If the fraction indexed was closer to half, you could have a second lattice or there may be strong ice rings: visualising the indexed and unindexed reflections in the reciprocal lattice viewer is instructive for reassuring yourself that the data are well indexed. In particular, as we will see later, this can be useful when the indexing results are less good.
+There are two major pieces of information here: the fraction of reflections which are indexed (anything more than 90% counts as "all of them" in most cases) and the R.M.S. deviation between the observed and calculated spot positions as part of the indexing in refinement. At this stage we are assuming a single orientation matrix, not accounting for any crystal slippage or unit cell variation - the values above represent good results which in turn reflect that this is a single crystal with quite unimodal spot shapes. If the fraction indexed was closer to half, you could have a second lattice or there may be strong ice rings: visualising the indexed and unindexed reflections in the reciprocal lattice viewer is instructive for reassuring yourself that the data are well indexed. In particular, as we will see later, this can be useful when the indexing results are less good. To do this:
+
+```console
+dials.reciprocal_lattice_viewer indexed.expt indexed.refl
+```
 
 ![Reciprocal lattice 2 - all spots indexed](./reciprocal-lattice-2.png)
 
