@@ -355,7 +355,13 @@ At the end of refinement you can open the experiment and reflections in either t
 
 ## Integration
 
-Despite being the most computationally expensive part of the whole process, the actual integration with DIALS tells you very little beyond how much work it was to perform. What you can do though is look at the integrated reflections, which really shows why we do all the refinement - the calculated and observed spot positions match up very well:
+Despite being the most computationally expensive part of the whole process, the actual integration with DIALS
+
+```console
+dials.integrate refined.expt refined.refl
+```
+
+tells you very little beyond how much work it was to perform. What you can do though is look at the integrated reflections, which really shows why we do all the refinement - the calculated and observed spot positions match up very well:
 
 ![Integrated boxes](./integrated.png)
 
