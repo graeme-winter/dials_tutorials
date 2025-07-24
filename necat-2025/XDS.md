@@ -1,6 +1,21 @@
 # Processing with XDS
 
-XDS is a very well established, very quick data processing program. The classic program is used on the command line, though there is also the XDS-GUI. In this tutorial we will run XDS on the command line, then review what was done with the XDS GUI. The program reads a file called `XDS.INP` which contains the instructions as to what to do. We will use `generate_XDS.INP`, a script maintained by Kay Diederichs, to generate the input file, which looks like this:
+XDS is a very well established, very quick data processing program. The classic program is used on the command line, though there is also the XDS-GUI. In this tutorial we will run XDS on the command line, then review what was done with the XDS GUI. There is [documentation on the wiki](https://wiki.uni-konstanz.de/xds/index.php/Main_Page) as well as [formal online documentation](https://xds.mr.mpg.de/html_doc/XDS.html). The program reads a file called `XDS.INP` which contains the instructions as to what to do. We will use `generate_XDS.INP`, a script maintained by Kay Diederichs, to generate the input file.
+
+## Too Long Didn't Read
+
+I am too busy and I don't have time for this:
+
+```console
+generate_XDS.INP "../insulin_042225_15_1_00????.cbf"
+xds_par
+```
+
+This will print _a lot_ of stuff to the output and, if something goes wrong, you will need to read that output. If all goes well, you will need to review the output to decide e.g. on the resolution and explore the "ISa" of your data (which is one of the statistics that encapsulates the "quality" of your data).
+
+## Optional: XDS.INP
+
+The `XDS.INP` file contains some very old and shouty instructions on all they key parameters for processing your data: XDS _does not_ read the image headers (contrast this with DIALS).
 
 ```console
 JOB= XYCORR INIT COLSPOT IDXREF DEFPIX INTEGRATE CORRECT
@@ -68,25 +83,84 @@ DATA_RANGE=1 1800
 SPOT_RANGE=1 900
 ```
 
-defines what data to use in all processing (`DATA_RANGE=`) and spot finding (`SPOT_RANGE`).
+defines what data to use in all processing (`DATA_RANGE=`) and spot finding (`SPOT_RANGE`). Finally, there is:
+
+```console
+INCLUDE_RESOLUTION_RANGE=50 0
+```
+
+which defines what data will be included - this is something we will revisit.
 
 ## Running
 
-Type `xds_par`, wait.
+Type `xds_par`, wait. Maybe not very long, if you are on my laptop 😉 because XDS is very fast. You can also run everything through XDSGUI which allows you to run each step one at a time, review the results then proceed - I will demo this in real time.
 
 ## Results
 
-Review in XDSGUI...
+Review in XDSGUI... this is the easiest way to look at the graphs in the output, and look at where the spots were found. In many respects the process of running XDS is very similar to DIALS, and we can look to find some very similar information.
+
+### Spot Finding
+
+The spot finding looks for spots in the first half of the data set by default, when running with `generate_XDS.INP`. You should see a fairly constant number of spots across the data set - if the spots _vanish_ at some point then reappear your crystal wasn't centred. If it goes down and never comes back that was probably radiation damage.
 
 ![Spot finding](./COLSPOT.png)
 
+### Indexing
+
+The most useful indexing output is in the text, showing the fraction of spots indexed:
+
+```console
+
+ ***** INDEXING OF OBSERVED SPOTS IN SPACE GROUP #   1 *****
+     22729 OUT OF     23157 SPOTS INDEXED.
+        2 REJECTED REFLECTIONS (REASON: OVERLAP)
+      426 REJECTED REFLECTIONS (REASON: TOO FAR FROM IDEAL POSITION)
+ EXPECTED ERROR IN SPINDLE  POSITION     0.207 DEGREES
+ EXPECTED ERROR IN DETECTOR POSITION      0.92 PIXELS
+```
+
+then how well the spot positions match between computed and observed spot positions:
+
+```console
+ ***** DIFFRACTION PARAMETERS USED AT START OF INTEGRATION *****
+
+ REFINED VALUES OF DIFFRACTION PARAMETERS DERIVED FROM     22729 INDEXED SPOTS
+ REFINED PARAMETERS:   AXIS BEAM ORIENTATION CELL
+ STANDARD DEVIATION OF SPOT    POSITION (PIXELS)     0.86
+ STANDARD DEVIATION OF SPINDLE POSITION (DEGREES)    0.18
+ SPACE GROUP NUMBER      1
+ UNIT CELL PARAMETERS     67.963    67.948    67.890 109.448 109.469 109.490
+ REC. CELL PARAMETERS   0.018022  0.018023  0.018037  60.018  60.006  59.993
+ COORDINATES OF UNIT CELL A-AXIS   -10.644     7.175   -66.740
+ COORDINATES OF UNIT CELL B-AXIS    16.835    60.100    26.862
+ COORDINATES OF UNIT CELL C-AXIS    50.448   -44.263    10.238
+ CRYSTAL MOSAICITY (DEGREES)     0.200
+ LAB COORDINATES OF ROTATION AXIS  0.999996 -0.002627 -0.000839
+ DIRECT BEAM COORDINATES (REC. ANGSTROEM)     0.000700    0.001242    1.021241
+ DETECTOR COORDINATES (PIXELS) OF DIRECT BEAM    2107.10   2195.63
+ DETECTOR ORIGIN (PIXELS) AT                     2105.73   2193.20
+ CRYSTAL TO DETECTOR DISTANCE (mm)       150.00
+ LAB COORDINATES OF DETECTOR X-AXIS  1.000000  0.000000  0.000000
+ LAB COORDINATES OF DETECTOR Y-AXIS  0.000000  1.000000  0.000000
+```
+
+This is show in the GUI, which is a little easier, and shows choices for the lattice but by default it works in P1, and we can worry about the real symmetry later. The GUI also shows the number of spots which were indexed and unindexed as a function of frame number, which is probably the most useful graphical output:
+
 ![Indexing](./IDXREF.png)
+
+### Integration
+
+This is where we measure the strength of all the spots and get estimates of the uncertainties, as well as starting to get an idea of how the overall scale of the data changes - this should match with your expectations based on the geometry - a "blocky" crystal should have fairly uniform scales, a plate may have something completely different.
 
 ![Integration](./INTEGRATE.png)
 
+### Scaling
+
+Thinking back to DIALS: in XDS the scaling includes symmetry estimation, and this is the first time we can get a proper idea of the data quality as assessed by the merging statistics.
+
 ![Scaling / correction](./CORRECT0.png)
 
-### CORRECT
+This has the following text output, which gives an idea of the resolution limit:
 
 ```console
  SUBSET OF INTENSITY DATA WITH SIGNAL/NOISE >= -3.0 AS FUNCTION OF RESOLUTION
@@ -105,9 +179,13 @@ Review in XDSGUI...
     total      993374   61463     62439       98.4%      25.9%     25.3%   992706    4.06     26.7%    99.9*     0    0.615   29267
 ```
 
+We can feed this back by adding:
+
 ```console
 INCLUDE_RESOLUTION_RANGE=50 1.7
 ```
+
+to `XDS.INP` then changing the `JOB=` line to `JOB=CORRECT` and rerunning, to give:
 
 ```console
  SUBSET OF INTENSITY DATA WITH SIGNAL/NOISE >= -3.0 AS FUNCTION OF RESOLUTION
