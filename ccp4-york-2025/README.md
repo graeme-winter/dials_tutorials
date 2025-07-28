@@ -6,7 +6,7 @@ Adapted from a [tutorial](https://github.com/graeme-winter/dials_tutorials/blob/
 
 DIALS data processing may be run by automated tools such as `xia2` or interactively on the command line. For this tutorial, we shall start using the latter, to explain the opportunities afforded by the software, then demonstrate how the same may be achieved using `xia2.multiplex`. In any data processing package the workflow requires reading data, finding spots, indexing to get an orientation matrix, refinement, integration and then scaling / correction: DIALS is no different.
 
-This tutorial deviates slightly from the mainstream by _starting_ with data from a number of different crystals, which will show you how to classify data with subtle differences (e.g. presence or absence of a ligand.)
+This tutorial deviates slightly from the mainstream by _starting_ with data from a number of different crystals, which will show you how to classify data with subtle differences (e.g. presence or absence of a ligand, or as in this case different species of insulin.)
 
 ## The Data
 
@@ -16,7 +16,7 @@ All data have symmetry I213 and very similar unit cell constants so you can _try
 
 If you are at the workshop in real life, the data are already in: *CHECK THIS PRIOR TO WORKSHOP AND EDIT PATH*
 
-```
+```console
 /dls/i04/data/2024/mx39148-1/tutorial_data/cows_pigs_people
 ```
 
@@ -24,7 +24,7 @@ so you don't need to download the data - but you'll need to use this path in pla
 
 If you don't already have the data downloaded, you can do this with this script on linux / UNIX:
 
-```
+```bash
 mkdir data
 cd data
 for set in CIX1_1 CIX2_1 CIX3_1 CIX5_1 CIX6_1 CIX8_1 CIX9_1 CIX10_1 CIX11_1 CIX12_1 CIX14_1 CIX15_1 PIX5_1 PIX6_1 PIX7_1 PIX8_1 PIX9_1 PIX10_1 PIX11_1 PIX12_1 PIX13_1 PIX14_1 PIX15_1 PIX16_1 X1_1 X2_1 X3_1 X4_1 X5_1 X6_1 X7_1 X8_1 X9_1 X11_1 X13_1 X14_1 ; do
@@ -59,7 +59,7 @@ In this tutorial, you will be processing a mixture of data sets: 12 each from hu
 
 We will first need to import _all_ the data and proceed through the workflow as far as symmetry determination. Remember to replace `../data` with the actual data path if you are using pre-downloaded data at the CCP4 School! Notice as well that we will be using `dials.cosym` instead of `dials.symmetry`:
 
-```
+```bash
 dials.import ../data/*gz
 dials.find_spots imported.expt
 dials.index imported.expt strong.refl joint=False
@@ -70,7 +70,7 @@ dials.cosym integrated.expt integrated.refl
 
 At this point we have found a common symmetry and indexing setting, and derived an average unit cell:
 
-```
+```console
 Best solution: I m -3
 Unit cell: 77.842, 77.842, 77.842, 90.000, 90.000, 90.000
 Reindex operator: -b-c,a+c,-a-b
@@ -87,7 +87,7 @@ however at this stage we can also start looking at the isomorphism analysis perf
 
 Scaling the data is "succcessful" in that you get results, but the merging stats are pretty poor. Test this out using:
 
-```
+```bash
 dials.scale symmetrized.expt symmetrized.refl
 ```
 
@@ -95,19 +95,19 @@ Looking at the logs you can see the data split (not shown) but it is not obvious
 
 We can however see the different groups if we run `dials.correlation_matrix` - a new tool to run after cosym which helps to look for different isomorphism classes. This is more helpful: using the correlation coefficients to define distances, then using the OPTICS algorithm to define clusters.
 
-```
+```bash
 dials.correlation_matrix symmetrized.expt symmetrized.refl
 ```
 
 _or_
 
-```
+```bash
 dials.correlation_matrix scaled.expt scaled.refl
 ```
 
 The program may take either scaled data, which may be biased but will show clearer clusters, or unscaled data which is less biased but may be more "fuzzy" - you may find you get a clearer signal one way or the other. Regardless of which method you choose, the program will recommend clusters:
 
-```
+```console
 Cluster 0
   Number of datasets: 12
   Completeness: 90.2 %
@@ -131,7 +131,7 @@ but more usefully shows the lattice separation superbly on a pairwise correlatio
 
 Here you can clearly see the three clusters. If `significant_clusters.output=True` is added to the command line, the program will split the data according to the clusters for further analysis:
 
-```
+```console
 -rw-r--r--   1 graeme  staff     528939 14 Oct 14:19 cluster_0.expt
 -rw-r--r--   1 graeme  staff  150001603 14 Oct 14:19 cluster_0.refl
 -rw-r--r--   1 graeme  staff     527726 14 Oct 14:19 cluster_1.expt
@@ -142,7 +142,7 @@ Here you can clearly see the three clusters. If `significant_clusters.output=Tru
 
 These can be scaled as above, e.g. by making a directory for each. The algorithm may leave outlier data sets from inclusion in any cluster, so it is possible only one cluster appears as a result. In this case I merged each cluster separately with:
 
-```
+```bash
 mkdir 0 1 2
 cd 0
 dials.scale ../cluster_0.expt ../cluster_0.refl
@@ -215,7 +215,7 @@ You can also select the lasso tool and highlight only specific datapoints. The a
 
 So far, this has been a manual process which allows you to look closely at your data. A more automated approach to this can be via `xia2.multiplex`[4] which automates much of the process. The input to `xia2.multiplex` are a series of individual integrated data files. `xia2.multiplex` will then automatically call a series of DIALS programs (ie `dials.cosym`, `dials.scale`, `dials.correlation_matrix`) and includes some additional intelligent filtering of datasets. Try running `xia2.multiplex` on this data (NOTE: you may want to make a clean directory as `xia2.multiplex` writes a lot of files!). Note, as we know what the space group is, we will define it as an input parameter to speed up the processing. It will work without this specified, but the cosym step will be slower! 
 
-```
+```bash
 mkdir multiplex
 cd multiplex
 xia2.multiplex ../integrated.expt ../integrated.refl symmetry.space_group=I213
@@ -227,7 +227,7 @@ If you examine the HTML and/or logfile (will be demonstrated for those at the tu
 
 To individually scale and merge the key clusters identified, re-run multiplex with some additional parameters:
 
-```
+```bash
 xia2.multiplex ../integrated.expt ../integrated.refl symmetry.space_group=I213 clustering.output_clusters=True clustering.method=coordinate
 ```
 
@@ -240,4 +240,3 @@ Note that the merging statistics for these additional clusters are available in 
 3. [Brehm-Diederichs algorithm](https://journals.iucr.org/d/issues/2014/01/00/wd5226/)
 4. [xia2.multiplex](https://journals.iucr.org/d/issues/2022/06/00/gm5092/)
 5. [OPTICS](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.OPTICS.html)
-
