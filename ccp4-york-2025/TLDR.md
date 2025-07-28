@@ -16,4 +16,4 @@ dials.export scaled.expt scaled.refl
 dials.merge scaled.expt scaled.refl
 ```
 
-This is only processing 120° of one of the data sets but on my laptop runs in about 12 minutes on my laptop. If you run this _before_ working through the tutorial you can spend the time playing with the viewers and looking at the log files (e.g. `less dials.index.log`) rather than waiting for the individual tasks to complete.
+This is only processing 120° of one of the data sets but on my laptop runs in about 12 minutes. If you run this _before_ working through the tutorial you can spend the time playing with the viewers and looking at the log files (e.g. `less dials.index.log`) rather than waiting for the individual tasks to complete.
