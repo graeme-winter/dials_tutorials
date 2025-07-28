@@ -1,5 +1,7 @@
 # TL;DR
 
+This is a one-file simple script for processing _only one_ data set with DIALS.
+
 ## Script
 
 This is the shortest script for processing the tutorial data with DIALS assuming you have the data in a parent directory:
