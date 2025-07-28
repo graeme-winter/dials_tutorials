@@ -1,5 +1,6 @@
 # Processing 🐮🐷🧑 with DIALS (CCP4 / York 2025)
-Adapted from a [tutorial](https://github.com/graeme-winter/dials_tutorials/blob/main/ccp4-dls-2024/COWS_PIGS_PEOPLE.md) by Graeme Winter
+
+Adapted from a [tutorial](https://github.com/graeme-winter/dials_tutorials/blob/main/ccp4-dls-2024/COWS_PIGS_PEOPLE.md) by Graeme Winter. Please see [workflow summary](./WORKFLOW.md) for details on how to do basic processing with DIALS.
 
 ## Introduction
 
