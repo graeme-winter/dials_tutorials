@@ -5,7 +5,7 @@ Adapted from a [tutorial](https://github.com/graeme-winter/dials_tutorials/blob/
 
 DIALS data processing may be run by automated tools such as `xia2` or interactively on the command line. For this tutorial, we shall start using the latter, to explain the opportunities afforded by the software, then demonstrate how the same may be achieved using `xia2.multiplex`. In any data processing package the workflow requires reading data, finding spots, indexing to get an orientation matrix, refinement, integration and then scaling / correction: DIALS is no different.
 
-This tutorial deviates slightly from the mainstream by _starting_ with data from a number of crystals, first from a single sample type and then from a mixture, which will show you how to classify data with subtle differences (e.g. presence or absence of a ligand.)
+This tutorial deviates slightly from the mainstream by _starting_ with data from a number of different crystals, which will show you how to classify data with subtle differences (e.g. presence or absence of a ligand.)
 
 ## The Data
 
@@ -48,7 +48,7 @@ As mentioned above the flow is to read the data, find spots, index, refine, inte
 - `dials.scale` - correct the data for sample decay, overall scale from beam or illuminated volume and absorption
 - `dials.export` - output processed data for e.g. use in CCP4 or PHENIX
 
-With multiple sweeps from a single crystal, we can assign a single orientation matrix and then use this throughout the processing (the default) - however if you have data from multiple crystals some of the assumptions will break down so we need to (i) tell the software that the crystals _do not_ share a matrix and in the symmetry determination also resolve any indexing ambiguity: we therefore replace `dials.symmetry` with `dials.cosym`.
+With multiple sweeps from a single crystal, we can assign a single orientation matrix and then use this throughout the processing (the default) - however if you have data from multiple crystals some of the assumptions will break down so we need to tell the software that the crystals _do not_ share a matrix and in the symmetry determination also resolve any indexing ambiguity: we therefore replace `dials.symmetry` with `dials.cosym`.
 
 For this tutorial, there is some assumed knowledge of what these different steps in DIALS do. If you are attending the CCP4 School in York, you will have just covered this in a previous session. If you have stumbled across this tutorial outside of that event, you can find additional details on these DIALS steps explained in [this tutorial](https://github.com/graeme-winter/dials_tutorials/blob/main/ccp4-dls-2024/COWS_PIGS_PEOPLE.md)
 
@@ -56,7 +56,7 @@ For this tutorial, there is some assumed knowledge of what these different steps
 
 In this tutorial, you will be processing a mixture of data sets: 12 each from human, bovine and porcine insulin. On a coarse scale they are isomorphous, but obviously deviate from one another at the scale of individual residues: this split is small enough that we could accidentally merge the data from all crystals if we were not careful: let's be careful. But first, let's be ignorant and see how that works out!
 
-We will first need to import _all_ the data and proceed through the workflow as far as symmetry determination. Notice here we will be using `dials.cosym` instead of `dials.symmetry`:
+We will first need to import _all_ the data and proceed through the workflow as far as symmetry determination. Remember to replace `../data` with the actual data path if you are using pre-downloaded data at the CCP4 School! Notice as well that we will be using `dials.cosym` instead of `dials.symmetry`:
 
 ```
 dials.import ../data/*gz
@@ -92,7 +92,7 @@ dials.scale symmetrized.expt symmetrized.refl
 
 Looking at the logs you can see the data split (not shown) but it is not obvious unless you know in advance that there are different crystals here. Take a look at `dials.scale.html` and look at the merging statistics as a function of image / batch number.
 
-We can however see the different groups if we run `dials.correlation_matrix` - a new tool to run after cosym which helps to look for different isomorphism classes. This is rather more helpful: using the correlation coefficients to define distances, then using the OPTICS algorithm to define clusters.
+We can however see the different groups if we run `dials.correlation_matrix` - a new tool to run after cosym which helps to look for different isomorphism classes. This is more helpful: using the correlation coefficients to define distances, then using the OPTICS algorithm to define clusters.
 
 ```
 dials.correlation_matrix symmetrized.expt symmetrized.refl
@@ -152,11 +152,11 @@ dials.scale ../cluster_2.expt ../cluster_2.refl
 cd ..
 ```
 
-Individually the merging statistics from each cluster look far better than the three combined.
+Individually, the merging statistics from each cluster look far better than the three combined.
 
 ## Intensity-Based Clustering
 
-If you open `dials.correlation_matrix.html` and click on the `Data correlation matrices`, you will see four tabs: 
+If you open `dials.correlation_matrix.html` and click on the `Data correlation matrices` tab, you will see four tabs: 
  - Correlation coefficient clustering
  - Cos angle clustering
  - Cosym cluster plots
@@ -212,7 +212,7 @@ You can also select the lasso tool and highlight only specific datapoints. The a
 
 ## Automation
 
-This is a manual process which allows you to look closely at your data. A more automated approach to this can be via `xia2.multiplex`[4] which automates much of the process. The input to `xia2.multiplex` are a series of individual integrated data files. `xia2.multiplex` will then automatically call a series of DIALS programs (ie `dials.cosym`, `dials.scale`, `dials.correlation_matrix`) and includes some additional intelligent filtering of datasets. Try running `xia2.multiplex` on this data (NOTE: you may want to make a clean directory as `xia2.multiplex` writes a lot of files!). Note, as we know what the space group is, we will define it as an input parameter to speed up the processing. It will work without this specified, but the cosym step will be slower! 
+So far, this has been a manual process which allows you to look closely at your data. A more automated approach to this can be via `xia2.multiplex`[4] which automates much of the process. The input to `xia2.multiplex` are a series of individual integrated data files. `xia2.multiplex` will then automatically call a series of DIALS programs (ie `dials.cosym`, `dials.scale`, `dials.correlation_matrix`) and includes some additional intelligent filtering of datasets. Try running `xia2.multiplex` on this data (NOTE: you may want to make a clean directory as `xia2.multiplex` writes a lot of files!). Note, as we know what the space group is, we will define it as an input parameter to speed up the processing. It will work without this specified, but the cosym step will be slower! 
 
 ```
 mkdir multiplex
