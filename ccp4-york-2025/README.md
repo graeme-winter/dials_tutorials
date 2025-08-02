@@ -14,10 +14,10 @@ This tutorial deviates slightly from the mainstream by _starting_ with data from
 
 All data have symmetry I213 and very similar unit cell constants so you can _try_ to merge them together and it will work, but won't give you good results as you will be measuring a mixture of structures.
 
-If you are at the workshop in real life, the data are already in: *CHECK THIS PRIOR TO WORKSHOP AND EDIT PATH*
+If you are at the workshop in real life, the data are already in:
 
 ```console
-/dls/i04/data/2024/mx39148-1/tutorial_data/cows_pigs_people
+/shared/storage/ysblnfs/summerschool/general
 ```
 
 so you don't need to download the data - but you'll need to use this path in place of `../data` - you do not need to follow these instructions here.
@@ -59,8 +59,23 @@ In this tutorial, you will be processing a mixture of data sets: 12 each from hu
 
 We will first need to import _all_ the data and proceed through the workflow as far as symmetry determination. Remember to replace `../data` with the actual data path if you are using pre-downloaded data at the CCP4 School! Notice as well that we will be using `dials.cosym` instead of `dials.symmetry`:
 
+Note: If you are on-site at the tutorial in York, make a new folder and import with dials using this command:
+
 ```bash
-dials.import ../data/*gz
+mkdir multicrystal
+cd multicrystal
+dials.import /shared/storage/ysblnfs/summerschool/general/{CIX,PIX,X}*/*.gz
+```
+
+If you are following along in your own time, make sure you have the path to all the datasets. 
+
+```bash
+dials.import /path/to/your/data/*gz
+```
+
+From here, the steps should be the same regardless of where you are. 
+
+```bash
 dials.find_spots imported.expt
 dials.index imported.expt strong.refl joint=False
 dials.refine indexed.expt indexed.refl
