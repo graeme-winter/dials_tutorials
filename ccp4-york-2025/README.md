@@ -87,13 +87,13 @@ At this point we have found a common symmetry and indexing setting, and derived 
 
 ```console
 Best solution: I m -3
-Unit cell: 77.842, 77.842, 77.842, 90.000, 90.000, 90.000
-Reindex operator: -b-c,a+c,-a-b
+Unit cell: 77.834, 77.834, 77.834, 90.000, 90.000, 90.000
+Reindex operator: -a-c,-a-b,b+c
 Laue group probability: 1.000
 Laue group confidence: 1.000
 Reindexing operators:
--x+y,y,y-z: [2, 3, 5, 10, 11, 13, 14, 15, 16, 18, 19, 20, 21, 22, 27, 34, 35]
-x,y,z: [0, 1, 4, 6, 7, 8, 9, 12, 17, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33]
+x,y,z: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 15, 16, 17, 22, 23, 24, 26, 27, 28, 30, 32, 33, 34]
+x,x-y,x-z: [8, 11, 18, 19, 20, 21, 25, 29, 31, 35]
 ```
 
 however at this stage we can also start looking at the isomorphism analysis performed by cosym, by looking at `dials.cosym.html` - this includes some measure of unit cell isomorphism, but from the dendrogram you can see it does not cleanly split into three categories:
