@@ -1,4 +1,6 @@
-# Processing in Detail: Simple Insulin to Learn Workflow (CCP4 / APS 2024)
+# Processing in Detail: Simple Insulin to Learn Workflow (LCLS SSRL User Meeting 2025)
+
+Note: this is slightly hacked from other schools to work with the virtual desktops provided by SBGrid. There _will_ be errors, please point them out if you see as I can fix and update before someone else hits the same error!
 
 ## Introduction
 
@@ -93,10 +95,10 @@ The starting point for any processing with DIALS is to _import_ the data - here 
 dials.import ../ins10_1.nxs
 ```
 
-will read the metadata from this `NeXus` file and write `imported.expt` from this. For this tutorial I am only processing the first 1200 images so we actually import with:
+will read the metadata from this `NeXus` file and write `imported.expt` from this. For this tutorial I am only processing the first 600 images so we actually import with:
 
 ```
-dials.import ../ins10_1.nxs image_range=1,1200
+dials.import ../ins10_1.nxs image_range=1,600
 ```
 
 It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. The output from importing describes what was found: this should correspond to our expectations.
@@ -111,7 +113,7 @@ input {
 }
 geometry {
   scan {
-    image_range = 1 1200
+    image_range = 1 600
   }
 }
 
@@ -121,8 +123,8 @@ Applying input geometry in the following order:
 
 --------------------------------------------------------------------------------
   format: <class 'dxtbx.format.FormatNXmxDLS16M.FormatNXmxDLS16M'>
-  template: /Users/graeme/data/i04-ins-1MGy/ins10_1.nxs:1:1200
-  num images: 1200
+  template: /Users/graeme/data/i04-ins-1MGy/ins10_1.nxs:1:600
+  num images: 600
   sequences:
     still:    0
     sweep:    1
@@ -186,8 +188,8 @@ Beam centre:
     px: (2121.07,2221.33)
 
 Scan:
-    number of images:   1200
-    image range:   {1,1200}
+    number of images:   600
+    image range:   {1,600}
     epoch:    0
     exposure time:    0
     oscillation:   {0,0.1}
