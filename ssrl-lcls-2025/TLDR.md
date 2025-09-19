@@ -5,7 +5,7 @@
 This is the shortest script for processing the tutorial data with DIALS assuming you have the data in a parent directory:
 
 ```
-dials.import ../ins10_1.nxs image_range=1,1200
+dials.import ../ins10_1.nxs image_range=1,600
 dials.find_spots imported.expt
 dials.index imported.expt strong.refl
 dials.refine indexed.expt indexed.refl

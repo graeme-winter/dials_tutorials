@@ -133,7 +133,7 @@ Applying input geometry in the following order:
 Writing experiments to imported.expt
 ```
 
-You will see that the log file includes the additional commands passed in, which is useful for tracing the processing options used and in this case confirms that we have read ~1200 images. Once you have `imported.expt` you can, if you like, look at the content with `dials.show` as `dials.show imported.expt`. This is a general program in DIALS to allow you to print the current state of models, with output which looks like:
+You will see that the log file includes the additional commands passed in, which is useful for tracing the processing options used and in this case confirms that we have read ~600 images. Once you have `imported.expt` you can, if you like, look at the content with `dials.show` as `dials.show imported.expt`. This is a general program in DIALS to allow you to print the current state of models, with output which looks like:
 
 ```
 DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
