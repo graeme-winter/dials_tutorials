@@ -4,7 +4,7 @@
 
 This is the shortest script for processing the tutorial data with DIALS assuming you have the data in a parent directory:
 
-```
+```bash
 dials.import /shared/data/projects/zenodo/simple_cubic_insulin/ins10_1.nxs image_range=1,600
 dials.find_spots imported.expt
 dials.index imported.expt strong.refl
