@@ -92,13 +92,13 @@ which will generate a HTML html describing the current state of the processing.
 The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
 
 ```
-dials.import ../ins10_1.nxs
+dials.import /shared/data/projects/zenodo/simple_cubic_insulin/ins10_1.nxs
 ```
 
 will read the metadata from this `NeXus` file and write `imported.expt` from this. For this tutorial I am only processing the first 600 images so we actually import with:
 
 ```
-dials.import ../ins10_1.nxs image_range=1,600
+dials.import /shared/data/projects/zenodo/simple_cubic_insulin/ins10_1.nxs image_range=1,600
 ```
 
 It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. The output from importing describes what was found: this should correspond to our expectations.
