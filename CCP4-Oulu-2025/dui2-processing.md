@@ -2,13 +2,13 @@
 
 ## Data
 
-To process the data locally using DIALS you will need a copy of the dataset on your computer. If you do not have it already you can download it from [Zenodo](https://zenodo.org/records/14541394/files/zinc_K_edge_data_images_1-800.tar?download=1).
+To process the data locally using DIALS you will need a copy of the dataset on your computer. On the Lehmus system at the Oulu workshop, the data set can be found in the directory `/study/2025/DP00BA77/library/THAS1`. Outside of the workshop, you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
 
 ## Summary
 
-We will work on a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1), with thanks to Prof. Dave Lawson for providing the data set. The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details about the data set [here](https://zenodo.org/records/14541394)).
+We will work on a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1), with thanks to Prof. Dave Lawson for providing the data set. The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details about the data set [here](https://zenodo.org/records/14541394)) and in the file `ADH4_data_info.pdf` (note that ADH4 is an old name for the gene encoding the protein).
 
-First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep your local computer free to simultaneously try out DIALS data processing using the DUI2 graphical user interface.
+First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep your computer free to simultaneously try out DIALS data processing using the DUI2 graphical user interface.
 
 Once you have completed the interactive processing, you can compare results with the xia2 job. Are there any differences? Which job has better statistics?
 
@@ -27,19 +27,10 @@ There's no need to set any advanced options, just select "Run". Make sure the jo
 
 Now we will process the images with DIALS via DUI. While it is possible to start DUI from either ccp4i2 or CCP4 Cloud, _this is not recommended!_ The problem is that when DUI is started from one of the CCP4 GUIs, it is not easy to restart DUI from where you left off if the program exists. If DUI is started from a terminal with the CCP4 environment sourced, then it can manage its own history and pick up from a previously unfinished job.
 
-Opening a command line (terminal) window with the CCP4 environment sourced differs by operating system. Please ask for help if you are unsure how to do this. Once it is done, first change to a directory where you want to do the processing (we recommend processing in a different directory from the images themselves), then start `dui2`. For example, using BASH on Linux or Mac:
+Opening a command line (terminal) window with the CCP4 environment sourced differs by operating system. Please ask for help if you are unsure how to do this. Once it is done, first change to a directory where you want to do the processing (on the Lehmus system, please work in a directory under `/study/2025/DP00BA77/personal/`), then start `dui2`:
 
 ```bash
-cd ~
-mkdir THAS1-dials
-cd THAS1-dials
-dui2
-```
-
-on Windows
-
-```bat
-cd %USERPROFILE%
+cd /study/2025/DP00BA77/personal/myusername
 mkdir THAS1-dials
 cd THAS1-dials
 dui2

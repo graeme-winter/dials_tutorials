@@ -2,13 +2,13 @@
 
 ## Data
 
-To process the data locally using DIALS you will need a copy of the dataset on your computer. If you do not have it already you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
+To process the data locally using DIALS you will need a copy of the dataset on your computer. On the Lehmus system at the Oulu workshop, the data set can be found in the directory `/study/2025/DP00BA77/library/THAS1`. Outside of the workshop, you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
 
 ## Summary
 
-We will start by looking at a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1). The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details provided alongside the images in the file `ADH4_data_info.pdf`.
+We will work on a data set recorded from crystals of the enzyme tetrahydroalstonine synthase (THAS1), with thanks to Prof. Dave Lawson for providing the data set. The images were collected at Diamond Light Source on a PILATUS 6M pixel array detector at an X-ray wavelength of 1.282 Å, at the Zinc _K_ edge. There is sufficient anomalous signal to solve the structure by experimental phasing (SAD). There are some more details about the data set [here](https://zenodo.org/records/14541394)) and in the file `ADH4_data_info.pdf` (note that ADH4 is an old name for the gene encoding the protein).
 
-First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep the local PCs free to simultaneously try out DIALS data processing using the command line.
+First we will set up a xia2 processing job, running remotely on the CCP4 Cloud at Harwell. This will keep your computer free to simultaneously try out DIALS data processing using the command line.
 
 Once you have completed the "manual" processing, you can compare results with the xia2 job. Are there any differences? Which job has better statistics?
 
@@ -25,12 +25,12 @@ There's no need to set any advanced options, just select "Run". Make sure the jo
 
 ## Setting up DIALS processing
 
-Now we will process the images using the DIALS command line. In a terminal with the CCP4 environment sourced, first change to a directory where you want to do the processing (we recommend processing in a different directory from the images themselves):
+Now we will process the images using the DIALS command line. In a terminal with the CCP4 environment sourced, first change to a directory where you want to do the processing (on the Lehmus system, please work in a directory under `/study/2025/DP00BA77/personal/`):
 
 ```bash
-cd ~
-mkdir ADH4-dials
-cd ADH4-dials
+cd /study/2025/DP00BA77/personal/myusername
+mkdir THAS1-dials
+cd THAS1-dials
 ```
 
 ## Importing the images
@@ -52,7 +52,13 @@ Now we are ready to import the images. You can do this by entering the following
 dials.import /path/to/images/ADH4_M7S9_6_*.cbf
 ```
 
-Note the use of the wildcard `*` character in this command. This is not DIALS syntax, but is expanded by the shell to match every image file in that directory, from `ADH4_M7S9_6_0001.cbf` to `ADH4_M7S9_6_0800.cbf`. What `dials.import` does is read the header of each of these files, checks the diffraction geometry, and determines the relationship between the files. All going well you will see output that looks something like this:
+Note the use of the wildcard `*` character in the `dials.import` command. This is not DIALS syntax, but is expanded by the shell to match every image file in that directory, from `ADH4_M7S9_6_0001.cbf` to `ADH4_M7S9_6_0800.cbf`. What `dials.import` does is read the header of each of these files, checks the diffraction geometry, and determines the relationship between the files.
+
+> [!NOTE]
+For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just pass the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
+>
+
+All going well you will see output that looks something like this:
 
 ```
 --------------------------------------------------------------------------------
@@ -84,7 +90,25 @@ dials.image_viewer imported.expt
 > [!NOTE]
 > Take a moment to explore the controls in the image viewer. Can you drag the image around and zoom using the mouse? Can you see the intensity and resolution information for a single pixel? What is your preferred colour scheme and brightness? Can you scroll through and see how the diffraction images change as data collection proceeds? Don't be afraid to play with the controls - nothing you can do here will affect processing of the data set.
 
-There is a horizontal backstop shadow across the images. We could mask this out if we wanted, however looking at the rotation axis orientation using `dials.image_viewer`, we see that this is aligned with the backstop shadow. Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?). So we will not bother to mask the shadow here.
+> [!NOTE]
+> Look at images at various points in the data set - at the beginning, in the middle, and at the end. Does the crystal diffract well throughout? Are there any other features present alongside the diffraction spots?
+
+## Masking the backstop shadow (optional)
+
+There is a horizontal backstop shadow across the images. We could mask this out if we wanted, however looking at the rotation axis orientation using `dials.image_viewer`, we see that this is aligned with the backstop shadow. Spots close to the rotation axis are less reliable and will not be integrated anyway (can you figure out why?).
+
+Nevertheless, if you want to try it you can mask out the shadow using the image viewer. First I recommend increasing the brightness to make the shadow more visible. A value of 100 should do fine. Then zoom into the image to make it easier to click around the edge of the shadow. A zoom level of 100% is likely to make the shadow fill the width of your screen. Now, in the "Actions" menu at the top of the main image viewer window, select "Show mask tool", and then choose one of the modes (I recommend "Polygon"). Now click around the edge of the shadow. When you have finished, select a different mode (say "Circle") to ensure that the polygon has been completed. Finally click the "Save" button to save the mask definition to the file `mask.phil`, and close the image viewer.
+
+To actually set the defined mask in the experiments file, run these commands:
+
+```bash
+dials.generate_mask imported.expt mask.phil
+dials.apply_mask imported.expt mask=pixels.mask
+```
+
+If you now open the new file with the image viewer (`dials.image_viewer masked.expt`) then click "Show mask" in the main controls you will see that the backstop shadow mask has been combined with the default mask for the module gaps.
+
+![The first image showing the mask](./images/dials.image_viewer-masked.png "Masked image")
 
 ## Finding spots
 
@@ -93,13 +117,19 @@ With the image viewer open, select the "Threshold pixels" checkbox. This shows y
 > [!NOTE]
 > Do the strong pixels match the position of the diffraction spots? What happens if you modify parameters of the threshold algorithm (like kernel size and gain)? What happens if you select different threshold algorithms?
 
-The default parameters seem pretty good for this data set, so exit the image viewer and run a default spot-finding job:
+The default parameters seem pretty good for this data set, so exit the image viewer and run a default spot-finding job. If you masked the backstop then that job would be:
+
+```bash
+dials.find_spots masked.expt
+```
+
+Otherwise, if you did not mask the backstop, run this instead:
 
 ```bash
 dials.find_spots imported.expt
 ```
 
-DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts equally well throughout the scan:
+DIALS finds spots throughout the entire rotation scan, whereas some other programs default to finding spots on just enough images to perform indexing. This means spot-finding takes longer with DIALS, but the information determined from the entire scan can be reused multiple times. In fact, now DIALS will not need to read the image data again until integration. At the end of the spot-finding procedure you will see an ASCII-art histogram indicating the number of spots found on each image. In this case it is pretty boring because the crystal diffracts consistently well throughout the scan:
 
 ```
 Histogram of per-image spot count for imageset 0:
@@ -122,10 +152,10 @@ Saved 307302 reflections to strong.refl
 
 ## Viewing the reciprocal lattice
 
-Now we can pass both the experimental geometry file `imported.expt`, and spot file `strong.refl` to `dials.reciprocal_lattice_viewer`:
+Now we can pass both the experimental geometry file `masked.expt` / `imported.expt`, and spot file `strong.refl` to `dials.reciprocal_lattice_viewer`:
 
 ```bash
-dials.reciprocal_lattice_viewer imported.expt strong.refl
+dials.reciprocal_lattice_viewer masked.expt strong.refl
 ```
 
 > [!TIP]
@@ -141,10 +171,10 @@ The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is t
 
 ## Indexing
 
-Go ahead and run a default `dials.index` job, which will find a $P\ 1$ cell, using the 3D FFT algorithm:
+Go ahead and run a default `dials.index` job, which will find a $P\ 1$ cell, using the 3D FFT algorithm (remember to substitute `imported.expt` for `masked.expt` if you did not mask the backstop):
 
 ```bash
-dials.index imported.expt strong.refl
+dials.index masked.expt strong.refl
 ```
 
 It is worth taking a moment to read the log output. The program runs through a few stages:
@@ -363,4 +393,4 @@ Now import your `scaled.mtz` from DIALS processing, and also follow that with a 
 
 Once both jobs have finished you can open both results windows to compare results side-by-side. Navigate to the "Scaling and merging" section in each case to compare merging statistics from Aimless.
 
-Which job looks better, yours or xia2's? Or does it not matter?
+Which job looks better, yours or xia2's? Or are they about the same?
