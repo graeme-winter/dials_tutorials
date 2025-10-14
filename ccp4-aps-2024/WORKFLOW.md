@@ -148,7 +148,7 @@ Detector:
 Panel:
   name: /entry/instrument/detector/module
   type: SENSOR_PAD
-  identifier: 
+  identifier:
   pixel_size:{0.075,0.075}
   image_size: {4148,4362}
   trusted_range: {0,33005}
@@ -181,7 +181,7 @@ Beam:
     transmission: 1
     sample to source distance: 0
 
-Beam centre: 
+Beam centre:
     mm: (159.08,166.60)
     px: (2121.07,2221.33)
 
@@ -200,7 +200,7 @@ Goniometer:
     Axis #1 (chi):  {-0.0046,0.0372,-0.9993}
     Axis #2 (omega):  {1,0,0}
     Angles: 0,0,0
-    scan axis: #2 (omega)    
+    scan axis: #2 (omega)
 ```
 
 I recognise that this is quite "computer" in the way that the numbers are presented, but there are a few useful things you can look for in here: does the wavelength, distance, beam centre look OK? Are the number of images what you would expect?
@@ -282,9 +282,10 @@ or
 ```
 dials.index optimised.expt strong.refl
 ```
-   
+
 are the ways to trigger the program, and the most common parameters to set are the `space_group` and `unit_cell` if these are known in advance. While this does index the data it will also perform some refinement with a static crystal model, and indicate in the output the fraction of reflections which have been indexed - ideally this should be close to 100%:
 
+{% raw %}
 ```
 Refined crystal models:
 model 1 (52907 reflections):
@@ -306,6 +307,7 @@ Crystal:
 |          0 |       52907 |          2522 |        95.5 |
 +------------+-------------+---------------+-------------+
 ```
+{% endraw %}
 
 If it is significantly less than 100% it is possible you have a second lattice - adding `max_lattices=2` (say) to the command-line will indicate to the program that you would like to consider attempting to separately index the unindexed reflections after the first lattice has been identified. Often the second lattice is a satellite of the main one, as crystals sometimes split when cooled.
 
@@ -325,7 +327,7 @@ The process that the indexing performs is quite complex -
 - save the indexed reflections and experiment models to the output files
 
 The indexing process takes place over a number of cycles, where low resolution reflections are initially indexed and refined before including more reflections at high resolution - this improves the overall success of the procedure by allowing some refinement as a part of the process.
-  
+
 During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern. To look at the crystal lattice(s) in the reciprocal space crystal frame you can select "crystal frame":
 
 ![Reciprocal viewer](./images/rlv1.png)
@@ -570,7 +572,7 @@ absorption_level=high
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~ 5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data. The overall summary data are printed to the console and the log file e.g.:
 
 ```
-            -------------Summary of merging statistics--------------           
+            -------------Summary of merging statistics--------------
 
                                             Suggested   Low    High  Overall
 High resolution limit                           1.29    3.50    1.29    1.05
@@ -588,9 +590,9 @@ CC half                                       1.000   1.000   0.268   1.000
 Anomalous completeness                        100.0   100.0   100.0    79.1
 Anomalous multiplicity                          7.0     7.1     6.7     5.6
 Anomalous correlation                        -0.019  -0.035  -0.016  -0.013
-Anomalous slope                               0.680                        
-dF/F                                          0.050                        
-dI/s(dI)                                      0.697                        
+Anomalous slope                               0.680
+dF/F                                          0.050
+dI/s(dI)                                      0.697
 Total observations                           267970   13812   13029  335453
 Total unique                                  19928    1071     994   32271
 ```
