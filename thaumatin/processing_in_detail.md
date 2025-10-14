@@ -15,7 +15,7 @@ overall process from e.g. associated lectures. With the graphical
 tools, I am not making so much effort to explain the options as simply
 "playing" will give you a chance to learn your way around and also
 find the settings which work for you. Particularly with looking at
-diffraction images, the "best" settings are very personal. 
+diffraction images, the "best" settings are very personal.
 
 ## DIALS version
 
@@ -60,10 +60,10 @@ program that created them e.g. `indexed.refl` and `indexed.expt` from
 `dials.index`. The only deviations from this are on import (see below)
 where we are only reading experiment models and spot finding where we
 find _strong_ reflections so write these to `strong.refl` - and we
-create no models so (by default) there is no output experiment file. 
+create no models so (by default) there is no output experiment file.
 
 At any time you can _look_ at these files with `dials.show` which will
-summarise the content of the files to the terminal. 
+summarise the content of the files to the terminal.
 
 [If you're impatient...](./tldr.md)
 
@@ -89,7 +89,7 @@ dials.index -c -e2 | less
 will allow you to scroll through the extensive list of options you can
 adjust. In most cases the defaults are relatively sensible for
 synchrotron data from a pixel array detector, as we are using in this
-tutorial. 
+tutorial.
 
 ## Output
 
@@ -98,7 +98,7 @@ In the majority of cases the `dials` programs write their output to
 which is printed to the terminal is also saved in this file, so you
 can review the processing later. In the case where you are reporting
 an issue to the developers including these log files in the error
-report (particularly for the step which failed) is very helpful. 
+report (particularly for the step which failed) is very helpful.
 
 From most stages you can generate a more verbose _report_ of the
 current state of processing with:
@@ -108,8 +108,8 @@ dials.report step.expt step.refl
 ```
 
 which will generate a detailed report as HTML describing the current
-state of the processing. 
-   
+state of the processing.
+
 ## Import
 
 The starting point for any processing with DIALS is to _import_ the
@@ -117,7 +117,7 @@ data - here the metadata are read and a description of the data to be
 processed saved to a file named `imported.expt`. This is "human
 readable" in that the file is JSON format (roughly readable text with
 brackets around to structure for computers). While you can edit this
-file if you know what you are doing, usually this is not necessary. 
+file if you know what you are doing, usually this is not necessary.
 
 ```
 dials.import xtal_1_5_master.h5
@@ -136,7 +136,7 @@ which is well-collected from a well-behaved sample) the commands below
 will often be identical after importing.
 
 At this point you can actually look at the images with the
-`dials.image_viewer` tool - 
+`dials.image_viewer` tool -
 
 ```
 dials.image_viewer imported.expt
@@ -158,7 +158,7 @@ view" of how the data look (particularly for establishing where the
 diffraction is visible to.)
 
 [Here](./import_detail.md) is a short discussion on some more details
-of importing data. 
+of importing data.
 
 ## Find Spots
 
@@ -201,7 +201,7 @@ extracted as spots. You can use the image mode buttons to preview
 how the parameters affect the spot finding algorithm. The final button
 'threshold’ is the one on which spots were found, so ensuring this
 produces peaks at real diffraction spot positions will give the best
-chance of success. 
+chance of success.
 
 The second tool for visualisation of the found spots is the reciprocal
 lattice viewer - which presents a view of the spot positions mapped to
@@ -239,10 +239,10 @@ lattice viewer with the optimised experiment output:
 dials.reciprocal_lattice_viewer optimised.expt strong.refl
 ```
 
-should show straight lines, provided everything has worked correctly. 
+should show straight lines, provided everything has worked correctly.
 
 Further discussion of the output can be found
-[here](./find_spots_detail.md). 
+[here](./find_spots_detail.md).
 
 ## Indexing
 
@@ -261,7 +261,7 @@ or
 ```
 dials.index optimised.expt strong.refl
 ```
-   
+
 are the ways to trigger the program, and the most common parameters to
 set are the `space_group` and `unit_cell` if these are known in
 advance. While this does index the data it will also perform some
@@ -269,6 +269,7 @@ refinement with a static crystal model, and indicate in the output the
 fraction of reflections which have been indexed - ideally this should
 be close to 100%:
 
+{% raw %}
 ```
 Refined crystal models:
 model 1 (19471 reflections):
@@ -290,24 +291,25 @@ Crystal:
 |          0 |       19471 |          3604 | 84.4%       |
 +------------+-------------+---------------+-------------+
 ```
+{% endraw %}
 
 If it is significantly less than 100% it is possible
 you have a second lattice - adding `max_lattices=2` (say) to the
 command-line will indicate to the program that you would like to
 consider attempting to separately index the unindexed reflections
-after the first lattice has been identified. 
+after the first lattice has been identified.
 
 By default the triclinic lattice i.e. with `P1` no additional symmetry
 is assumed - for the majority of data there are no differences in the
 quality of the results from assigning the Bravais lattice at this
 stage, even if as here it is perfectly obvious what the correct answer
-is. 
+is.
 
 If successful, `dials.index` writes the experiments and indexed
 reflections to two new files `indexed.expt` and `indexed.refl` - if
 these are loaded in the reciprocal lattice viewer you can see which
 spots have been indexed and if you have multiple lattices switch them
-"on and off" for comparison. 
+"on and off" for comparison.
 
 The process that the indexing performs is quite complex -
 
@@ -338,14 +340,14 @@ The indexing process takes place over a number of cycles, where low
 resolution reflections are initially indexed and refined before
 including more reflections at high resolution - this improves the
 overall success of the procedure by allowing some refinement as a part
-of the process. 
-  
+of the process.
+
 During this process an effort is made to eliminate "outlier"
 reflections - these are reflections which do not strictly belong to
 the crystal lattice but are accidentally close to a reciprocal space
 position and hence can be indexed. Most often this is an issue with
 small satellite lattices or ice / powder on the sample. Usually this
-should not be a cause for concern. 
+should not be a cause for concern.
 
 
 ## Bravais Lattice Determination (optional!)
@@ -405,7 +407,7 @@ If you wish to use one of the output experiments from this process
 e.g. `bravais_setting_9.expt` you will need to reindex the reflection
 data from indexing to match this - we do not output every option of
 reindexed data as these files can be large. In most cases it is
-simpler to re-run `dials.index` setting the chosen space group. 
+simpler to re-run `dials.index` setting the chosen space group.
 
 The reader is reminded here - in most cases it is absolutely fine to
 proceed without worrying about the crystal symmetry at this stage 🙂.
@@ -420,7 +422,7 @@ rotated. `dials.refine` will first re-run refinement with a fixed unit
 cell and then perform scan-varying refinement. If you have indexed
 multiple sweeps earlier in processing (not covered in this tutorial)
 then the crystal models will be copied and split at this stage to
-allow per-crystal-per-scan models to be refined. 
+allow per-crystal-per-scan models to be refined.
 
 By and large one may run:
 
@@ -501,7 +503,7 @@ can be very enlightening as you should see little red boxes around
 every reflection - if you select "integrated only" you can see what
 was and was not integrated. You may see a selection of reflections
 close to the rotation axis are missed - these are not well modelled or
-predicted in any program so typically excluded from processing. 
+predicted in any program so typically excluded from processing.
 
 ## Symmetry analysis
 
@@ -595,5 +597,5 @@ to simply export the scaled reflections in MTZ format or
 dials.merge scaled.expt scaled.refl
 ```
 
-which will output a scaled and merged MTZ file. 
+which will output a scaled and merged MTZ file.
 

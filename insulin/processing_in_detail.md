@@ -130,6 +130,7 @@ or
 
 are the ways to trigger the program, and the most common parameters to set are the `space_group` and `unit_cell` if these are known in advance. While this does index the data it will also perform some refinement with a static crystal model, and indicate in the output the fraction of reflections which have been indexed - ideally this should be close to 100%:
 
+{% raw %}
 ```
 Refined crystal models:
 model 1 (22031 reflections):
@@ -151,9 +152,11 @@ Crystal:
 |          0 |       22031 |         14143 | 60.9%       |
 +------------+-------------+---------------+-------------+
 ```
+{% endraw %}
 
 If it is significantly less than 100% it is possible you have a second lattice - adding `max_lattices=2` (say) to the command-line will indicate to the program that you would like to consider attempting to separately index the unindexed reflections after the first lattice has been identified. In this case there was a clear second lattice which can be indexed well:
 
+{% raw %}
 ```
 Refined crystal models:
 model 1 (21933 reflections):
@@ -194,6 +197,7 @@ Rotation matrix to transform crystal 1 to crystal 2:
  {-0.133, -0.239, 0.962}}
 Rotation of -179.465 degrees about axis (-0.066, -0.121, 0.990)
 ```
+{% endraw %}
 
 Here we see that there is a second lattice which is almost 180° separated: this is a very common outcome, resulting from the crystal splitting when cooled. In this case a reasonable data set can be obtained ignoring the second lattice, so we can just go ahead with the single lattice results. By default the triclinic lattice i.e. with `P1` no additional symmetry is assumed - for the majority of data there are no differences in the quality of the results from assigning the Bravais lattice at this stage, even if as here it is perfectly obvious what the correct answer is.
 
@@ -211,7 +215,7 @@ The process that the indexing performs is quite complex -
 - save the indexed reflections and experiment models to the output files
 
 The indexing process takes place over a number of cycles, where low resolution reflections are initially indexed and refined before including more reflections at high resolution - this improves the overall success of the procedure by allowing some refinement as a part of the process.
-  
+
 During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern.
 
 ## Bravais Lattice Determination (optional!)
@@ -364,7 +368,7 @@ During the experiment there are effects which alter the measured intensity of th
 
         dials.scale symmetrized.expt symmetrized.refl
 
-or 
+or
 
         dials.scale symmetrized.expt symmetrized.refl anomalous=True
 
@@ -379,7 +383,7 @@ with the latter being the parameter most likely changed. If you have a data set 
 - `absorption_level=low`
 - `absorption_level=medium`
 - `absorption_level=high`
-        
+
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data.
 
 ## Estimating resolution

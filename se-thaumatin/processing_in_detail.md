@@ -59,7 +59,7 @@ will allow you to scroll through the extensive list of options you can adjust. I
 
 ## Output
 
-In the majority of cases the `dials` programs write their output to `dials.program.log` e.g. `dials.find_spots.log` etc. - everything which is printed to the terminal is also saved in this file, so you can review the processing later. In the case where you are reporting an issue to the developers including these log files in the error report (particularly for the step which failed) is very helpful. 
+In the majority of cases the `dials` programs write their output to `dials.program.log` e.g. `dials.find_spots.log` etc. - everything which is printed to the terminal is also saved in this file, so you can review the processing later. In the case where you are reporting an issue to the developers including these log files in the error report (particularly for the step which failed) is very helpful.
 
 From most stages you can generate a more verbose _report_ of the current state of processing with:
 
@@ -68,7 +68,7 @@ dials.report step.expt step.refl
 ```
 
 which will generate a detailed report as HTML describing the current state of the processing.
-   
+
 ## Import
 
 The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
@@ -106,7 +106,7 @@ Detector:
 Panel:
   name: /entry/instrument/detector
   type: SENSOR_PAD
-  identifier: 
+  identifier:
   pixel_size:{0.075,0.075}
   image_size: {4148,4362}
   trusted_range: {-1,9202}
@@ -137,7 +137,7 @@ Beam:
     flux: 0
     transmission: 1
 
-Beam centre: 
+Beam centre:
     mm: (158.37,166.26)
     px: (2111.59,2216.80)
 
@@ -190,7 +190,7 @@ to get a sense of what spots were found. You will see that the spots are surroun
 
 ![Image viewer](./images/image-view-spots.png)
 
-The default parameters for spot finding usually do a good job for Pilatus or Eiger images, such as these. However they may not be optimal for data from other detector types, such as CCDs or image plates. Issues with  incorrectly set gain might, for example, lead to background noise being extracted as spots. You can use the image mode buttons to preview how the parameters affect the spot finding algorithm. The final button 'threshold’ is the one on which spots were found, so ensuring this produces peaks at real diffraction spot positions will give the best chance of success. 
+The default parameters for spot finding usually do a good job for Pilatus or Eiger images, such as these. However they may not be optimal for data from other detector types, such as CCDs or image plates. Issues with  incorrectly set gain might, for example, lead to background noise being extracted as spots. You can use the image mode buttons to preview how the parameters affect the spot finding algorithm. The final button 'threshold’ is the one on which spots were found, so ensuring this produces peaks at real diffraction spot positions will give the best chance of success.
 
 The second tool for visualisation of the found spots is the reciprocal lattice viewer - which presents a view of the spot positions mapped to reciprocal space.
 
@@ -214,7 +214,7 @@ to determine an updated position for the beam centre - ideally the shift that th
 dials.reciprocal_lattice_viewer optimised.expt strong.refl
 ```
 
-should show straight lines, provided everything has worked correctly. 
+should show straight lines, provided everything has worked correctly.
 
 Further discussion of the output can be found [here](./find_spots_detail.md).
 
@@ -231,9 +231,10 @@ or
 ```
 dials.index optimised.expt strong.refl
 ```
-   
+
 are the ways to trigger the program, and the most common parameters to set are the `space_group` and `unit_cell` if these are known in advance. While this does index the data it will also perform some refinement with a static crystal model, and indicate in the output the fraction of reflections which have been indexed - ideally this should be close to 100%:
 
+{% raw %}
 ```
 Refined crystal models:
 model 1 (178887 reflections):
@@ -255,6 +256,7 @@ Crystal:
 |          0 |      178887 |         55243 | 76.4%       |
 +------------+-------------+---------------+-------------+
 ```
+{% endraw %}
 
 If it is significantly less than 100% it is possible you have a second lattice - adding `max_lattices=2` (say) to the command-line will indicate to the program that you would like to consider attempting to separately index the unindexed reflections after the first lattice has been identified.
 
@@ -274,7 +276,7 @@ The process that the indexing performs is quite complex -
 - save the indexed reflections and experiment models to the output files
 
 The indexing process takes place over a number of cycles, where low resolution reflections are initially indexed and refined before including more reflections at high resolution - this improves the overall success of the procedure by allowing some refinement as a part of the process.
-  
+
 During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern.
 
 ## Bravais Lattice Determination (optional!)
@@ -485,7 +487,7 @@ absorption_level=high
 where setting low, the default, corresponds to ~ 1% absorption, medium to ~ 5% and high to ~ 25% - these are not absolute, more a sense of what you may expect. Testing has indicated that setting it too high is unlikely to do any harm, but setting it too low can have a measurable impact on the quality of the data for phasing experiments. `dials.scale` generates a HTML report `dials.scale.html` which includes a lot of information about how the models look, as well as regions of the data which agree well and poorly - from a practical perspective this is the point where you really _know_ about the final quality of the data. The overall summary data are printed to the console and the log file e.g.:
 
 ```
-            -------------Summary of merging statistics--------------           
+            -------------Summary of merging statistics--------------
 
                                             Suggested   Low    High  Overall
 High resolution limit                           1.18    3.20    1.18    1.08
@@ -503,9 +505,9 @@ CC half                                       0.999   1.000   0.316   0.999
 Anomalous completeness                         92.9   100.0    57.8    77.5
 Anomalous multiplicity                          6.4     7.1     3.2     6.0
 Anomalous correlation                         0.192   0.300  -0.018   0.206
-Anomalous slope                               0.519                        
-dF/F                                          0.067                        
-dI/s(dI)                                      0.565                        
+Anomalous slope                               0.519
+dF/F                                          0.067
+dI/s(dI)                                      0.565
 Total observations                           957119   56962   15339  988441
 Total unique                                  79095    4663    2492   87260
 ```

@@ -137,6 +137,7 @@ or
 
 are the ways to trigger the program, and the most common parameters to set are the `space_group` and `unit_cell` if these are known in advance. While this does index the data it will also perform some refinement with a static crystal model, and indicate in the output the fraction of reflections which have been indexed - ideally this should be close to 100%:
 
+{% raw %}
 ```
 Refined crystal models:
 model 1 (23862 reflections):
@@ -158,6 +159,7 @@ Crystal:
 |          0 |       23862 |           614 | 97.5%       |
 +------------+-------------+---------------+-------------+
 ```
+{% endraw %}
 
 If the fraction of indexed reflections is substantially below 100%, go look - there is probably a reason (and I would place a small wager that your crystal has split). A successful `dials.index` job writes the experiments and indexed reflections to two new files `indexed.expt` and `indexed.refl` - if these are loaded in the reciprocal lattice viewer you can see which spots have been indexed and if you have multiple lattices switch them "on and off" for comparison.
 
@@ -173,7 +175,7 @@ The process that the indexing performs is quite complex -
 - save the indexed reflections and experiment models to the output files
 
 The indexing process takes place over a number of cycles, where low resolution reflections are initially indexed and refined before including more reflections at high resolution - this improves the overall success of the procedure by allowing some refinement as a part of the process.
-  
+
 During this process an effort is made to eliminate "outlier" reflections - these are reflections which do not strictly belong to the crystal lattice but are accidentally close to a reciprocal space position and hence can be indexed. Most often this is an issue with small satellite lattices or ice / powder on the sample. Usually this should not be a cause for concern.
 
 ## Bravais Lattice Determination (optional!)
@@ -326,7 +328,7 @@ During the experiment there are effects which alter the measured intensity of th
 
         dials.scale symmetrized.expt symmetrized.refl
 
-or 
+or
 
         dials.scale symmetrized.expt symmetrized.refl anomalous=True
 
@@ -344,7 +346,7 @@ Though `dials.scale` will perform an estimate of the resolution limit, it does n
 
         dials.estimate_resolution scaled.expt scaled.refl
 
-This will also write out a HTML file with a graph to inspect. You can take the output of this and re-scale the data to this limit with `d_min=1.52` (in this case.) - you can apply this in the scaling by repeating the scaling process if you like, with 
+This will also write out a HTML file with a graph to inspect. You can take the output of this and re-scale the data to this limit with `d_min=1.52` (in this case.) - you can apply this in the scaling by repeating the scaling process if you like, with
 
         dials.scale symmetrized.expt symmetrized.refl d_min=1.52
 
@@ -407,6 +409,7 @@ The find spots job will step through each scan one at a time, so you will get tw
 
 as before. The indexing output will however show two sets of output:
 
+{% raw %}
 ```
 RMSDs by experiment:
 +-------+--------+----------+----------+------------+
@@ -454,6 +457,7 @@ Crystal:
 Saving refined experiments to indexed.expt
 Saving refined reflections to indexed.refl
 ```
+{% endraw %}
 
 here we can see that almost all of the reflections from both scans were indexed but the R.M.S. deviations were rather larger than before - this is a reflection of inaccuracy in the goniometer information and will come out in the wash when we do some refinement.
 
