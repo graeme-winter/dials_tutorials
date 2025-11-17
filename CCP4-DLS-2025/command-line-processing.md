@@ -2,7 +2,7 @@
 
 ## Data
 
-To process the data locally using DIALS you will need a copy of the dataset on your computer. On the Lehmus system at the Oulu workshop, the data set can be found in the directory `/study/2025/DP00BA77/library/THAS1`. Outside of the workshop, you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
+To process the data locally using DIALS you will need a copy of the dataset on your computer. At the Diamond workshop, the data set can be found in the directory `/FIXME`. Outside of the workshop, you can download it from [this link](https://ccp4serv6.rc-harwell.ac.uk/jscofe-dev/tmp/ADH4.zip).
 
 ## Summary
 
@@ -25,7 +25,7 @@ There's no need to set any advanced options, just select "Run". Make sure the jo
 
 ## Setting up DIALS processing
 
-Now we will process the images using the DIALS command line. In a terminal with the CCP4 environment sourced, first change to a directory where you want to do the processing (on the Lehmus system, please work in a directory under `/study/2025/DP00BA77/personal/`):
+Now we will process the images using the DIALS command line. In a terminal with the CCP4 environment sourced, first change to a directory where you want to do the processing (at the Diamond workshop, please work in a directory under the location you are moved to when you run `module load ccp4-workshop`):
 
 ```bash
 cd /study/2025/DP00BA77/personal/myusername
