@@ -205,7 +205,7 @@ The spots are now coloured according to whether they are indexed or not.
 
 ## Determining the Bravais lattice
 
-The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ \nd $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices we run:
+The initial solution from `dials.index` is triclinic, but the α, β and γ angles are very close to 90°. To identify compatible Bravais lattices we run:
 
 ```bash
 dials.refine_bravais_settings indexed.expt indexed.refl
@@ -394,3 +394,4 @@ Now import your `scaled.mtz` from DIALS processing, and also follow that with a 
 Once both jobs have finished you can open both results windows to compare results side-by-side. Navigate to the "Scaling and merging" section in each case to compare merging statistics from Aimless.
 
 Which job looks better, yours or xia2's? Or are they about the same?
+
