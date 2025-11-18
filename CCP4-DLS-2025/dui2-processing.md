@@ -158,7 +158,7 @@ Back in the DUI main window, switch to the "Image" tab. Now we have crystal mode
 
 ## Determining the Bravais lattice
 
-The initial solution from `dials.index` is triclinic, but the $\alpha$, $\beta$ \nd $\gamma$ angles are very close to 90°. To identify compatible Bravais lattices click on the "refine bravais settings" button and press "Run"
+The initial solution from `dials.index` is triclinic, but the α, β and γ angles are very close to 90°. To identify compatible Bravais lattices click on the "refine bravais settings" button and press "Run"
 
 This will enforce the Bravais symmetry of compatible lattices (within some tolerance) and run refinement. The results are printed as a table at the end of the logfile shown in the "Log" tab:
 
