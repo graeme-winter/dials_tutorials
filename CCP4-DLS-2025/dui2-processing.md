@@ -135,7 +135,7 @@ The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is t
 
 ## Indexing
 
-Click the "index" button to set up a `dials.index` job. By default this will find a $P\ 1$ cell, using the 3D FFT algorithm. This is fine for our purposes, but feel free to experiment with the other settings. If a job goes wrong you can always click back to the `find_spots` node on the history tree and start a new "index" job from that point.
+Click the "index" button to set up a `dials.index` job. By default this will find a P1 cell, using the 3D FFT algorithm. This is fine for our purposes, but feel free to experiment with the other settings. If a job goes wrong you can always click back to the `find_spots` node on the history tree and start a new "index" job from that point.
 
 It is worth taking a moment to read the output in the "Log" tab once the job completes. The program runs through a few stages:
 
@@ -152,7 +152,7 @@ It is worth taking a moment to read the output in the "Log" tab once the job com
 Now we have a crystal model it is worth looking at the reciprocal lattice again, by launching the `dials.reciprocal_lattice_viewer` from the "Reciprocal lattice" tab. The spots are now coloured according to whether they are indexed or not, although in this case almost all spots are indexed.
 
 > [!NOTE]
-> Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, $a^\star$, $b^\star$ or $c^\star$. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
+> Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, a\*, b\* or c\*. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
 
 Back in the DUI main window, switch to the "Image" tab. Now we have crystal model we can switch between displaying shoeboxes for the observed spots, and little "`+`" symbols for the predicted spots (see the "Display info" pull down). At a high enough Zoom level the Miller indices for reflections are also displayed.
 
@@ -184,7 +184,7 @@ However, within DUI it is easier to see this table in the next step - reindexing
 
 The decision of which solution to choose is down to the user, but solutions deemed acceptable are marked with a "Y" in the "Ok" column. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one. So ensure that row is highlighted and then press "Run".
 
-You could now check the crystal model under "Experiments" in the "Report" tab to see that the space group has been set to P\ 2\ 2\ 2$. No attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
+You could now check the crystal model under "Experiments" in the "Report" tab to see that the space group has been set to P222. No attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
 
 ## Refining the solution
 
@@ -251,7 +251,7 @@ The systematic absence information is written to a table in the log:
 +--------------+---------+---------------+--------------+---------------+--------------+-------------------+------------------+
 ```
 
-Here we see clear screw axes along $b$ and $c$, which have high average intensity and $I/\sigma$ for reflections that are expected to be present, but low values for absences. For the potential axis along $a$, while there is higher intensity and $I/\sigma$ for expected present reflections compared to absences, the intensity in the putative absences is actually rather high. This indicates that the a screw axis along $a$ is not supported by the data. As a result, `dials.symmetry` ultimately writes the files `symmetrized.expt` and `symmetrized.refl`, using the space group $P\ 2\ 2_1\ 2_1$
+Here we see clear screw axes along _b_ and _c_, which have high average intensity and I/σ for reflections that are expected to be present, but low values for absences. For the potential axis along _a_, while there is higher intensity and I/σ for expected present reflections compared to absences, the intensity in the putative absences is actually rather high. This indicates that the a screw axis along _a_ is not supported by the data. As a result, `dials.symmetry` ultimately writes the files `symmetrized.expt` and `symmetrized.refl`, using the space group P212121
 
 ## Scaling and exporting
 

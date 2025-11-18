@@ -171,7 +171,7 @@ The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is t
 
 ## Indexing
 
-Go ahead and run a default `dials.index` job, which will find a $P\ 1$ cell, using the 3D FFT algorithm (remember to substitute `imported.expt` for `masked.expt` if you did not mask the backstop):
+Go ahead and run a default `dials.index` job, which will find a P1 cell, using the 3D FFT algorithm (remember to substitute `imported.expt` for `masked.expt` if you did not mask the backstop):
 
 ```bash
 dials.index masked.expt strong.refl
@@ -201,7 +201,7 @@ dials.reciprocal_lattice_viewer indexed.expt indexed.refl
 The spots are now coloured according to whether they are indexed or not.
 
 > [!NOTE]
-> Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, $a^\star$, $b^\star$ or $c^\star$. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
+> Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, a\*, b\* or c\*. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
 
 ## Determining the Bravais lattice
 
@@ -260,7 +260,7 @@ RMSDs by experiment:
 ```
 
 > [!NOTE]
-> The space group selected by `dials.refine_bravais_settings` is $P\ 2\ 2\ 2$; that is, no attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
+> The space group selected by `dials.refine_bravais_settings` is P222; that is, no attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
 
 It useful to look at the way the crystal parameters change during the scan, to make sure there are no unrealistic-looking changes. One way to do that is to use the command:
 
@@ -320,7 +320,7 @@ This systematic absence information is written to a table:
 +--------------+---------+---------------+--------------+---------------+--------------+-------------------+------------------+
 ```
 
-Here we see clear screw axes along $b$ and $c$, which have high average intensity and $I/\sigma$ for reflections that are expected to be present, but low values for absences. For the potential axis along $a$, while there is higher intensity and $I/\sigma$ for expected present reflections compared to absences, the intensity in the putative absences is actually rather high. This indicates that the a screw axis along $a$ is not supported by the data. As a result, `dials.symmetry` ultimately writes the files `symmetrized.expt` and `symmetrized.refl`, using the space group $P\ 2\ 2_1\ 2_1$
+Here we see clear screw axes along _b_ and _c_, which have high average intensity and I/σ for reflections that are expected to be present, but low values for absences. For the potential axis along _a_, while there is higher intensity and I/σ for expected present reflections compared to absences, the intensity in the putative absences is actually rather high. This indicates that the a screw axis along _a_ is not supported by the data. As a result, `dials.symmetry` ultimately writes the files `symmetrized.expt` and `symmetrized.refl`, using the space group P212121
 
 ## Scaling and exporting
 
