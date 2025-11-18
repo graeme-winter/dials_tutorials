@@ -20,7 +20,6 @@ Within your Cloud project, add a new "Automatic Image Processing with Xia-2" tas
 
 There's no need to set any advanced options, just select "Run". Make sure the job starts, but after that you can leave it to process while you look at the images locally with DIALS.
 
-> [!WARNING]
 > Running xia2 in CCP4 Cloud requires you first to upload the images to Cloud, so it hasn't been a very popular option in the past. You are more likely to come across xia2 from autoprocessing results at the synchrotron, or by running xia2 locally through ccp4i2 or at the command line. Recently however, uploading images was made easier if you (or your lab) use the Globus file transfer platform, where CCP4 Cloud has an endpoint. However, image data is large and will eventually be deleted from Cloud to save space. So don't consider CCP4 Cloud as a backup solution for your diffraction data!
 
 ## Setting up DIALS processing
@@ -43,7 +42,6 @@ dials.import
 
 You may have to scroll up to read the full output. If you add the option `-h` to this command you will not only see the help message, but also the structured definitions of the command line parameters that can be passed to the program.
 
-> [!NOTE]
 > What happens if you pass multiple `h` and `v` characters? Try this out later with other DIALS programs too.
 
 Now we are ready to import the images. You can do this by entering the following command, after adjusting the path to the files on your computer:
@@ -54,8 +52,7 @@ dials.import /path/to/images/ADH4_M7S9_6_*.cbf
 
 Note the use of the wildcard `*` character in the `dials.import` command. This is not DIALS syntax, but is expanded by the shell to match every image file in that directory, from `ADH4_M7S9_6_0001.cbf` to `ADH4_M7S9_6_0800.cbf`. What `dials.import` does is read the header of each of these files, checks the diffraction geometry, and determines the relationship between the files.
 
-> [!NOTE]
-For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just pass the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
+> For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just pass the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
 >
 
 All going well you will see output that looks something like this:
@@ -87,10 +84,8 @@ Although we are doing command-line data processing, we should still look at the 
 dials.image_viewer imported.expt
 ```
 
-> [!NOTE]
 > Take a moment to explore the controls in the image viewer. Can you drag the image around and zoom using the mouse? Can you see the intensity and resolution information for a single pixel? What is your preferred colour scheme and brightness? Can you scroll through and see how the diffraction images change as data collection proceeds? Don't be afraid to play with the controls - nothing you can do here will affect processing of the data set.
 
-> [!NOTE]
 > Look at images at various points in the data set - at the beginning, in the middle, and at the end. Does the crystal diffract well throughout? Are there any other features present alongside the diffraction spots?
 
 ## Masking the backstop shadow (optional)
@@ -114,7 +109,6 @@ If you now open the new file with the image viewer (`dials.image_viewer masked.e
 
 With the image viewer open, select the "Threshold pixels" checkbox. This shows you which pixels the spot-finding algorithm considers to be "strong".
 
-> [!NOTE]
 > Do the strong pixels match the position of the diffraction spots? What happens if you modify parameters of the threshold algorithm (like kernel size and gain)? What happens if you select different threshold algorithms?
 
 The default parameters seem pretty good for this data set, so exit the image viewer and run a default spot-finding job. If you masked the backstop then that job would be:
@@ -158,12 +152,10 @@ Now we can pass both the experimental geometry file `masked.expt` / `imported.ex
 dials.reciprocal_lattice_viewer masked.expt strong.refl
 ```
 
-> [!TIP]
 > Using tab completion, if supported by your shell, avoids you having to type out long commands or filenames, like `dials.reciprocal_lattice_viewer`. Even if tab complete does not work, in this case you can use the alias `dials.rlv` instead.
 
 Take some time to explore the controls in the `dials.reciprocal_lattice_viewer`
 
-> [!NOTE]
 > What does middle-button drag do? Try setting "Max Z" to something small, like 5. What does this show you? Align the view down the rotation axis and then click to increase the Max Z value (Use Alt-click to jump in blocks of 100). Can you see how data collection sweeps out a volume of reciprocal space? Can you align the view in a direction that clearly shows the crystal lattice?
 
 The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems.
@@ -189,7 +181,6 @@ It is worth taking a moment to read the log output. The program runs through a f
   - Increases resolution for the next macrocycle
 - Once the resolution limit includes all reflections the final refined model and reflections are written to the files `indexed.expt` and `indexed.expt`
 
-> [!NOTE]
 > The behaviour of all of these stages can be controlled by parameters given to `dials.index` (remember option switches like `-hhhvv`), but in most cases the defaults suffice.
 
 Now we have a crystal model it is worth looking at the reciprocal lattice again:
@@ -200,7 +191,6 @@ dials.reciprocal_lattice_viewer indexed.expt indexed.refl
 
 The spots are now coloured according to whether they are indexed or not.
 
-> [!NOTE]
 > Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, a\*, b\* or c\*. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
 
 ## Determining the Bravais lattice
@@ -211,7 +201,6 @@ The initial solution from `dials.index` is triclinic, but the α, β and γ angl
 dials.refine_bravais_settings indexed.expt indexed.refl
 ```
 
-> [!TIP]
 > Like with `dials.reciprocal_lattice_viewer`, `dials.refine_bravais_settings` has a short form alias: `dials.rbs`
 
 This will enforce the Bravais symmetry of compatible lattices (within some tolerance) and run refinement. The results are printed as a table:
@@ -259,7 +248,6 @@ RMSDs by experiment:
 +-------+--------+----------+----------+------------+
 ```
 
-> [!NOTE]
 > The space group selected by `dials.refine_bravais_settings` is P222; that is, no attempt has been made yet to locate screw axes. That's not a problem, we do not need to know the exact space group prior to integration, just a sub group. There will be another attempt at symmetry determination later.
 
 It useful to look at the way the crystal parameters change during the scan, to make sure there are no unrealistic-looking changes. One way to do that is to use the command:
@@ -276,7 +264,6 @@ dials.report refined.expt refined.refl
 
 which will produce an HTML document, `dials.report.html`, containing similar plots as well as lot more information about the current stage of the data processing. This can be opened in any web browser.
 
-> [!NOTE]
 > Check that the change in unit cell parameters and orientation angles looks small across the whole scan.
 
 ## Integration
@@ -363,12 +350,10 @@ Total observations                           561027   39438     526
 Total unique                                 145885    9107     507
 ```
 
-> [!NOTE]
 > Do the summary statistics look okay? Is there any sign of an anomalous signal?
 
 While the summary table is worth a quick glance, graphical representations of the merging statistics are usually more informative. You can see plots of values against resolution and against image number if you open the file `dials.scale.html` in a web browser.
 
-> [!NOTE]
 > Open `dials.scale.html` and look at the plots. What is the main factor determining the usable resolution limit in this case? How does the anomalous signal look?
 
 Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we could use:

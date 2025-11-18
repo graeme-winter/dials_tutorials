@@ -20,7 +20,6 @@ Within your Cloud project, add a new "Automatic Image Processing with Xia-2" tas
 
 There's no need to set any advanced options, just select "Run". Make sure the job starts, but after that you can leave it to process while you look at the images locally with DIALS.
 
-> [!WARNING]
 > Running xia2 in CCP4 Cloud requires you first to upload the images to Cloud, so it hasn't been a very popular option in the past. You are more likely to come across xia2 from autoprocessing results at the synchrotron, or by running xia2 locally through ccp4i2 or at the command line. Recently however, uploading images was made easier if you (or your lab) use the Globus file transfer platform, where CCP4 Cloud has an endpoint. However, image data is large and will eventually be deleted from Cloud to save space. So don't consider CCP4 Cloud as a backup solution for your diffraction data!
 
 ## Setting up processing with DUI
@@ -46,8 +45,7 @@ The first task in data processing with DIALS is to import the images. The DUI hi
 
 To import the data set, click on the "Open images" button and then navigate to the directory where the images are located. You then need to click on just one of the CBF images, say `ADH4_M7S9_6_0001.cbf`, and then click "Open". DUI will automatically convert that to a template that matches all the images in the data set.
 
-> [!NOTE]
-For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just select the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
+> For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just select the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
 >
 
 DUI has not actually done the import yet. To do that you need to click on the "Run" button with the DIALS logo, at the bottom of the window. Once that is completed, in the "Log" tab you should see output that looks like this:
@@ -80,7 +78,6 @@ This tells you that DIALS interprets the 800 images as a single rotation sweep, 
 
 Click on the "Image" tab to view the diffraction images using DUI's viewer. You can use the mousewheel to zoom (if you have one), or the magnifying glass buttons at the upper right of the window. Click and drag to scroll the image. More options to change the contrast and colour scheme are contained in the "Display info" pull down menu.
 
-> [!NOTE]
 > Look at images at various points in the data set - at the beginning, in the middle, and at the end. Does the crystal diffract well throughout? Are there any other features present alongside the diffraction spots?
 
 ## Masking the backstop shadow (optional)
@@ -122,10 +119,8 @@ Similar information is available graphically in the "Report" tab. Click on "Anal
 
 DUI does not yet contain its own reciprocal lattice viewer. However it is able to launch `dials.reciprocal_lattice_viewer` for you, from a button in the "Reciprocal lattice" tab. Press that, then take some time to explore the controls in the `dials.reciprocal_lattice_viewer`.
 
-> [!NOTE]
 > What does middle-button drag do? Try setting "Max Z" to something small, like 5. What does this show you? Align the view down the rotation axis and then click to increase the Max Z value (Use Alt-click to jump in blocks of 100). Can you see how data collection sweeps out a volume of reciprocal space? Can you align the view in a direction that clearly shows the crystal lattice?
 
-> [!WARNING]
 > Sorry, there are bugs in the way buttons are displayed in CCP4's version of `dials.reciprocal_lattice_viewer`. The controls are functional. but the values are hard to read.
 
 The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems. Here is a view with a nicely aligned lattice, suggesting that indexing should not be a problem:
@@ -151,7 +146,6 @@ It is worth taking a moment to read the output in the "Log" tab once the job com
 
 Now we have a crystal model it is worth looking at the reciprocal lattice again, by launching the `dials.reciprocal_lattice_viewer` from the "Reciprocal lattice" tab. The spots are now coloured according to whether they are indexed or not, although in this case almost all spots are indexed.
 
-> [!NOTE]
 > Try the "Show reciprocal cell" option. Zoom in and see if you can align the view with one of the reciprocal basis vectors, a\*, b\* or c\*. Try the toggles between "indexed" and "unindexed", "inliers" and "outliers".
 
 Back in the DUI main window, switch to the "Image" tab. Now we have crystal model we can switch between displaying shoeboxes for the observed spots, and little "`+`" symbols for the predicted spots (see the "Display info" pull down). At a high enough Zoom level the Miller indices for reflections are also displayed.
@@ -209,7 +203,6 @@ It useful to look at the way the crystal parameters change during the scan, to m
 
 ![The scan-varying crystal orientation parameters](./images/sv-orientation.png "Scan-varying orientation")
 
-> [!NOTE]
 > Check that the change in unit cell parameters and orientation angles looks small across the whole scan.
 
 ## Integration
@@ -290,17 +283,14 @@ Total observations                           561027   39438     526
 Total unique                                 145885    9107     507
 ```
 
-> [!NOTE]
 > Do the summary statistics look okay? Is there any sign of an anomalous signal?
 
 While the summary table is worth a quick glance, graphical representations of the merging statistics are usually more informative. You can see plots of values against resolution and against image number in the "Report" tab.
 
-> [!NOTE]
 > Look at the plots in the "Report" tab. What is the main factor determining the usable resolution limit in this case? How does the anomalous signal look?
 
 Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we click on the "merge" button and export `merged.mtz`. However, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that we click on the "export" button instead and click "Run". Once that is finished, click on the button "Download/save hklout file" to save the file to the directory where you started the processing.
 
-> [!WARNING]
 > DUI will save the file with the name `scaled` by default. That is, you have to add the extension `.mtz` yourself.
 
 ## Comparing results with xia2
