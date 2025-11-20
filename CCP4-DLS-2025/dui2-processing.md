@@ -37,13 +37,20 @@ dui2
 
 Once the program starts you should see something like this:
 
+<!-- 
+keeping reference to old picture in case @dagewa wants to compare
 ![The DUI window at start up](./images/dui-start.png "DUI")
+-->
+
+<img width="1886" height="1054" alt="Screenshot_20251118_Dui_ini" src="https://github.com/user-attachments/assets/48503c3c-e279-443d-aa3e-ca078e4ec407" />
 
 ## Importing the images
 
 The first task in data processing with DIALS is to import the images. The DUI history tree is already highlighting an incomplete `dials.import` node. To see some help for a node that hasn't yet been run, click on the "Log" tab on the right, but note this help message is relevant mainly for the usage of `dials.import` from the command line, and some of the description might not be relevant for DUI.
 
 To import the data set, click on the "Open images" button and then navigate to the directory where the images are located. You then need to click on just one of the CBF images, say `ADH4_M7S9_6_0001.cbf`, and then click "Open". DUI will automatically convert that to a template that matches all the images in the data set.
+
+<img width="1886" height="1054" alt="Screenshot_20251118_Dui_import" src="https://github.com/user-attachments/assets/d2127402-5a93-40ea-ae06-2b8afbbefc90" />
 
 > For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just select the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
 >
@@ -79,6 +86,8 @@ This tells you that DIALS interprets the 800 images as a single rotation sweep, 
 Click on the "Image" tab to view the diffraction images using DUI's viewer. You can use the mousewheel to zoom (if you have one), or the magnifying glass buttons at the upper right of the window. Click and drag to scroll the image. More options to change the contrast and colour scheme are contained in the "Display info" pull down menu.
 
 > Look at images at various points in the data set - at the beginning, in the middle, and at the end. Does the crystal diffract well throughout? Are there any other features present alongside the diffraction spots?
+
+<img width="1886" height="1054" alt="Screenshot_20251118_Dui_import_2" src="https://github.com/user-attachments/assets/2f607a61-8187-4047-8e76-276b22cd02ce" />
 
 ## Masking the backstop shadow (optional)
 
@@ -174,7 +183,12 @@ oP: P222 P2221 P21212 P212121
 
 However, within DUI it is easier to see this table in the next step - reindexing. So click on the "reindex" button, and the input pane now shows the same information as the text table, with a recommended solution highlighted.
 
+<!-- 
+keeping reference to old picture in case @dagewa wants to compare
 ![The table of Bravais lattice solutions](./images/rbs-table.png "Reindexing options")
+-->
+
+<img width="889" height="327" alt="Screenshot_part_of_Dui2_reindex_table" src="https://github.com/user-attachments/assets/ed4e48b7-1e19-4663-87a1-b62469077a20" />
 
 The decision of which solution to choose is down to the user, but solutions deemed acceptable are marked with a "Y" in the "Ok" column. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one. So ensure that row is highlighted and then press "Run".
 
@@ -221,6 +235,8 @@ Calculating E.S.D Reflecting Range (mosaicity).
 ```
 
 The `sigma m` value is the standard deviation of the reflecting range of reflections, which is sometimes (and inaccurately) called "mosacicity". It is good to check that this value is not too high. Here it is significantly less than 0.1°, so the sample seems very well behaved.
+
+<img width="1886" height="1054" alt="Screenshot_20251118_integrate" src="https://github.com/user-attachments/assets/1a352709-b71e-4bf0-98ea-83600f2ef75b" />
 
 After this step, `dials.integrate` will split the processing over as many processors as you have available, first modelling reflection profiles, and then performing the actual integration, using both summation integration and profile fitting methods. There are some summary tables at the end of the log file that are worth a glance, but really we don't have a good idea of the quality of the data set until we do scaling.
 
@@ -289,7 +305,11 @@ While the summary table is worth a quick glance, graphical representations of th
 
 > Look at the plots in the "Report" tab. What is the main factor determining the usable resolution limit in this case? How does the anomalous signal look?
 
-Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we click on the "merge" button and export `merged.mtz`. However, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that we click on the "export" button instead and click "Run". Once that is finished, click on the button "Download/save hklout file" to save the file. You should navigate from the _Donwload MTZ File_ dialog, most likely go back at least one directory and remember where you saved the _mtz_ file.
+Although `dials.scale` reports the _merging statistics_, the data set has not actually been merged (meaning only a single record for each unique Miller index is kept). To export a merged MTZ for structure solution we click on the "merge" button and export `merged.mtz`. However, in this case we prefer to export the scaled, unmerged data then perform merging inside CCP4 Cloud, so that we also get the merging statistics recorded there. To do that we click on the "export" button instead and click "Run". Once that is finished, click on the button "Download/save hklout file" to save the file.
+
+
+> You should remember where you save the `scaled.mtz` file when you use the _Download MTZ File_ dialog. Yo will need the path to this file later.
+
 
 ## Comparing results with xia2
 
