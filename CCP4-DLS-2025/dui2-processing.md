@@ -37,12 +37,7 @@ dui2
 
 Once the program starts you should see something like this:
 
-<!-- 
-keeping reference to old picture in case @dagewa wants to compare
-![The DUI window at start up](./images/dui-start.png "DUI")
--->
-
-<img width="1886" height="1054" alt="Screenshot_20251118_Dui_ini" src="https://github.com/user-attachments/assets/48503c3c-e279-443d-aa3e-ca078e4ec407" />
+![The DUI window at start up](./images/Screenshot_Dui2_ini.png "DUI")
 
 ## Importing the images
 
@@ -50,7 +45,7 @@ The first task in data processing with DIALS is to import the images. The DUI hi
 
 To import the data set, click on the "Open images" button and then navigate to the directory where the images are located. You then need to click on just one of the CBF images, say `ADH4_M7S9_6_0001.cbf`, and then click "Open". DUI will automatically convert that to a template that matches all the images in the data set.
 
-<img width="1886" height="1054" alt="Screenshot_20251118_Dui_import" src="https://github.com/user-attachments/assets/d2127402-5a93-40ea-ae06-2b8afbbefc90" />
+![The DUI window before launching the import command](./images/Screenshot_Dui2_import.png "DUI")
 
 > For EIGER data there is not one file per image, but usually a few files with the extension `.h5`. In this case, just select the file with the name that ends `_master.h5`, or, (better) if it is present, the file with the extension `.nxs`.
 >
@@ -87,7 +82,7 @@ Click on the "Image" tab to view the diffraction images using DUI's viewer. You 
 
 > Look at images at various points in the data set - at the beginning, in the middle, and at the end. Does the crystal diffract well throughout? Are there any other features present alongside the diffraction spots?
 
-<img width="1886" height="1054" alt="Screenshot_20251118_Dui_import_2" src="https://github.com/user-attachments/assets/2f607a61-8187-4047-8e76-276b22cd02ce" />
+![The image viewer after running import and navigating to the image number 345](./images/Screenshot_Dui2_image_viewer.png "Backstop mask")
 
 ## Masking the backstop shadow (optional)
 
@@ -95,7 +90,7 @@ There is a horizontal backstop shadow across the images. We could mask this out 
 
 Nevertheless, if you want to try it you can mask out the shadow by clicking the "apply mask" button and then choosing one of the options (I recommend "Polygon") then clicking in the image to define a mask. Be aware that the mask is not actually defined until you click the DIALS "Run" button! After that the masked region will be displayed in translucent red, like this:
 
-![The backstop mask is shown as a translucent red polygon](./images/backstop-mask.png "Backstop mask")
+![The backstop mask is shown as a translucent red polygon](./images/Screenshot_Dui2_masking.png "Backstop mask")
 
 ## Finding spots
 
@@ -135,7 +130,6 @@ DUI does not yet contain its own reciprocal lattice viewer. However it is able t
 The main purpose of the `dials.reciprocal_lattice_viewer` prior to indexing is to look for pathologies that might cause indexing to fail, such as poor diffraction geometry, noisy spots, split spots, ice rings, and so on. In this case the reciprocal space lattice looks very clean, so we would not expect indexing to have any problems. Here is a view with a nicely aligned lattice, suggesting that indexing should not be a problem:
 
 ![The aligned reciprocal lattice points](./images/rlv.png "dials.reciprocal_lattice_viewer")
-
 
 ## Indexing
 
@@ -183,12 +177,7 @@ oP: P222 P2221 P21212 P212121
 
 However, within DUI it is easier to see this table in the next step - reindexing. So click on the "reindex" button, and the input pane now shows the same information as the text table, with a recommended solution highlighted.
 
-<!-- 
-keeping reference to old picture in case @dagewa wants to compare
-![The table of Bravais lattice solutions](./images/rbs-table.png "Reindexing options")
--->
-
-<img width="889" height="327" alt="Screenshot_part_of_Dui2_reindex_table" src="https://github.com/user-attachments/assets/ed4e48b7-1e19-4663-87a1-b62469077a20" />
+![The table of Bravais lattice solutions](./images/Screenshot_part_of_Dui2_reindex_table.png "Reindexing options")
 
 The decision of which solution to choose is down to the user, but solutions deemed acceptable are marked with a "Y" in the "Ok" column. In general, we look for the highest symmetry solution with reasonable values for the `Metric fit`, `rmsd` and `min/max cc` columns. Here we will take solution 5, the primitive orthorhombic (`oP`) one. So ensure that row is highlighted and then press "Run".
 
@@ -236,7 +225,7 @@ Calculating E.S.D Reflecting Range (mosaicity).
 
 The `sigma m` value is the standard deviation of the reflecting range of reflections, which is sometimes (and inaccurately) called "mosacicity". It is good to check that this value is not too high. Here it is significantly less than 0.1°, so the sample seems very well behaved.
 
-<img width="1886" height="1054" alt="Screenshot_20251118_integrate" src="https://github.com/user-attachments/assets/1a352709-b71e-4bf0-98ea-83600f2ef75b" />
+![Log tab just after integration](./images/Screenshot_Dui2_integrate.png "Scan-varying orientation")
 
 After this step, `dials.integrate` will split the processing over as many processors as you have available, first modelling reflection profiles, and then performing the actual integration, using both summation integration and profile fitting methods. There are some summary tables at the end of the log file that are worth a glance, but really we don't have a good idea of the quality of the data set until we do scaling.
 
