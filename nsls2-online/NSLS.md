@@ -1,46 +1,20 @@
-# Processing in Detail: Simple Insulin to Learn Workflow (CCP4 / APS 2024)
+# Processing in Detail: Simple Lysozyme to Learn Workflow
 
 ## Introduction
 
-DIALS processing may be performed by either running the individual tools (spot finding, indexing, refinement, integration, symmetry, scaling, exporting to MTZ) or you can run `xia2`, which makes (hopefully) informed choices for you at each stage. In this tutorial we will run through each of the steps in turn, taking a look at the output as we go. We will also look at enforcing the correct lattice symmetry.
+DIALS processing may be performed by either running the individual tools (spot finding, indexing, refinement, integration, symmetry, scaling, exporting to MTZ) or you can run `xia2`, which makes (we hope) informed choices for you at each stage. In this tutorial we will run through each of the steps in turn, taking a look at the output as we go. We will also look at enforcing the correct lattice symmetry.
 
-The aim of this tutorial is to introduce you to the tools, not teach about data processing - it is assumed you have some idea of the overall process from e.g. associated lectures. With the graphical tools, I am not making so much effort to explain the options as simply "playing" will give you a chance to learn your way around and also find the settings which work for you. Particularly with looking at diffraction images, the "best" settings are very personal.
+The aim of this tutorial is to introduce you to the tools, not teach about data processing - it is assumed you have some idea of the overall process from e.g. other tutorials or lectures. With the graphical tools, I am not making so much effort to explain the options as simply "playing" will give you a chance to learn your way around and also find the settings which work for you. Particularly with looking at diffraction images, the "best" settings are very personal.
 
 ## DIALS version
 
-This tutorial assumes you are using [DIALS version 3.20 or later](https://dials.github.io/installation.html) and that you have this set up (i.e. you've sourced the setup file).
+This tutorial assumes you are using a recent version of [DIALS](https://dials.github.io/installation.html) and that you have this set up (i.e. you've sourced the setup file).
 
 If you are running at home on Linux or macOS then you should be able to reproduce the results in here. If you are on Windows, try installing the Linux version in a WSL terminal using e.g. Ubuntu or using the version from CCP4, but be aware that there may be small differences in the output.
 
 ## Tutorial data
 
-If you are at the workshop then the data are already on disk at:
-
-```
-/opt/xtal/Tutorials/dials/WORKFLOW
-```
-
-So replace `../data` or whatever with that. If you are doing this on your own computer, or you are at home, or not part of the workshop then you need to follow these instructions.
-
-The following example uses [cubic insulin collected on beamline i04 at Diamond Light Source](https://zenodo.org/records/8376818): this was collected with a large beam, depositing ~ 1MGy / scan of dose on the sample. To speed things up, you can run with just a subset of the data rather than a full sweep or all four data sets. The purposes of this is _not_ to be an interesting data set, rather to show how the tools work when there are no problems as a preamble to processing more interesting data sets [in the main tutorial](./README.md). If you have all the time in the world you can process all four together with only a minor change to the import command.
-
-Fetching the data can be performed by writing a file containing
-
-```
-https://zenodo.org/records/8376818/files/ins10_1.nxs
-https://zenodo.org/records/8376818/files/ins10_1_000001.h5
-https://zenodo.org/records/8376818/files/ins10_1_000002.h5
-https://zenodo.org/records/8376818/files/ins10_1_000003.h5
-https://zenodo.org/records/8376818/files/ins10_1_000004.h5
-https://zenodo.org/records/8376818/files/ins10_1_master.h5
-https://zenodo.org/records/8376818/files/ins10_1_meta.h5
-```
-
-then:
-
-```
-wget -i file.list
-```
+The tutorial data here are lysozyme data collected at NSLS II - however the _process_ you follow tends to be very similar for almost any data, but the phenomena observed and how you handle them may differ. FIXME add link to the data.
 
 ## Files
 
@@ -49,7 +23,7 @@ DIALS creates two principal file types:
 - experiment files called `something.expt`
 - reflection files called `something.refl`
 
-"Experiment" in DIALS has a very specific meaning - the capturing of data from one set of detector, beam, goniometer and crystal - so if you have two scans from one crystal this is two experiments, if you have two lattices on one data set this is two experiments. In most cases you can ignore this distinction though.
+"Experiment" in DIALS has a very specific meaning - the capturing of data from one set of detector, beam, goniometer and crystal - so if you have two scans from one crystal this is two experiments, if you have two lattices on one data set this is two experiments. In most cases you can ignore this distinction though - it becomes more important in the [more complex tutorials](./COWS_PIGS_PEOPLE.md).
 
 Usually the output filenames will correspond to the name of the DIALS program that created them e.g. `indexed.refl` and `indexed.expt` from `dials.index`. The only deviations from this are on import (see below) where we are only reading experiment models and spot finding where we find _strong_ reflections so write these to `strong.refl` - and we create no models so (by default) there is no output experiment file.
 
@@ -90,39 +64,24 @@ which will generate a HTML html describing the current state of the processing.
 The starting point for any processing with DIALS is to _import_ the data - here the metadata are read and a description of the data to be processed saved to a file named `imported.expt`. This is "human readable" in that the file is JSON format (roughly readable text with brackets around to structure for computers). While you can edit this file if you know what you are doing, usually this is not necessary.
 
 ```
-dials.import ../ins10_1.nxs
+dials.import ../LysFMX_01_8704_master.h5
 ```
 
-will read the metadata from this `NeXus` file and write `imported.expt` from this. For this tutorial I am only processing the first 1200 images so we actually import with:
-
-```
-dials.import ../ins10_1.nxs image_range=1,1200
-```
-
-It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. The output from importing describes what was found: this should correspond to our expectations.
+will read the metadata from this `master` file and write `imported.expt` from this. It is important to note that for well-behaved data (i.e. anything which is well-collected from a well-behaved sample) the commands below will often be identical after importing. The output from importing describes what was found: this should correspond to our expectations.
 
 ```
 DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
-DIALS 3.dev.1215-gb54762037
+DIALS 3.dev.1386-g1a2d56924
 The following parameters have been modified:
 
 input {
   experiments = <image files>
 }
-geometry {
-  scan {
-    image_range = 1 1200
-  }
-}
-
-
-Applying input geometry in the following order:
-  1. Manual geometry
 
 --------------------------------------------------------------------------------
-  format: <class 'dxtbx.format.FormatNXmxDLS16M.FormatNXmxDLS16M'>
-  template: /Users/graeme/data/i04-ins-1MGy/ins10_1.nxs:1:1200
-  num images: 1200
+  format: <class 'dxtbx.format.FormatNXmxEigerFilewriter.FormatNXmxEigerFilewriter'>
+  template: /Users/graeme/data/NSLS/LysFMX_01_8704_master.h5:1:900
+  num images: 900
   sequences:
     still:    0
     sweep:    1
@@ -131,7 +90,7 @@ Applying input geometry in the following order:
 Writing experiments to imported.expt
 ```
 
-You will see that the log file includes the additional commands passed in, which is useful for tracing the processing options used and in this case confirms that we have read ~1200 images. Once you have `imported.expt` you can, if you like, look at the content with `dials.show` as `dials.show imported.expt`. This is a general program in DIALS to allow you to print the current state of models, with output which looks like:
+You will see that the log file includes the additional commands passed in, which is useful for tracing the processing options used. Once you have `imported.expt` you can, if you like, look at the content with `dials.show` as `dials.show imported.expt`. This is a general program in DIALS to allow you to print the current state of models, with output which looks like:
 
 ```
 DIALS (2018) Acta Cryst. D74, 85-97. https://doi.org/10.1107/S2059798317017235
@@ -142,36 +101,36 @@ input {
 }
 
 Experiment 0:
-Experiment identifier: 82dbf00d-4836-aded-b32f-c1789f2de707
-Image template: /Users/graeme/data/i04-ins-1MGy/ins10_1.nxs
+Experiment identifier: 2b1eb41b-a8ec-df7a-fd79-e4515ee364fc
+Image template: /Users/graeme/data/NSLS/LysFMX_01_8704_master.h5
 Detector:
 Panel:
   name: /entry/instrument/detector/module
   type: SENSOR_PAD
   identifier: 
   pixel_size:{0.075,0.075}
-  image_size: {4148,4362}
-  trusted_range: {0,33005}
+  image_size: {4150,4371}
+  trusted_range: {0,59991}
   thickness: 0.45
   material: Si
-  mu: 3.66309
+  mu: 3.95847
   gain: 1
   pedestal: 0
   fast_axis: {1,0,0}
   slow_axis: {0,-1,0}
-  origin: {-159.08,166.6,-170}
-  distance: 170
+  origin: {-150.15,168.825,-150}
+  distance: 150
   pixel to millimeter strategy: ParallaxCorrectedPxMmStrategy
-    mu: 3.66309
+    mu: 3.95847
     t0: 0.45
 
 
-Max resolution (at corners): 1.058512
-Max resolution (inscribed):  1.337295
+Max resolution (at corners): 1.022156
+Max resolution (inscribed):  1.279456
 
 Beam:
     probe: x-ray
-    wavelength: 0.953738
+    wavelength: 0.979338
     sample to source direction : {0,0,1}
     divergence: 0
     sigma divergence: 0
@@ -182,25 +141,20 @@ Beam:
     sample to source distance: 0
 
 Beam centre: 
-    mm: (159.08,166.60)
-    px: (2121.07,2221.33)
+    mm: (150.15,168.82)
+    px: (2002.00,2251.00)
 
 Scan:
-    number of images:   1200
-    image range:   {1,1200}
+    number of images:   900
+    image range:   {1,900}
     epoch:    0
-    exposure time:    0
-    oscillation:   {0,0.1}
+    exposure time:    0.02
+    oscillation:   {0,0.2}
 
 Goniometer:
     Rotation axis:   {1,0,0}
     Fixed rotation:  {1,0,0,0,1,0,0,0,1}
     Setting rotation:{1,0,0,0,1,0,0,0,1}
-    Axis #0 (phi):  {1,-0.0037,0.002}
-    Axis #1 (chi):  {-0.0046,0.0372,-0.9993}
-    Axis #2 (omega):  {1,0,0}
-    Angles: 0,0,0
-    scan axis: #2 (omega)    
 ```
 
 I recognise that this is quite "computer" in the way that the numbers are presented, but there are a few useful things you can look for in here: does the wavelength, distance, beam centre look OK? Are the number of images what you would expect?
