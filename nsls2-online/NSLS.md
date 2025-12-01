@@ -169,15 +169,11 @@ in this tool there are many settings you can adjust, which could depend on the s
 
 ![Image viewer](./images/image-view.png)
 
-If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
+If the data are not stacked the spot finding process can also be explored - the controls at the bottom of the "Settings" window:
 
-If you have the time and interest to download all four data sets from the deposition above, you can import all four at once with:
+![Image viewer: settings](./images/image-view-settings.png)
 
-```
-dials.import ../ins10_?.nxs
-```
-
-Then proceed through the entire tutorial with _all four sweeps_ - note though that this is only possible without changing the defaults as the data were taken from a single sample, with the goniometer rotations correctly recorded. [The main tutorial](./README.md) covers what to do if this is not the case.
+allow you to step through these and can be very useful for getting a "computer's eye view" of how the data look (particularly for establishing where the diffraction is visible to.)
 
 ## Find Spots
 
