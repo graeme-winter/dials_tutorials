@@ -14,7 +14,7 @@ If you are running at home on Linux or macOS then you should be able to reproduc
 
 ## Tutorial data
 
-The tutorial data here are lysozyme data collected at NSLS II - however the _process_ you follow tends to be very similar for almost any data, but the phenomena observed and how you handle them may differ. FIXME add link to the data.
+The tutorial data here are lysozyme data collected at NSLS II - however the _process_ you follow tends to be very similar for almost any data, but the phenomena observed and how you handle them may differ. The data can be downloaded [here](https://drive.google.com/file/d/1T2Vf8kEG9RIT4QB_q_729ntfZUgsuS7d/view?usp=drive_link).
 
 ## Files
 
