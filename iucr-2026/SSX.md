@@ -159,3 +159,24 @@ The main purpose of this calibration was to work out a better detector position 
 ```
 
 We can then recycle this information to improve the indexing, for actual data processing.
+
+### Actual Processing
+
+The processing sets off in the same direction as the calibration above with two key differences:
+
+- we now know a little more about the experimental geometry
+- we will now use all the data
+
+We get started by importing the data this time making use of the reference geometry:
+
+```bash
+dials.import reference_geometry=refined.expt ../*cbf use_beam_reference=false
+```
+
+As we did not refine the beam above, we do not want to include it in the reference. The spot finding is identical: indeed if you are processing the same subset of data it need not be repeated. Indexing will also work as before, but should give a slightly higher hit rate with the corrected geometry. We can also now look for multiple lattices, which are fairly likely in an SSX experiment:
+
+```bash
+dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P23 max_lattices=3
+```
+
+At this point we now want to perform some integration rather than further refinement, which is quite different for SSX compared with rotation crystallography.
