@@ -49,7 +49,7 @@ dials.import ../*.cbf
 dials.find_spots imported.expt
 dials.ssx_index strong.refl imported.expt
 # review
-dials.ssx_index strong.refl imported.expt space_group=P23 unit_cell=96,96,96,90,90,90
+dials.ssx_index strong.refl imported.expt space_group=P23 unit_cell="96.7 96.7 96.7 90 90 90"
 dials.refine indexed.* refine.phil
 ```
 
@@ -58,7 +58,7 @@ Then:
 ```bash
 dials.import ../*cbf reference_geometry=refined.expt use_beam_reference=0
 dials.find_spots imported.expt
-dials.ssx_index strong.refl imported.expt unit_cell=97,97,97,90,90,90 space_group=P23 max_lattices=3
+dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P23 max_lattices=3
 dials.ssx_integrate indexed.expt indexed.refl
 dials.cosym integrated* cosym.phil
 dials.scale symmetrized.* scale.phil
@@ -67,6 +67,8 @@ dials.scale symmetrized.* scale.phil
 **Note well** in here there are input files called `phil` - these will be explored below.
 
 ## SSX Workflow
+
+Two parts to the overall SSX workflow: calibration then full processing. The purpose of the calibration is to "tune up" our understanding of the experimental geometry before tackling the full data set, so we make a different set of decisions in the calibration to those we will make in the full processing.
 
 ### Calibration
 
