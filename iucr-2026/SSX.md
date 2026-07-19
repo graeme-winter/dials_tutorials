@@ -105,7 +105,7 @@ cluster_04       46       136.88(0.47 ) 136.71(0.48 ) 136.79(0.43 ) 75.18 (24.54
 Here we can see that the most common cluster contains a cubic-looking unit cell with multiples of those same parameters appearing later. We can therefore take a guess that the correct unit cell is cubic with ⍺⩬96.7Å. Re-running the index step (without even constraining the unit cell to _be_ cubic, just giving that cell as an initial guess) nearly doubles the number of indexed crystals. This is run with:
 
 ```bash
-dials.ssx_index imported.expt strong,refl unit_cell="96.7 96.7 96.7 90 90 90"
+dials.ssx_index imported.expt strong.refl unit_cell="96.7 96.7 96.7 90 90 90"
 ```
 
 As these are still images, we get successful indexing by giving the hint for the cell, but we want to perform refinement with this: we would get better refinement results by reducing the number of unknowns - in this case, constraining the cell to be cubic by adding `space_group=P23`. In general, you should have a good understanding of a crystal system before performing SSX experiments so knowing a unit cell and crystal symmetry in advance is reasonable.
@@ -162,9 +162,9 @@ We can then recycle this information to improve the indexing, for actual data pr
 
 ### Actual Processing
 
-The processing sets off in the same direction as the calibration above with two key differences:
+The processing starts off in the same way as the calibration above with two key differences:
 
-- we now know a little more about the experimental geometry
+- we now know more about the experimental geometry
 - we will now use all the data
 
 We get started by importing the data this time making use of the reference geometry:
@@ -173,10 +173,20 @@ We get started by importing the data this time making use of the reference geome
 dials.import reference_geometry=refined.expt ../*cbf use_beam_reference=false
 ```
 
-As we did not refine the beam above, we do not want to include it in the reference. The spot finding is identical: indeed if you are processing the same subset of data it need not be repeated. Indexing will also work as before, but should give a slightly higher hit rate with the corrected geometry. We can also now look for multiple lattices, which are fairly likely in an SSX experiment:
+As we did not refine the beam above, we do not want to include it in the reference. The spot finding is identical: indeed if you are processing the same subset of data it does not need to be repeated. Indexing will also work as before, but should give a slightly higher hit rate with the corrected geometry. We can also now look for multiple lattices, which are fairly likely in an SSX experiment:
 
 ```bash
 dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P23 max_lattices=3
 ```
 
-At this point we now want to perform some integration rather than further refinement, which is quite different for SSX compared with rotation crystallography.
+FIXME should I re-do the refinement here? Does that make much of a difference?
+
+At this point we now want to perform some integration rather than further refinement, which is quite different for SSX compared with rotation crystallography and uses `dials.ssx_integrate`. Here we will run with the `algorithm=ellipsoid` option:
+
+```bash
+dials.ssx_integrate indexed.* algorithm=ellipsoid
+```
+
+This attempts to model the pixels on the image which are illuminated as a mechanism to predict the spot locations. At this point you can take a look at the integration results with `dials.image_viewer integrated.*`.
+
+> at this point I look at the results myself and I am not happy
