@@ -204,16 +204,17 @@ This attempts to model the pixels on the image which are illuminated as a mechan
 
 > Partiality: for rotation data we generally record _all_ of a reflection by capturing a little on every image then essentially "adding this up" (though in practice we integrate with a 3D profile) - this is possible because the crystal rotates by a measurable amount within every image. For a still shot we only sample _some_ of the reflection profile, and we have to try and model what fraction that is - in the opinion of the tutorial author this is the *principle* source of uncertainty in SSX data. Measurements with a low partiality are inherently unreliable.
 
-Given this commentary on partiality, if we want to look at the integration results we need to filter the spots on the ones we are somewhat certain are present: the number of spots decreases rapidly as the partiality increases, so the vast majority have low partiality hence a higher chance of being absent. We therefore _filter_ the reflections as:
+Given this commentary on partiality, if we want to look at the integration results we need to filter the spots on the ones we are somewhat certain are present: the number of spots decreases rapidly as the partiality increases, so the vast majority have low partiality hence a higher chance of being absent. `dials.ssx_integrate` also works in batches, so to look at all images we want to combine the output then _filter_ the reflections as:
 
 ```bash
-dials.filter_reflections partiality.min=0.25 integrated.refl
+dials.combine_experiments integrated_*
+dials.filter_reflections partiality.min=0.25 combined.refl
 ```
 
-This outputs `filtered.refl` which we will only use for image viewing, with:
+This outputs `combined.expt` and `combined.refl`, which is in turn filtered to give `filtered.refl` which we will only use for image viewing, with:
 
 ```bash
-dials.image_viewer integrated.expt filtered.refl
+dials.image_viewer combined.expt filtered.refl
 ```
 
 As you step though the images you will see that the different lattices have different coloured boxes, and a reasonable fraction (but by no means not all) have a spot in the middle of them: these are the spots we will use for subsequent analysis.
