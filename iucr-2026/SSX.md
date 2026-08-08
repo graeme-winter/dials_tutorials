@@ -220,3 +220,50 @@ dials.image_viewer combined.expt filtered.refl
 As you step though the images you will see that the different lattices have different coloured boxes, and a reasonable fraction (but by no means not all) have a spot in the middle of them:
 
 ![Image zoom](./images/image-two-lattice.png)
+
+In most cases where we know in advance the crystal unit cell and symmetry there will be no ambiguity in how the lattices are indexed. In some cases however (for example here) the crystal _lattice_ has higher symmetry than the crystal _intensities_ i.e. a cubic lattice has four-fold symmetry around the centre of each face but our crystals do not have that four-fold symmetry. As with the cubic insulin crystals in [cows, pigs, people](./COWS_PIGS_PEOPLE.md) we will use `dials.cosym` to resolve this ambiguity, though we need to use some specific settings to have this work correctly:
+
+```bash
+dials.cosym combined.* min_i_mean_over_sigma_mean=0.5 space_group=P213 cc_weights=sigma partiality_threshold=0.25
+```
+
+As before these reflect some of the specific issues which result from the data being still shots: high uncertainties and partiality. The cosym analysis clusters the intensities in reciprocal space to determine the correct indexing - and as a side-effect also shows that we have two populations of unit cell length, though one is dominant:
+
+![Unit cell histogram](./images/unit-cells.png)
+
+We won't explore this much more here but the full data set did show two different unit cell lengths. For the next step - scaling - there are quite a number of different options which are needed so these are best presented as a `phil` file:
+
+```json
+model = *KB array dose_decay physical
+output {
+  additional_stats = True
+}
+reflection_selection {
+  method = quasi_random *intensity_ranges use_all random
+  Isigma_range = 2.0,0.0
+  min_partiality = 0.25
+  intensity_choice = profile sum *combine
+}
+weighting {
+  error_model {
+    reset_error_model = True
+  }
+}
+cut_data {
+  partiality_cutoff = 0.25
+}
+scaling_options {
+  nproc = 8
+  full_matrix = False
+  outlier_rejection = standard *simple
+  outlier_zmax = 4.0
+}
+```
+
+This should be saved as `scale.phil` (say) and run with:
+
+```bash
+dials.scale symmetrized.* scale.phil
+```
+
+Many of these parameters will be familiar from earlier steps (e.g, the min_partiality).
