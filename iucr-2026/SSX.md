@@ -217,4 +217,6 @@ This outputs `combined.expt` and `combined.refl`, which is in turn filtered to g
 dials.image_viewer combined.expt filtered.refl
 ```
 
-As you step though the images you will see that the different lattices have different coloured boxes, and a reasonable fraction (but by no means not all) have a spot in the middle of them: these are the spots we will use for subsequent analysis.
+As you step though the images you will see that the different lattices have different coloured boxes, and a reasonable fraction (but by no means not all) have a spot in the middle of them:
+
+![Image zoom](./images/image-two-lattice.png)
