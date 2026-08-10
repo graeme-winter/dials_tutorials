@@ -5,3 +5,5 @@ This is a pair of tutorials for the CCP4 workshop at GM/CA. The data are from Ze
 [Simple tutorial](./WORKFLOW.md) takes you through some of the basic steps.
 
 [The more interesting](./COWS_PIGS_PEOPLE.md) tutorial takes you through some multi-crystal analysis.
+
+[Finally the SSX](./SSX.md) tutorial walks you through how to use the DIALS command line for SSX data processing.
