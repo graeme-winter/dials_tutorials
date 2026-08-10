@@ -266,4 +266,4 @@ This should be saved as `scale.phil` (say) and run with:
 dials.scale symmetrized.* scale.phil
 ```
 
-Many of these parameters will be familiar from earlier steps (e.g, the min_partiality).
+Many of these parameters will be familiar from earlier steps (e.g, the min_partiality) - some reflect the fact that there are a _lot_ of parameters when scaling SSX data because each crystal gets its own `k` and `B` parameter. As with rotation data processing `dials.scale` makes a recommendation for the resolution limit based on the CC½ parameter - re-running with this limit set with `d_min=1.76` (for example) will truncate the data set.
