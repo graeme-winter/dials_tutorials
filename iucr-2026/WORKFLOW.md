@@ -1,4 +1,4 @@
-# Processing in Detail: Simple Insulin to Learn Workflow (CCP4 / APS 2024)
+# Processing in Detail: Simple Insulin to Learn Workflow (IUCr 2026)
 
 ## Introduction
 
@@ -56,6 +56,20 @@ Usually the output filenames will correspond to the name of the DIALS program th
 At any time you can _look_ at these files with `dials.show` which will summarise the content of the files to the terminal. You can also `dials.show` reflection files which gives a tabular symmary of the content but this can be rather slow, as the data are much more substantial.
 
 [If you're impatient...](./TLDR.md) - as a note this is essentially the script I would use to have a first look at any data set where I expected the experiment metadata (wavelength, beam centre etc.) to be correct.
+
+## GUI
+
+For the tutorial there now exists a GUI you start with:
+
+```bash
+dials.gui
+```
+
+which will allow you to go through every one of the steps of the command line tutorial _without typing_:
+
+![DIALS GUI](./images/GUI.png)
+
+In practice you can also use this for the [cows, pigs and people](./COWS_PIGS_PEOPLE.md) tutorial but the tutorials here emphasise the command line...
 
 ## Parameters
 
