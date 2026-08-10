@@ -63,7 +63,7 @@ dials.import ../*.cbf
 dials.find_spots imported.expt
 dials.ssx_index strong.refl imported.expt
 # output 👀 - decide what is probably the right unit cell / lattice
-dials.ssx_index strong.refl imported.expt space_group=P23 unit_cell="96.7 96.7 96.7 90 90 90"
+dials.ssx_index strong.refl imported.expt space_group=P213 unit_cell="96.7 96.7 96.7 90 90 90"
 dials.ssx_refine indexed.*
 ```
 
@@ -73,7 +73,7 @@ Then:
 # phase 2: actually process this data with the refined geometry
 dials.import ../*cbf reference_geometry=refined.expt use_beam_reference=0
 dials.find_spots imported.expt
-dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P23 max_lattices=3
+dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P213 max_lattices=3
 dials.ssx_integrate indexed.expt indexed.refl
 dials.cosym integrated* partiality_threshold=0.25 space_group=P213
 dials.scale symmetrized.* scale.phil
@@ -123,7 +123,7 @@ Here we can see that the most common cluster (`cluster 01`) contains a cubic-loo
 dials.ssx_index imported.expt strong.refl unit_cell="96.7 96.7 96.7 90 90 90"
 ```
 
-As these are still images, we get successful indexing by giving the hint for the cell, but we want to perform refinement with this: we would get better refinement results by reducing the number of parameters - in this case, constraining the cell to be cubic by adding `space_group=P23`. In general, you should have a good understanding of a crystal system before performing SSX experiments so knowing a unit cell and crystal symmetry in advance is reasonable.
+As these are still images, we get successful indexing by giving the hint for the cell, but we want to perform refinement with this: we would get better refinement results by reducing the number of parameters - in this case, constraining the cell to be cubic by adding `space_group=P213`. In general, you should have a good understanding of a crystal system before performing SSX experiments so knowing a unit cell and crystal symmetry in advance is reasonable.
 
 Even with the lattice constrained by the space group, the refinement is still under-constrained. In particular, `dials.refine` by default attempts to refine the rotation axis, beam direction and detector position: in an SSX experiment there is degeneracy which makes this poorly constrained. We handle this here by reducing the amount of freedom in the model, which is achieved by using a customised version called `dials.ssx_refine`: this is essentially the same program with a collection of defaults assigned:
 
@@ -191,7 +191,7 @@ dials.import reference_geometry=refined.expt ../*cbf use_beam_reference=false
 As we did not refine the beam above, we do not want to include it in the reference. The spot finding is identical: indeed if you are processing the same subset of data it does not need to be repeated. Indexing will also work as before, but should give a slightly higher hit rate with the corrected geometry. We can also now look for multiple lattices, which can be fairly likely in an SSX experiment:
 
 ```bash
-dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P23 max_lattices=3
+dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P213 max_lattices=3
 ```
 
 At this point we now want to perform some integration rather than further refinement, which is quite different for SSX compared with rotation crystallography and uses `dials.ssx_integrate`:
@@ -231,39 +231,10 @@ As before these reflect some of the specific issues which result from the data b
 
 ![Unit cell histogram](./images/unit-cells.png)
 
-We won't explore this much more here but the full data set did show two different unit cell lengths. For the next step - scaling - there are quite a number of different options which are needed so these are best presented as a `phil` file:
-
-```json
-model = *KB array dose_decay physical
-output {
-  additional_stats = True
-}
-reflection_selection {
-  method = quasi_random *intensity_ranges use_all random
-  Isigma_range = 2.0,0.0
-  min_partiality = 0.25
-  intensity_choice = profile sum *combine
-}
-weighting {
-  error_model {
-    reset_error_model = True
-  }
-}
-cut_data {
-  partiality_cutoff = 0.25
-}
-scaling_options {
-  nproc = 8
-  full_matrix = False
-  outlier_rejection = standard *simple
-  outlier_zmax = 4.0
-}
-```
-
-This should be saved as `scale.phil` (say) and run with:
+We won't explore this much more here but the full data set did show two different unit cell lengths. For the next step - scaling - there are quite a number of different options which can be tinkered with but the default of:
 
 ```bash
-dials.scale symmetrized.* scale.phil
+dials.scale symmetrized.* additional_stats=true
 ```
 
-Many of these parameters will be familiar from earlier steps (e.g, the min_partiality) - some reflect the fact that there are a _lot_ of parameters when scaling SSX data because each crystal gets its own `k` and `B` parameter. As with rotation data processing `dials.scale` makes a recommendation for the resolution limit based on the CC½ parameter - re-running with this limit set with `d_min=1.76` (for example) will truncate the data set.
+should generally work fine. Here `additional_stats=true` computes additional merging statistics which are more typical for SSX data. The parameters set will be familiar from earlier steps (e.g, the `min_partiality`) - and some reflect the fact that there are a _lot_ of parameters when scaling SSX data because each crystal gets its own `k` and `B` parameter. As with rotation data processing `dials.scale` makes a recommendation for the resolution limit based on the CC½ parameter - re-running with this limit set with `d_min=1.76` (for example) will truncate the data set.
