@@ -76,10 +76,10 @@ dials.find_spots imported.expt
 dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P213 max_lattices=3
 dials.ssx_integrate indexed.expt indexed.refl
 dials.cosym integrated* partiality_threshold=0.25 space_group=P213
-dials.scale symmetrized.* scale.phil
+dials.scale symmetrized.*
 ```
 
-**Note well** in here there are extra input files called `something.phil` - these will be explored below. There are also extra command parameters because SSX data are fundamentally different (as of August 2026) to rotation data.
+There are extra command parameters compared with the rotation data tutorials because SSX data are fundamentally different (as of August 2026) to rotation data.
 
 ## SSX Workflow
 
@@ -194,7 +194,11 @@ As we did not refine the beam above, we do not want to include it in the referen
 dials.ssx_index strong.refl imported.expt unit_cell="96.7 96.7 96.7 90 90 90" space_group=P213 max_lattices=3
 ```
 
-At this point we now want to perform some integration rather than further refinement, which is quite different for SSX compared with rotation crystallography and uses `dials.ssx_integrate`:
+At this point we now want to perform some integration however as an aside we can also now get a feel for how much reciprocal space coverage we have by looking at the data with the recprocal lattice viewer. Simply loading up the frames with `dials.reciprocal_lattice_viewer indexed.*` will show a curve, as all the images are recorded with the same nominal omega angle. If, however, we select the "show in crystal frame" option we see:
+
+![Reciprocal lattice](./images/reciprocal-lattice-ssx.png)
+
+This shows the distribution of the crystal lattices and gives a _hint_ that your data cover reciprocal space well - if you were collecting fixed target data from a crystal with lower symmetry this could easily not be the case. After indexing we perform integration rather than further refinement, which is quite different for SSX compared with rotation crystallography and uses `dials.ssx_integrate`:
 
 ```bash
 dials.ssx_integrate indexed.*
