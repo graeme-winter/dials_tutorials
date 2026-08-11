@@ -1,4 +1,4 @@
-# Processing 🐮🐷🧑 with DIALS (CCP4 / APS 2024)
+# Processing 🐮🐷🧑 with DIALS (IUCr 2026)
 
 ## Introduction
 
